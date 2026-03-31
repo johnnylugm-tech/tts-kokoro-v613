@@ -227,29 +227,18 @@ tts-v610 --file input.txt -o output/
 ## 6. 需求追蹤（Traceability）
 
 所有需求皆具備唯一識別符（FR-01 ~ FR-08、NFR-01 ~ NFR-07）。
-詳細追蹤矩陣見 `SPEC_TRACKING.md`。
 
----
+**模組化架構（Module/Component）**：
+- FR-01 ~ FR-03 → `engines/taiwan_linguistic.py`、`engines/ssml_parser.py`、`engines/text_splitter.py`
+- FR-04 ~ FR-06 → `engines/synthesis.py`、`middleware/circuit_breaker.py`、`cache/redis_cache.py`
+- FR-07 ~ FR-08 → `cli.py`、`audio_converter.py`
 
-## 6. 模型參數建議（Taiwan Persona）
+**依賴關係（Dependencies）**：
+- 核心依賴：`httpx`、`pydub`、`fastapi`
+- 平台依賴：`ffmpeg`（音訊轉換）
+- 可選依賴：`redis`（快取）
 
-| Persona | 音色配方 | Speed | 應用 |
-|---------|---------|-------|------|
-| 極致溫柔助理 | `zf_xiaoxiao(0.8)+af_heart(0.2)` | 0.85–0.95 | 睡前故事 |
-| 親切智慧導遊 | `zf_xiaoxiao(0.7)+af_sky(0.3)` | 0.9–1.0 | 展場導覽 |
-| 現代幹練秘書 | `zf_yunxi(0.8)+af_nicole(0.2)` | 1.0–1.1 | 行事曆提醒 |
-| 甜美親和主播 | `zf_xiaoyi(0.6)+zf_xiaoxiao(0.4)` | 1.0–1.1 | 新聞摘要 |
-
----
-
-## 7. API 端點
-
-| 方法 | 路徑 | 說明 |
-|------|------|------|
-| GET | `/health` | 健康檢查 |
-| GET | `/ready` | 就緒檢查 |
-| GET | `/v1/proxy/voices` | 音色列表 |
-| POST | `/v1/proxy/speech` | 語音合成 |
+詳細追蹤矩陣見 `SPEC_TRACKING.md` 和 `TRACEABILITY_MATRIX.md`。
 
 ---
 
@@ -258,7 +247,7 @@ tts-v610 --file input.txt -o output/
 | 項目 | 狀態 |
 |------|------|
 | 審查狀態 | Phase 1 審查中 |
-| 最後更新 | 2026-03-31 |
+| 最後更新 | 2026-04-01 |
 | Constitution 評分 | 待 Phase 1 CONFIRM |
 
 ---
@@ -270,3 +259,28 @@ tts-v610 --file input.txt -o output/
 2. 影響分析（分析對架構、時程、風險的影響）
 3. 審查核准（需 Johnny CONFIRM）
 4. 重新追蹤（更新 SPEC_TRACKING.md 和 TRACEABILITY_MATRIX.md）
+
+---
+
+## 9. 模型參數建議（Taiwan Persona）
+
+| Persona | 音色配方 | Speed | 應用 |
+|---------|---------|-------|------|
+| 極致溫柔助理 | `zf_xiaoxiao(0.8)+af_heart(0.2)` | 0.85–0.95 | 睡前故事 |
+| 親切智慧導遊 | `zf_xiaoxiao(0.7)+af_sky(0.3)` | 0.9–1.0 | 展場導覽 |
+| 現代幹練秘書 | `zf_yunxi(0.8)+af_nicole(0.2)` | 1.0–1.1 | 行事曆提醒 |
+| 甜美親和主播 | `zf_xiaoyi(0.6)+zf_xiaoxiao(0.4)` | 1.0–1.1 | 新聞摘要 |
+
+---
+
+## 10. API 端點
+
+| 方法 | 路徑 | 說明 |
+|------|------|------|
+| GET | `/health` | 健康檢查 |
+| GET | `/ready` | 就緒檢查 |
+| GET | `/v1/proxy/voices` | 音色列表 |
+| POST | `/v1/proxy/speech` | 語音合成 |
+
+
+TEST_MARKER_12345
