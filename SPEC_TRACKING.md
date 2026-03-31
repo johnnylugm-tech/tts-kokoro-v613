@@ -42,3 +42,15 @@
 | SPEC_TRACKING.md | 01-requirements/SPEC_TRACKING.md | ✅ 完成 | 2026-03-31 |
 | TRACEABILITY_MATRIX.md | 01-requirements/TRACEABILITY_MATRIX.md | ✅ 完成 | 2026-03-31 |
 | DEVELOPMENT_LOG.md | DEVELOPMENT_LOG.md | ✅ 完成 | 2026-03-31 |
+
+
+---
+
+## 更新紀錄（Changelog）
+
+| 日期 | 變更內容 | 負責 |
+|------|---------|------|
+| 2026-03-31 | 初始版本：建立 FR/NFR 追蹤矩陣 | Agent A |
+| 2026-04-01 | 對齊 SRS.md：修正 NFR-05/NFR-06/NFR-07 識別符、補充驗證方法 | Agent A |
+| 2026-04-01 | Phase 1 交付物對齊：路徑修正至根目錄 | Agent A |
+

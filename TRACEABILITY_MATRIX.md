@@ -50,3 +50,17 @@
 | Phase 3 | 單元測試 | 待實作 | — |
 | Phase 4 | TEST_PLAN.md | 待實作 | — |
 | Phase 4 | TEST_RESULTS.md | 待實作 | — |
+
+
+---
+
+## 連結（Links）
+
+| 交付物 | GitHub 路徑 |
+|--------|------------|
+| SRS.md | [SRS.md](https://github.com/johnnylugm-tech/tts-kokoro-v613/blob/main/SRS.md) |
+| SPEC_TRACKING.md | [SPEC_TRACKING.md](https://github.com/johnnylugm-tech/tts-kokoro-v613/blob/main/SPEC_TRACKING.md) |
+| TRACEABILITY_MATRIX.md | [TRACEABILITY_MATRIX.md](https://github.com/johnnylugm-tech/tts-kokoro-v613/blob/main/TRACEABILITY_MATRIX.md) |
+| DEVELOPMENT_LOG.md | [DEVELOPMENT_LOG.md](https://github.com/johnnylugm-tech/tts-kokoro-v613/blob/main/DEVELOPMENT_LOG.md) |
+| Phase1_STAGE_PASS.md | [00-summary/Phase1_STAGE_PASS.md](https://github.com/johnnylugm-tech/tts-kokoro-v613/blob/main/00-summary/Phase1_STAGE_PASS.md) |
+
