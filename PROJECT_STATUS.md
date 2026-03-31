@@ -235,3 +235,18 @@ Telegram Group（規劃中）
 目標：消除 Johnny 作為中間轉递者的 bottleneck。
 
 ---
+
+---
+
+## 持久化架構原則
+
+**GitHub 是 Complete Source of Truth**
+
+| 檔案 | 必要性 | 說明 |
+|------|--------|------|
+| `PROJECT_STATUS.md` | ✅ 必需 | 任何災難後的第一頁 |
+| `memory/` | ❌ 可選 | agent 輔助用，不影響 resume |
+| `USER.md` | ❌ 可選 | agent 輔助用，不影響 resume |
+
+**依賴性 = 0**：砍掉 `memory/`、`USER.md`、methodology-v2，clone 此 repo 就能完整 resume。
+
