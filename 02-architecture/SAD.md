@@ -1,395 +1,469 @@
-# SAD.md — Software Architecture Document
+# SAD.md — tts-kokoro-v613 軟體架構文件
 
-> **版本**: v1.0.0  
-> **專案**: tts-kokoro-v613  
-> **日期**: 2026-04-01  
-> **Phase**: 2 (架構設計)  
-> **Author**: Johnny1027_bot (architect agent)
-
----
-
-## 1.  Overview
-
-### 1.1 Purpose
-本文件描述 tts-kokoro-v613 專案的軟體架構，基於 SRS.md 需求規格進行架構設計。
-
-### 1.2 Scope
-Phase 2 涵蓋代理層架構、模組設計、接口定義、錯誤處理和安全性設計。
-
-### 1.3 Technology Stack
-- **後端**: Kokoro Docker (`http://localhost:8880`)
-- **代理層**: FastAPI + httpx + Python 3.10+
-- **可選快取**: Redis
-- **CLI 工具**: ffmpeg
-- **非同步**: httpx.AsyncClient
+> 版本：v6.13.1  
+> Phase：Phase 2（架構設計）  
+> 日期：2026-04-01  
+> 基於：SRS.md v6.13.1
 
 ---
 
-## 2. Module Design
+## 1. 概覽
 
-### 2.1 Module Boundary Map
+### 1.1 系統目的
 
-| Module | Responsibility | Public API | FR Mapping |
-|--------|---------------|------------|------------|
-| `engines/taiwan_linguistic.py` | 台灣中文詞彙映射、變調處理 | `process(text) -> ProcessedText` | FR-01 |
-| `engines/ssml_parser.py` | SSML 標籤解析與驗證 | `parse(ssml_string) -> SSMLTree` | FR-02 |
-| `engines/text_splitter.py` | 長文本智能切分 | `split(text, max_length) -> List[Chunk]` | FR-03 |
-| `engines/synthesis.py` | Kokoro TTS 引擎調用 | `synthesize(text, voice, **opts) -> AudioBytes` | FR-04 |
-| `middleware/circuit_breaker.py` | 斷路器保護模式 | `call(func, *args, **kwargs) -> Result` | FR-05 |
-| `cache/redis_cache.py` | Redis 快取管理 | `get(key)`, `set(key, value, ttl)` | FR-06 |
-| `cli.py` | CLI 命令列工具 | `main()` | FR-07 |
-| `audio_converter.py` | 音訊格式轉換 | `convert(audio, from_fmt, to_fmt) -> bytes` | FR-08 |
+基於 Kokoro-82M 之台灣中文最佳化語音合成系統，透過 Python FastAPI 代理層將後端 Kokoro Docker 服務轉化為具備台灣在地化能力的專業 TTS 系統。
 
-### 2.2 Module Dependencies
+### 1.2 系統邊界
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        External Clients                          │
-└─────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     FastAPI Router Layer                         │
-│            (health.py, tts.py, /v1/proxy/*)                    │
-└────────────────────────────┬────────────────────────────────────┘
-                             │
-         ┌───────────────────┼───────────────────┐
-         ▼                   ▼                   ▼
-┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│     CLI         │  │  text_splitter  │  │   ssml_parser   │
-│  (cli.py)      │  │  (FR-03)        │  │   (FR-02)       │
-└────────┬────────┘  └────────┬────────┘  └────────┬────────┘
-         │                     │                    │
-         │                     └──────────┬────────┘
-         │                              ▼
-         │                   ┌─────────────────────┐
-         │                   │ taiwan_linguistic.py │
-         │                   │ (FR-01)              │
-         │                   └──────────┬───────────┘
-         │                              │
-         │                              ▼
-         │                   ┌─────────────────────┐
-         │                   │   redis_cache.py     │
-         │                   │   (FR-06)            │
-         │                   └──────────┬───────────┘
-         │                              │
-         │                              ▼
-         │                   ┌─────────────────────┐
-         │                   │ circuit_breaker.py   │
-         │                   │ (FR-05)              │
-         │                   └──────────┬───────────┘
-         │                              │
-         │                              ▼
-         │                   ┌─────────────────────┐
-         │                   │   synthesis.py      │
-         │                   │   (FR-04)           │
-         │                   └──────────┬───────────┘
-         │                              │
-         │                              ▼
-         │                   ┌─────────────────────┐
-         │                   │ audio_converter.py  │
-         │                   │ (FR-08)             │
-         │                   └─────────────────────┘
-         │
-         ▼
-┌─────────────────┐
-│   Kokoro Docker │
-│ (External)      │
-└─────────────────┘
+┌─────────────────────────────────────────────────────┐
+│                    Client (外部)                     │
+│  CLI / HTTP Client / Telegram Bot / 其他 Agent      │
+└──────────────────────┬──────────────────────────────┘
+                       │ HTTP/S
+┌──────────────────────▼──────────────────────────────┐
+│               tts-kokoro-v613 (本系統)                  │
+│                                                      │
+│  ┌──────────────────────────────────────────────┐   │
+│  │           API Layer (FastAPI)                  │   │
+│  │  /health  /ready  /v1/proxy/voices            │   │
+│  │  /v1/proxy/speech                             │   │
+│  └──────────────────────────────────────────────┘   │
+│                        │                              │
+│  ┌─────────────────────▼────────────────────────┐   │
+│  │           CLI Layer (Typer)                   │   │
+│  │  tts-v610 文字/SSML/檔案 輸入                  │   │
+│  └───────────────────────────────────────────────┘   │
+│                        │                              │
+│  ┌─────────────────────▼────────────────────────┐   │
+│  │      Text Processing Layer (Module 1)         │   │
+│  │  TaiwanLexicon → SSMLParser → TextSplitter    │   │
+│  └───────────────────────────────────────────────┘   │
+│                        │                              │
+│  ┌─────────────────────▼────────────────────────┐   │
+│  │      Synthesis Layer (Module 2)                │   │
+│  │  AsyncEngine + CircuitBreaker                  │   │
+│  └───────────────────────────────────────────────┘   │
+│                        │                              │
+│  ┌─────────────────────▼────────────────────────┐   │
+│  │      Caching Layer (Module 3)                  │   │
+│  │  RedisCache (optional, graceful degradation)   │   │
+│  └───────────────────────────────────────────────┘   │
+│                        │                              │
+│  ┌─────────────────────▼────────────────────────┐   │
+│  │      Audio Processing Layer (Module 4)         │   │
+│  │  AudioConverter (ffmpeg)                       │   │
+│  └───────────────────────────────────────────────┘   │
+└──────────────────────┬──────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│           Kokoro Docker (http://localhost:8880)       │
+│           - 音色合成                                  │
+│           - MP3 編碼                                  │
+└──────────────────────────────────────────────────────┘
+                       │
+┌──────────────────────▼──────────────────────────────┐
+│           Redis (optional)                            │
+│           - 熱門語句快取                              │
+│           - TTL: 24h                                  │
+└──────────────────────────────────────────────────────┘
 ```
-
-### 2.3 Dependency Matrix
-
-| Consumer | Provider | Dependency Type | FR Mapping |
-|----------|----------|----------------|------------|
-| `router/tts.py` | `text_splitter.py` | Functional dependency | FR-03 |
-| `router/tts.py` | `ssml_parser.py` | Functional dependency | FR-02 |
-| `router/tts.py` | `taiwan_linguistic.py` | Functional dependency | FR-01 |
-| `taiwan_linguistic.py` | `ssml_parser.py` | Functional dependency | FR-02 |
-| `redis_cache.py` | `circuit_breaker.py` | Resilience dependency | FR-05 |
-| `circuit_breaker.py` | `synthesis.py` | Resilient call dependency | FR-04 |
-| `synthesis.py` | `Kokoro Docker` | External API dependency | FR-04 |
-| `cli.py` | `text_splitter.py` | Functional dependency | FR-03 |
-| `cli.py` | `taiwan_linguistic.py` | Functional dependency | FR-01 |
-| `cli.py` | `synthesis.py` | Functional dependency | FR-04 |
-| `cli.py` | `audio_converter.py` | Functional dependency | FR-08 |
 
 ---
 
-## 3. Interface Definitions
+## 2. 模組架構
 
-### 3.1 FastAPI Endpoints
+### 2.1 模組 1：Text Processing Layer
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/health` | 健康檢查 |
-| GET | `/ready` | 就緒檢查（含 Kokoro/Redis 狀態） |
-| GET | `/v1/proxy/voices` | 音色列表 |
-| POST | `/v1/proxy/speech` | 語音合成 |
+**職責**：文字預處理，涵蓋 FR-01、FR-02、FR-03
 
-### 3.2 Internal Module Interfaces
+**子模組**：
 
-#### taiwan_linguistic.py
+| 子模組 | 檔案 | 職責 |
+|--------|------|------|
+| TaiwanLexicon | `engines/taiwan_linguistic.py` | 台灣詞彙映射（≥50詞） |
+| SSMLParser | `engines/ssml_parser.py` | SSML 解析與音色標籤處理 |
+| TextSplitter | `engines/text_splitter.py` | 三級遞迴文本切分（≤250字） |
+
+**介面**：
+
 ```python
-class TaiwanLinguisticEngine:
-    def process(self, text: str) -> ProcessedText:
-        """應用台灣中文變調規則和詞彙映射"""
-```
+class TaiwanLexicon:
+    def map(text: str) -> str: ...
 
-#### ssml_parser.py
-```python
 class SSMLParser:
-    def parse(self, ssml_string: str) -> SSMLTree:
-        """解析 SSML 為語法樹"""
-    def validate(self, tree: SSMLTree) -> ValidationResult:
-        """驗證 SSML 結構"""
-```
+    def parse(ssml: str) -> SSMLDocument: ...
+    def to_kokoro_params(doc: SSMLDocument) -> dict: ...
 
-#### text_splitter.py
-```python
 class TextSplitter:
-    def split(self, text: str, max_length: int = 250) -> List[Chunk]:
-        """三級遞迴切分，確保每段 ≤ max_length 字"""
+    def split(text: str, max_chars: int = 250) -> list[str]: ...
 ```
 
-#### synthesis.py
-```python
-class KokoroSynthesis:
-    def __init__(self, base_url: str = "http://localhost:8880")
-    def synthesize(self, text: str, voice: str, **opts) -> bytes:
-        """呼叫 Kokoro Docker TTS API"""
-```
+**追溯至 SRS**：
+- FR-01：台灣中文詞彙映射（≥50詞）
+- FR-02：SSML 解析（含 `<voice>` 標籤）
+- FR-03：智能文本切分（≤250字）
 
-#### circuit_breaker.py
+**NFR 覆蓋**：
+- NFR-02：LEXICON 覆蓋率 ≥ 80%（目標 ≥ 95%）
+- NFR-03：變調正確率 ≥ 95%
+
+---
+
+### 2.2 模組 2：Synthesis Layer
+
+**職責**：非同步並行合成與可靠性保護，涵蓋 FR-04、FR-05
+
+**子模組**：
+
+| 子模組 | 檔案 | 職責 |
+|--------|------|------|
+| AsyncEngine | `engines/synthesis.py` | httpx.AsyncClient 並行合成 |
+| CircuitBreaker | `middleware/circuit_breaker.py` | 三態斷路器保護 |
+
+**介面**：
+
 ```python
+class AsyncSynthesisEngine:
+    def synthesize(chunks: list[str], voice: str, speed: float) -> bytes: ...
+
 class CircuitBreaker:
-    def __init__(self, failure_threshold: int = 3, recovery_timeout: float = 10.0)
-    async def call(self, func: Callable, *args, **kwargs) -> Any:
-        """執行帶斷路器保護的調用"""
+    def call(func: Callable, *args, **kwargs) -> Any:
+    # 狀態：CLOSED → OPEN → HALF_OPEN → CLOSED
+    # 失敗閾值：3 次，恢復計時：10 秒
 ```
 
-#### redis_cache.py
+**追溯至 SRS**：
+- FR-04：並行合成引擎（httpx.AsyncClient + MP3 串接）
+- FR-05：斷路器（失敗 ≥ 3 → Open，10 秒後 Half-Open）
+
+**NFR 覆蓋**：
+- NFR-01：TTFB < 300ms
+- NFR-04：API 可用率 ≥ 99%
+- NFR-05：錯誤恢復時間 < 10s
+- NFR-07：斷路器恢復 < 10s
+
+---
+
+### 2.3 模組 3：Caching Layer
+
+**職責**：可選 Redis 快取，涵蓋 FR-06
+
+**子模組**：
+
+| 子模組 | 檔案 | 職責 |
+|--------|------|------|
+| RedisCache | `cache/redis_cache.py` | Hash-based 快取，24h TTL |
+
+**介面**：
+
 ```python
 class RedisCache:
-    def __init__(self, url: str = "redis://localhost:6379")
-    async def get(self, key: str) -> Optional[bytes]
-    async def set(self, key: str, value: bytes, ttl: int = 86400) -> bool
+    def __init__(self, url: str | None = None): ...
+    def get(text: str, voice: str, speed: float) -> bytes | None: ...
+    def set(text: str, voice: str, speed: float, audio: bytes, ttl: int = 86400): ...
+    # url=None 時自動降級（略過快取，直接合成）
+```
+
+**追溯至 SRS**：
+- FR-06：Redis 快取（Key=hash(text+voice+speed)，TTL=24h）
+
+**NFR 覆蓋**：
+- NFR-01：TTFB < 300ms（快取命中時 TTFB ≈ 0ms）
+
+---
+
+### 2.4 模組 4：Audio Processing Layer
+
+**職責**：音訊格式轉換，涵蓋 FR-08
+
+**子模組**：
+
+| 子模組 | 檔案 | 職責 |
+|--------|------|------|
+| AudioConverter | `audio_converter.py` | ffmpeg MP3 ↔ WAV 互轉 |
+
+**介面**：
+
+```python
+class AudioConverter:
+    def convert(input_path: Path, output_format: str) -> Path: ...
+    # 支援：mp3 → wav, wav → mp3
+    # 依賴：ffmpeg CLI（必要依賴）
+```
+
+**追溯至 SRS**：
+- FR-08：ffmpeg 音訊格式轉換
+
+---
+
+### 2.5 模組 5：API Layer
+
+**職責**：FastAPI HTTP 端點，涵蓋 FR-07
+
+**子模組**：
+
+| 子模組 | 檔案 | 職責 |
+|--------|------|------|
+| APIServer | `api/server.py` | FastAPI 端點路由 |
+| CLIApp | `cli.py` | Typer CLI 命令列工具 |
+
+**API 端點**：
+
+| 方法 | 路徑 | 說明 |
+|------|------|------|
+| GET | `/health` | 健康檢查 |
+| GET | `/ready` | 就緒檢查（Kokoro + Redis 狀態） |
+| GET | `/v1/proxy/voices` | 音色列表 |
+| POST | `/v1/proxy/speech` | 語音合成（JSON 或 SSML） |
+
+**CLI 命令**：
+
+```bash
+tts-v610 "你好世界" -o output.mp3
+tts-v610 --ssml "<speak>...</speak>" -o out.mp3
+tts-v610 --file input.txt -o output/
+```
+
+**追溯至 SRS**：
+- FR-07：CLI 命令列工具
+
+---
+
+## 3. 安全性設計
+
+### 3.1 認證（Authentication）
+
+| 層面 | 設計 |
+|------|------|
+| 對外 API | API 金鑰（`X-API-Key` header）或 JWT token |
+| 本地 CLI | 無（localhost 信任） |
+| Kokoro Backend | 内部網路，無需認證 |
+
+**實施**：
+```python
+# api/server.py
+@app.middleware("http")
+async def api_key_auth(request: Request, call_next):
+    if request.url.path.startswith("/v1/"):
+        api_key = request.headers.get("X-API-Key")
+        if api_key != settings.API_KEY:
+            raise HTTPException(status_code=401)
+    return await call_next(request)
+```
+
+### 3.2 授權（Authorization）
+
+| 音色分級 | 授權 | 說明 |
+|---------|------|------|
+| 公開音色 | 所有已驗證用戶 | `zf_xiaoxiao`, `zf_yunxi` 等 |
+| 受限音色 | Admin 角色 | 實驗性音色（Alpha/Beta） |
+
+**實施**：基於 role 的存取控制（RBAC），音色白名單。
+
+### 3.3 加密（Encryption）
+
+| 場景 | 設計 |
+|------|------|
+| 對外暴露（Production） | HTTPS/TLS 1.2+（反向代理 Nginx/Caddy） |
+| 本機開發 | HTTP（localhost:8880） |
+| Kokoro Backend | localhost，無需加密 |
+
+### 3.4 資料保護（Data Protection）
+
+| 措施 | 說明 |
+|------|------|
+| 日誌脫敏 | 音訊合成內容不寫入日誌 |
+| 暫存清理 | 合成後的 MP3 檔案（若暫存）自動刪除 |
+| 無持久化 | 使用者音訊資料不留存 server-side |
+
+---
+
+## 4. 錯誤處理架構
+
+### 4.1 錯誤分類（L1–L4 四級制）
+
+| 等級 | 名稱 | 說明 | 可復原 | 觸發熔斷 |
+|------|------|------|--------|---------|
+| **L1** | 配置錯誤 | 缺少環境變數、API Key 未設定 | ❌ | ✅ |
+| **L2** | API 錯誤 | Kokoro 5xx、後端超時、網路中斷 | ✅ | ✅ |
+| **L3** | 業務錯誤 | SSML 解析失敗、文本過長、超過 rate limit | ✅ | ✅ |
+| **L4** | 預期異常 | 參數 Validation 失敗、檔案不存在 | ✅ | ❌ |
+
+| 錯誤類型 | HTTP 狀態碼 | 處理策略 |
+|---------|-------------|---------|
+| 文字預處理失敗（SSML parse error） | 200（降級） | Fallback 純文字合成 |
+| 後端 Kokoro 故障（5xx） | 503 | CircuitBreaker 觸發 |
+| 網路超時（>30s） | 504 | 重試 1 次後返回錯誤 |
+| Redis 不可用 | 200（降級） | 略過快取，直接合成 |
+| ffmpeg 轉換失敗 | 422 | 返回明確錯誤訊息 |
+| 認證失敗（L1） | 401 | 拒絕訪問 |
+
+### 4.2 錯誤傳播鏈
+
+```
+Client Request
+      │
+      ▼
+┌─────────────┐
+│ API Layer   │ ← HTTP 401/422 處理
+└──────┬──────┘
+       ▼
+┌─────────────┐
+│ Cache Layer │ ← Redis 降級
+└──────┬──────┘
+       ▼
+┌─────────────┐
+│  TextProc   │ ← SSML Fallback
+└──────┬──────┘
+       ▼
+┌─────────────┐
+│ Synthesis   │ ← CircuitBreaker 保護
+│  (Async)    │
+└──────┬──────┘
+       ▼
+┌─────────────┐
+│ Kokoro      │ ← 503 if circuit open
+│ (localhost) │
+└─────────────┘
+```
+
+### 4.3 Circuit Breaker 詳細行為
+
+| 狀態 | 行為 |
+|------|------|
+| CLOSED | 正常流量，失敗計數遞增 |
+| OPEN（失敗 ≥ 3） | 直接返回 503，不發請求 |
+| HALF_OPEN（10 秒後） | 允許 1 個測試請求 |
+| CLOSED（HALF_OPEN 成功） | 重置計數，恢復正常 |
+
+---
+
+## 5. 資料流
+
+### 5.1 標準合成流程
+
+```
+1. Client → POST /v1/proxy/speech { text, voice, speed }
+2. API Layer → 驗證 API Key
+3. Cache Layer → 檢查 Redis（key=hash(text+voice+speed)）
+   └→ Hit → 直接返回 MP3
+   └→ Miss → 繼續
+4. TextProc → TaiwanLexicon.map(text)
+5. TextProc → SSMLParser.parse(ssml_text)
+6. TextProc → TextSplitter.split(text, max_chars=250)
+7. Synthesis → AsyncEngine.synthesize(chunks) [並行 N 請求]
+8. Synthesis → MP3 串接
+9. Cache Layer → set(text+voice+speed, mp3, ttl=24h)
+10. AudioProc → [可選] ffmpeg convert to WAV
+11. API Layer → 返回 MP3/WAV
+```
+
+### 5.2 CLI 流程
+
+```
+tts-v610 "文字" -o output.mp3
+  └→ CLIApp → TextProc → Synthesis → output.mp3
 ```
 
 ---
 
-## 4. Data Flow
+## 6. 部署架構
+
+### 6.1 元件相依
 
 ```
-[Client Input: Text/SSML]
-         │
-         ▼
-┌─────────────────────────────────┐
-│  FastAPI /v1/proxy/speech       │
-└─────────────┬───────────────────┘
-              │
-              ▼
-┌─────────────────────────────────┐
-│  text_splitter.py               │◄── FR-03: 智能文本切分
-│  (max 250 chars per chunk)      │
-└─────────────┬───────────────────┘
-              │
-              ▼
-┌─────────────────────────────────┐
-│  taiwan_linguistic.py           │◄── FR-01: 詞彙映射
-│  (LEXICON ≥50, tone sandhi)    │
-└─────────────┬───────────────────┘
-              │
-              ▼
-┌─────────────────────────────────┐
-│  ssml_parser.py                 │◄── FR-02: SSML 解析
-│  (break/prosody/voice tags)     │
-└─────────────┬───────────────────┘
-              │
-              ▼
-┌─────────────────────────────────┐
-│  redis_cache.py                 │◄── FR-06: Redis 快取
-│  (TTL=24h, key=hash)           │
-└─────────────┬───────────────────┘
-              │
-     [Cache Hit]──────────┐
-         │               │
-         ▼               ▼
-┌─────────────────┐  ┌────────────────────┐
-│  Return Cache   │  │ circuit_breaker.py │
-└─────────────────┘  │ (FR-05)             │
-                     └──────────┬──────────┘
-                                │
-                                ▼
-                     ┌────────────────────┐
-                     │ synthesis.py       │
-                     │ (Kokoro Docker)    │
-                     └──────────┬─────────┘
-                                │
-                                ▼
-                     ┌────────────────────┐
-                     │ audio_converter.py │
-                     │ (FR-08: ffmpeg)   │
-                     └────────────────────┘
+┌─────────────────────────────────────────┐
+│           tts-kokoro-v613               │
+│  Python 3.10+  │  FastAPI  │  httpx     │
+└────────┬───────────────────┬─────────────┘
+         │                   │
+    ┌────▼────┐         ┌───▼────┐
+    │  Redis  │         │ Kokoro │
+    │(Optional)│         │ Docker │
+    └─────────┘         │:8880    │
+                       └────────┘
 ```
 
----
+### 6.2 環境變數
 
-## 5. Security Architecture
-
-### 5.1 Four Security Design Aspects
-
-| Aspect | Implementation | Status |
-|--------|---------------|--------|
-| **Authentication** | API key via `X-API-Key` header; JWT token support | ✅ |
-| **Authorization** | Voice/model ACL; Rate limiting (100 req/min default) | ✅ |
-| **Encryption** | HTTPS/TLS for external; HTTP for localhost Kokoro | ✅ |
-| **Data Protection** | No user input logged; Audio not persisted; Redis TTL auto-expiry | ✅ |
-
-### 5.2 Security Configuration
-
-```yaml
-security:
-  api_key_enabled: true
-  rate_limit:
-    enabled: true
-    requests_per_minute: 100
-  tls:
-    enabled: true
-  data_protection:
-    log_user_input: false
-    persist_audio: false
-    redis_ttl: 86400
-```
-
-### 5.3 Threat Model
-
-| Threat | Mitigation |
-|--------|------------|
-| Unauthorized API access | API key authentication |
-| Voice/Model abuse | Authorization ACL |
-| Man-in-the-middle | TLS encryption |
-| Data leakage | No audio persistence |
-| DoS attack | Rate limiting |
-| Backend overload | Circuit breaker |
+| 變數 | 預設值 | 說明 |
+|------|--------|------|
+| `KOKORO_BACKEND_URL` | `http://localhost:8880` | Kokoro 後端 URL |
+| `REDIS_URL` | `None`（停用快取） | Redis 連線 URL |
+| `API_KEY` | `None`（停用認證） | API 金鑰 |
+| `CIRCUIT_BREAKER_THRESHOLD` | `3` | 失敗閾值 |
+| `CIRCUIT_BREAKER_TIMEOUT` | `10` | 恢復秒數 |
+| `REQUEST_TIMEOUT` | `30` | 請求超時秒數 |
 
 ---
 
-## 6. Error Handling
+## 6. 模組化設計原則
 
-### 6.1 Error Level Classification (L1-L4)
+本架構遵循以下設計原則：
 
-| Level | Type | Description | Action |
-|-------|------|-------------|--------|
-| **L1** | Input Error | Invalid text format, SSML syntax error | Return 400 immediately |
-| **L2** | Tool Error | Kokoro/Redis connection timeout | Retry 3 times, then return 503 |
-| **L3** | Execution Error | Upstream API failure, decode error | Circuit breaker increments, degrade gracefully |
-| **L4** | System Error | Backend崩潰, memory exhausted | Circuit breaker OPEN after 3 failures, 10s recovery, alert, return 503 |
+| 原則 | 應用 | 說明 |
+|------|------|------|
+| **SRP（單一職責原則）** | 各 Module 獨立 | 每個模組只負責一個明確的領域 |
+| **依賴注入（DI）** | FastAPI Depends | 便於測試替換 |
+| **介面隔離（ISP）** | 模組 API | 避免過度耦合 |
 
-### 6.2 Error Response Mapping
-
-| Error Type | HTTP Code | Response |
-|------------|-----------|----------|
-| Kokoro unavailable | 503 | `{"error": "TTS service temporarily unavailable"}` |
-| Invalid SSML | 400 | `{"error": "SSML validation failed", "details": [...]}` |
-| Voice not found | 404 | `{"error": "Voice not found"}` |
-| Text too long | 413 | `{"error": "Text exceeds maximum length"}` |
-| Redis unavailable | 200 | Degrade gracefully (skip cache) |
-
-### 6.3 Circuit Breaker Configuration
-
-| Parameter | Value | Description |
-|-----------|-------|-------------|
-| failure_threshold | 3 | Open after 3 consecutive failures |
-| recovery_timeout | 10.0s | Time before Half-Open |
-| expected_exception | Exception | Base exception type |
+例如：
+- `Text Processing Layer` 只負責文字預處理
+- `Synthesis Layer` 只負責並行合成
+- `Caching Layer` 只負責快取查詢
 
 ---
 
-## 7. Configuration
+## 7. 模組責任矩陣
 
-```yaml
-kokoro:
-  base_url: "http://localhost:8880"
-  timeout: 30.0
-
-redis:
-  url: "redis://localhost:6379"
-  default_ttl: 86400
-  key_prefix: "tts:v1:"
-
-circuit_breaker:
-  failure_threshold: 3
-  recovery_timeout: 10.0
-
-app:
-  host: "0.0.0.0"
-  port: 8000
-  workers: 4
-```
+| 模組 | FR-01 | FR-02 | FR-03 | FR-04 | FR-05 | FR-06 | FR-07 | FR-08 |
+|------|-------|-------|-------|-------|-------|-------|-------|-------|
+| Module 1: TextProc | ✅ | ✅ | ✅ | | | | | |
+| Module 2: Synthesis | | | | ✅ | ✅ | | | |
+| Module 3: Caching | | | | | | ✅ | | |
+| Module 4: AudioProc | | | | | | | | ✅ |
+| Module 5: API/CLI | | | | | | | ✅ | |
 
 ---
 
-## 8. Directory Structure
+## 8. 追溯至 SRS（NFR）
 
-```
-tts-kokoro-v613/
-├── 01-requirements/          # Phase 1
-├── 02-architecture/          # Phase 2 (this)
-│   ├── SAD.md                # This document
-│   └── adr/                  # Architecture Decision Records
-│       ├── 001-fastapi-proxy-layer.md
-│       ├── 002-redis-caching-strategy.md
-│       └── 003-circuit-breaker-resilience.md
-├── 03-implementation/         # Phase 3 (future)
-├── 04-testing/                # Phase 4 (future)
-├── 00-summary/                # STAGE_PASS files
-├── engines/                   # Source code (Phase 3)
-├── middleware/                 # Source code (Phase 3)
-├── cache/                      # Source code (Phase 3)
-├── cli.py                      # CLI tool
-├── audio_converter.py          # Audio converter
-├── DEVELOPMENT_LOG.md
-└── sessions_spawn.log
-```
+| NFR | 模組/設計 | 實現方式 |
+|-----|----------|---------|
+| NFR-01（TTFB < 300ms） | Module 3（Caching） | Redis 快取命中繞過 Synthesis |
+| NFR-02（LEXICON ≥ 80%） | Module 1 | TaiwanLexicon ≥ 50 詞 |
+| NFR-03（變調正確率 ≥ 95%） | Module 1 | 詞彙映射 + 單元測試 |
+| NFR-04（API 可用率 ≥ 99%） | Module 2 | CircuitBreaker 防止級聯故障 |
+| NFR-05（錯誤恢復 < 10s） | Module 2 | CircuitBreaker 10 秒恢復 |
+| NFR-06（測試覆蓋 ≥ 80%） | All | pytest --cov |
+| NFR-07（斷路器恢復 < 10s） | Module 2 | CircuitBreaker 10 秒計時器 |
 
 ---
 
-## 9. ADR (Architecture Decision Records)
+## 9. 技術決策摘要
 
-See `adr/` directory for detailed ADRs:
-
-| ADR | Title | Status |
-|-----|-------|--------|
-| 001 | FastAPI + httpx Proxy Layer | Accepted |
-| 002 | Redis Caching Strategy | Accepted |
-| 003 | Circuit Breaker Resilience Pattern | Accepted |
-
----
-
-## 10. Acceptance Criteria
-
-- [ ] All 4 API endpoints implemented
-- [ ] taiwan_linguistic.py handles tone sandhi rules
-- [ ] text_splitter.py correctly segments Chinese text (≤250 chars)
-- [ ] ssml_parser.py validates SSML 1.0 subset
-- [ ] circuit_breaker opens after 3 consecutive failures, 10s recovery
-- [ ] Redis cache reduces Kokoro calls for repeated text
-- [ ] CLI can synthesize audio from command line
-- [ ] audio_converter.py converts between mp3/wav via ffmpeg
-- [ ] Health endpoints return proper status
-- [ ] Unit tests achieve ≥80% coverage
+| ADR # | 決策 | 採用 |
+|-------|------|------|
+| ADR-001 | 代理框架 | FastAPI + httpx |
+| ADR-002 | 台灣化策略 | TaiwanLexicon 映射表 |
+| ADR-003 | SSML 解析 | 手寫 XML Parser + AST |
+| ADR-004 | 並行合成 | httpx.AsyncClient + asyncio.gather |
+| ADR-005 | 熔斷機制 | 軟體斷路器（pycircuit） |
+| ADR-006 | 快取策略 | Redis Hash，optional graceful degradation |
 
 ---
 
-## 11. Conflict Log
+## 10. 安全性矩陣
 
-| Date | Decision | Reason | Notes |
-|------|----------|--------|-------|
-| 2026-04-01 | Use FastAPI over Flask | Async-native, OpenAPI auto-generation | |
-| 2026-04-01 | Circuit breaker threshold=3 | SRS FR-05 要求 | |
-| 2026-04-01 | Redis TTL=24h | Balance cache size vs freshness | |
+| 威脅 | 緩解措施 | 驗證方式 |
+|------|---------|---------|
+| 未授權 API 存取 | API Key / JWT | 單元測試 |
+| SSML 注入攻擊 | XML 解析白名單 | 滲透測試 |
+| 後端 DoS | CircuitBreaker + Rate Limiting | 負載測試 |
+| 敏感資料外洩 | 日誌脫敏，無持久化 | Code Review |
 
 ---
 
-*本文件依據 SKILL.md Phase 2 規範生成*
+*文件狀態：Phase 2 交付物*
+*下次審查：Phase 3 實作完成後*
