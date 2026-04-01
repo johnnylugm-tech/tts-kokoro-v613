@@ -80,6 +80,63 @@ Phase 1 doc_checker: ✅ PASS
 
 ## 待處理
 
-- [ ] Phase 2：架構設計（SAD.md + ADR）
+- [x] Phase 2：架構設計（SAD.md + ADR） ✅ 2026-04-01
 - [ ] Phase 3：代碼實作 + 單元測試
 - [ ] Phase 4：測試計畫（TEST_PLAN.md + TEST_RESULTS.md）
+
+---
+
+## Phase 2: 架構設計 (Claude Code 對照組)
+
+### 開始時間
+2026-04-01 08:00 GMT+8
+
+### 分支
+`phase2-claude-code-comparison`（從 `ef85a4a` Phase 1 最終狀態分支）
+
+### Agent A session_id
+- 初稿：`agent:claude:agenta:architect:phase2-sad`
+- 修正：`agent:claude:agenta:architect:phase2-fix`
+
+### 交付物狀態
+- [x] SAD.md v2.0 — 02-architecture/SAD.md (1700+ lines)
+- [x] ADR-001 — 02-architecture/ADR-001-fastapi-proxy-layer.md
+- [x] ADR-002 — 02-architecture/ADR-002-lazy-init-pattern.md
+- [x] ADR-003 — 02-architecture/ADR-003-three-level-chunking.md
+- [x] ADR-004 — 02-architecture/ADR-004-circuit-breaker-state-machine.md
+- [x] Phase2_STAGE_PASS.md — 00-summary/Phase2_STAGE_PASS.md
+
+### Agent B 審查記錄
+
+**第一輪**
+- session_id：`agent:claude:agentb:reviewer:phase2-review`
+- 裁決：**REJECT**
+- BLOCK 項目：6 項（BLOCK-01 ~ BLOCK-06）
+- 主要問題：循環依賴、簽名不一致、缺少依賴工廠、缺少 asyncio.Lock
+
+**修正項目 (Agent A)**
+- BLOCK-01：ADR-003 §1.4 加入 SRS 偏差說明
+- BLOCK-02：新增 ClientSideError 於 app/models/errors.py 打破循環依賴
+- BLOCK-03：_on_failure(self, exc: Exception) 簽名統一
+- BLOCK-04：新增 SAD §6.14 get_orchestrator() 工廠 + lifespan
+- BLOCK-05：SynthEngine.__init__ 加入 circuit_breaker 參數
+- BLOCK-06：KokoroClient + AudioConverter 加入 asyncio.Lock 雙重檢查
+
+**第二輪**
+- session_id：`agent:claude:agentb:reviewer:phase2-review-v2`
+- 發現 4 個新問題（NEW-01~04），均為一行修正
+- 裁決：**APPROVE**（確認後）
+
+### Quality Gate 結果
+```
+Constitution Runner (type=sad): 未執行（quality_gate/constitution/runner.py 不在 phase2 分支）
+Phase 2 Agent B 審查：APPROVE ✅
+STAGE_PASS 信心分數：87/100
+```
+
+### 版本歷史更新
+
+| 版本 | 日期 | 變更 |
+|------|------|-------|
+| v6.13.1 | 2026-03-31 | Phase 1 完成 |
+| v6.13.2 | 2026-04-01 | Phase 2 完成（Claude Code 對照組）|
