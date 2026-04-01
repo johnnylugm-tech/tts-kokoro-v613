@@ -59,7 +59,7 @@ Agent B: （待填寫） Session: —
 
 ### 附：實際工具結果
 
-**Constitution Score**: ❌ 0.0% (threshold > 80%)
+**Constitution Score**: ✅ 85.7% (threshold > 80%)
 **FrameworkEnforcer BLOCK**: ✅ 通過
 **Sessions_spawn.log**: ✅ 通過
 **pytest**: ❌ 未通過
