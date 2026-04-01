@@ -171,9 +171,9 @@ Johnny 的核心目標：
 | Step | 模組 | Commit | 狀態 |
 |------|------|--------|------|
 | 0 | Directory Setup | ad628ab | ✅ |
-| 1 | TaiwanLexicon | - | 🔄 |
-| 2 | SSMLParser | - | ⏳ |
-| 3 | TextSplitter | - | ⏳ |
+| 1 | TaiwanLexicon | dcf6119 | ✅ |
+| 2 | SSMLParser | dcb034a | ✅ |
+| 3 | TextSplitter | 2f17124 | ✅ |
 | 4 | SynthEngine | - | ⏳ |
 | 5 | CircuitBreaker | - | ⏳ |
 | 6 | RedisCache | - | ⏳ |
