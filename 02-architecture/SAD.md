@@ -98,6 +98,22 @@ Phase 2 涵蓋代理層架構、模組設計、接口定義、錯誤處理和安
 └─────────────────┘
 ```
 
+### 2.3 Dependency Matrix
+
+| Consumer | Provider | Dependency Type | FR Mapping |
+|----------|----------|----------------|------------|
+| `router/tts.py` | `text_splitter.py` | Functional dependency | FR-03 |
+| `router/tts.py` | `ssml_parser.py` | Functional dependency | FR-02 |
+| `router/tts.py` | `taiwan_linguistic.py` | Functional dependency | FR-01 |
+| `taiwan_linguistic.py` | `ssml_parser.py` | Functional dependency | FR-02 |
+| `redis_cache.py` | `circuit_breaker.py` | Resilience dependency | FR-05 |
+| `circuit_breaker.py` | `synthesis.py` | Resilient call dependency | FR-04 |
+| `synthesis.py` | `Kokoro Docker` | External API dependency | FR-04 |
+| `cli.py` | `text_splitter.py` | Functional dependency | FR-03 |
+| `cli.py` | `taiwan_linguistic.py` | Functional dependency | FR-01 |
+| `cli.py` | `synthesis.py` | Functional dependency | FR-04 |
+| `cli.py` | `audio_converter.py` | Functional dependency | FR-08 |
+
 ---
 
 ## 3. Interface Definitions
