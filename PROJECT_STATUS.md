@@ -166,6 +166,32 @@ Johnny 的核心目標：
 
 ---
 
+## Phase 3 進度（實驗中）
+
+| Step | 模組 | Commit | 狀態 |
+|------|------|--------|------|
+| 0 | Directory Setup | ad628ab | ✅ |
+| 1 | TaiwanLexicon | - | 🔄 |
+| 2 | SSMLParser | - | ⏳ |
+| 3 | TextSplitter | - | ⏳ |
+| 4 | SynthEngine | - | ⏳ |
+| 5 | CircuitBreaker | - | ⏳ |
+| 6 | RedisCache | - | ⏳ |
+| 7 | AudioConverter | - | ⏳ |
+| 8 | FastAPI routes | - | ⏳ |
+| 9 | Typer CLI | - | ⏳ |
+| 10 | 合規矩陣 | - | ⏳ |
+| 11 | 單元測試 | - | ⏳ |
+
+### 實驗原則
+- 每個 Step 完成後立即 commit
+- Commit message 格式：`[Phase 3] Step N: 模組名稱 (commit HASH)`
+- PROJECT_STATUS.md 即時更新進度
+
+---
+
+---
+
 ## 系統層級原則（來自 Johnny 的第一性原理）
 
 | 編號 | 領域 | 第一性原理 |
