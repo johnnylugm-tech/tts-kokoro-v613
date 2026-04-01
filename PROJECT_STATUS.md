@@ -166,27 +166,11 @@ Johnny 的核心目標：
 
 ---
 
-## Phase 3 進度（實驗中）
+## Phase 3 進度
 
-| Step | 模組 | Commit | 狀態 |
-|------|------|--------|------|
-| 0 | Directory Setup | ad628ab | ✅ |
-| 1 | TaiwanLexicon | dcf6119 | ✅ |
-| 2 | SSMLParser | dcb034a | ✅ |
-| 3 | TextSplitter | 2f17124 | ✅ |
-| 4 | SynthEngine | - | ⏳ |
-| 5 | CircuitBreaker | - | ⏳ |
-| 6 | RedisCache | - | ⏳ |
-| 7 | AudioConverter | - | ⏳ |
-| 8 | FastAPI routes | - | ⏳ |
-| 9 | Typer CLI | - | ⏳ |
-| 10 | 合規矩陣 | - | ⏳ |
-| 11 | 單元測試 | - | ⏳ |
+Phase 3 尚未開始。SAD 已合併完成（commit 07605ac）。
 
-### 實驗原則
-- 每個 Step 完成後立即 commit
-- Commit message 格式：`[Phase 3] Step N: 模組名稱 (commit HASH)`
-- PROJECT_STATUS.md 即時更新進度
+等待 Johnny 指示開始 Phase 3 實作。
 
 ---
 
