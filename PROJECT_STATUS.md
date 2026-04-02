@@ -178,6 +178,39 @@ Johnny 的核心目標：
 
 ---
 
+## Phase 3 進度
+
+Phase 3 尚未開始。SAD 已合併完成（commit 07605ac）。
+
+等待 Johnny 指示開始 Phase 3 實作。
+
+### Phase 3 狀態持久化設計（Experiment v1）
+
+**原則**：每個 Step 完成後立即 commit 到 GitHub。Commit message 包含 Step 編號和 commit hash。
+
+**Commit 格式**：`[Phase N] Step X: 模組名稱 (commit HASH)`
+
+**持久化資訊**（每個 Step）：
+| 資訊 | 儲存位置 |
+|------|----------|
+| 當前 Phase | `PROJECT_STATUS.md` |
+| Step 完成狀態 | `PROJECT_STATUS.md` |
+| 完整 source code | GitHub commit |
+| Framework version | `PROJECT_STATUS.md` |
+
+**新工具接手流程**：
+1. Clone repo
+2. Read `PROJECT_STATUS.md` → 知道做到哪個 Phase/Step
+3. Read `PROJECT_STATUS.md` → 知道 Framework 版本
+4. Install methodology-v2 (`pip install methodology-v2`)
+5. 從上次 commit 繼續
+
+---
+
+---
+
+---
+
 ## 系統層級原則（來自 Johnny 的第一性原理）
 
 | 編號 | 領域 | 第一性原理 |
