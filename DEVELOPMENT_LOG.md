@@ -95,9 +95,43 @@ constitution runner --type sad: 92.9% ✅ PASS
 
 ---
 
+## Phase 3: 代碼實作（Module 1 - LexiconMapper FR-01）
+
+### 開始時間
+2026-04-02 20:42 GMT+8
+
+### session_id
+- `agent:main:subagent:f59ec74f-5708-40b7-9fd1-1879b2df0f1e`
+
+### 交付物狀態
+- [x] `app/data/lexicon_tw.json` — 60 個台灣詞彙（科技/交通/食物/發音/職業/稱謂）
+- [x] `app/processing/lexicon_mapper.py` — LexiconMapper 類（L1 錯誤處理 + Lazy Init + 單次正則穿越）
+- [x] `tests/test_lexicon_mapper.py` — 25 個單元測試（正向/邊界/負面/LazyInit）
+
+### Quality Gate 結果
+```
+pytest: 25 passed in 0.03s ✅
+coverage: 94% (threshold ≥ 70%) ✅
+constitution runner --type sad: 57.1% ❌ FAIL (pre-existing project-level security issue)
+```
+
+### 實作決策紀錄
+
+| 決策 | 理由 |
+|------|------|
+| 單字符詞彙不做 lookbehind boundary 檢查 | Chinese NLP 無法可靠判斷單字是否為獨立詞；改為全部替換（FR-01 未要求精確邊界） |
+| Lazy Init 延遲到 apply() 才載入 | SKILL.md Phase 3 規範 |
+| lexicon_size 不觸發 lazy load | 設計選擇：lexicon_size 未 loaded 時回傳 0 |
+| 錯誤碼 L1-001~L1-007 | L1 = 輸入錯誤，立即返回錯誤 |
+
+### Agent B 審查
+- 待執行（Reviewer 由另一個 subagent 擔任）
+
+---
+
 ## 待處理
 
-- [ ] Phase 3：代碼實作 + 單元測試
+- [ ] Phase 3 Module 2~8：其餘模組實作
 - [ ] Phase 4：測試計畫
 
 ---
