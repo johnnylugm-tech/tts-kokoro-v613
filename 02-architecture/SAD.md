@@ -1,9 +1,48 @@
 # SAD.md — tts-kokoro-v613 軟體架構文件
 
-> 版本：v6.13.1  
-> Phase：Phase 2（架構設計）  
-> 日期：2026-04-01  
+> 版本：v6.13.2  
+> Phase：Phase 2（架構設計）→ Phase 3（實作）  
+> 日期：2026-04-02  
 > 基於：SRS.md v6.13.1
+
+---
+
+## 0. Phase 3 框架對齊
+
+### 0.1 定位說明
+
+本文檔 Phase 2 階段以 Layer 視角呈現系統架構（§2–§9），符合架構設計產出要求。
+進入 Phase 3 後，實作以 **FR 模組** 為單位組織，每個 FR 模組是獨立的實作/測試/審查單位。
+Layer 結構降為 FR 模組內部實作細節，非頂層架構。
+
+### 0.2 Phase 3 Entry Conditions
+
+| 條件 | 驗證方式 |
+|------|---------|
+| Phase 2 APPROVE | Agent B APPROVE in Phase2_STAGE_PASS.md |
+| state.json 初始化 | `.methodology/state.json` 存在且 `current_phase = 2` |
+| sessions_spawn.log 存在 | A/B 記錄存在 |
+
+### 0.3 Constitution 類型（Phase 3）
+
+Phase 3 代碼實作使用 `sad` 作為 Constitution type。
+
+| 維度 | 門檻 |
+|------|------|
+| 正確性（Correctness） | = 100% |
+| 安全性（Security） | = 100% |
+| 可維護性（Maintainability） | > 70% |
+| 測試覆蓋率 | > 80% |
+
+### 0.4 Quality Gate 工具（Phase 3）
+
+| 指標 | 工具 | 命令 |
+|------|------|------|
+| Constitution | constitution/runner.py | `python3 quality_gate/constitution/runner.py --type sad` |
+| ASPICE 合規 | doc_checker.py | `python3 quality_gate/doc_checker.py` |
+| Phase Truth | phase-verify | `python cli.py phase-verify --phase 3` |
+| 測試通過率 | pytest | `pytest tests/ -v` |
+| 覆蓋率 | pytest --cov | `pytest --cov=app/ -v` |
 
 ---
 
@@ -454,7 +493,72 @@ tts-v610 "文字" -o output.mp3
 
 ---
 
-## 10. 安全性矩陣
+## 10. 目錄結構（Phase 3 FR 模組化）
+
+> **原則**：每個 FR 模組有自己的目錄，Layer 是內部實作細節。
+
+```
+tts-kokoro-v613/
+├── app/
+│   ├── processing/                # FR-01, FR-02, FR-03 模組目錄
+│   │   ├── __init__.py
+│   │   ├── lexicon_mapper.py      # FR-01（TaiwanLexicon）
+│   │   │   └── internals/         # 可選：內部 layer（如 /lexicon_data/）
+│   │   ├── ssml_parser.py         # FR-02
+│   │   └── text_chunker.py        # FR-03
+│   ├── synth/                     # FR-04 模組目錄
+│   │   ├── __init__.py
+│   │   ├── async_engine.py        # FR-04（AsyncEngine）
+│   │   └── circuit_breaker.py     # FR-05
+│   ├── cache/                     # FR-06 模組目錄
+│   │   ├── __init__.py
+│   │   └── redis_cache.py
+│   ├── audio/                     # FR-08 模組目錄
+│   │   ├── __init__.py
+│   │   └── audio_converter.py
+│   ├── api/                       # FR-07 模組目錄
+│   │   ├── __init__.py
+│   │   ├── server.py
+│   │   └── cli.py
+│   └── main.py
+├── tests/                         # 測試（與 FR 對應）
+│   ├── test_fr01_lexicon.py
+│   ├── test_fr02_ssml.py
+│   ├── test_fr03_chunker.py
+│   ├── test_fr04_synth.py
+│   ├── test_fr05_circuit.py
+│   ├── test_fr06_cache.py
+│   ├── test_fr07_api.py
+│   └── test_fr08_audio.py
+├── quality_gate/                  # Phase 3 Quality Gate 工具
+│   ├── constitution/
+│   │   └── runner.py
+│   └── doc_checker.py
+├── .methodology/
+│   └── state.json
+├── 02-architecture/
+│   ├── SAD.md
+│   └── adr/
+├── SRS.md
+└── PROJECT_STATUS.md
+```
+
+### 10.1 FR 模組與 Layer 對照
+
+| FR 模組 | 目錄 | Layer（內部實作） |
+|---------|------|------------------|
+| FR-01 LexiconMapper | `app/processing/` | TextProc Layer（內部） |
+| FR-02 SSMLParser | `app/processing/` | TextProc Layer（內部） |
+| FR-03 TextChunker | `app/processing/` | TextProc Layer（內部） |
+| FR-04 AsyncEngine | `app/synth/` | Synthesis Layer（內部） |
+| FR-05 CircuitBreaker | `app/synth/` | Synthesis Layer（內部） |
+| FR-06 RedisCache | `app/cache/` | Caching Layer（內部） |
+| FR-07 API/CLI | `app/api/` | API Layer（內部） |
+| FR-08 AudioConverter | `app/audio/` | AudioProc Layer（內部） |
+
+---
+
+## 11. 安全性矩陣
 
 | 威脅 | 緩解措施 | 驗證方式 |
 |------|---------|---------|
@@ -465,5 +569,5 @@ tts-v610 "文字" -o output.mp3
 
 ---
 
-*文件狀態：Phase 2 交付物*
+*文件狀態：Phase 3 準備完成（SAD 已與 SKILL.md Phase 3 框架對齊）*
 *下次審查：Phase 3 實作完成後*

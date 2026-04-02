@@ -1,8 +1,8 @@
 # 專案狀態總覽 — tts-kokoro-v613
 
 > 建立日期：2026-04-01  
-> 最近更新：2026-04-01  
-> 狀態：Phase 1 ✅ 完成，Phase 2 ✅ 完成，待 Phase 3
+> 最近更新：2026-04-02  
+> 狀態：Phase 1 ✅ 完成，Phase 2 ✅ 完成，SAD ✅ 對齊 Phase 3，待 Phase 3 實作
 
 ---
 
@@ -95,6 +95,18 @@ Johnny 的核心目標：
 | 正確性（Correctness） | 100% | ✅ 4/4 | ✅ |
 | 安全性（Security） | 100% | ✅ 4/4 | ✅ |
 | 可維護性（Maintainability） | > 80% | ✅ 4/4 | ✅ |
+
+### SAD.md Phase 3 框架對齊（2026-04-02）
+
+| 修正項目 | 說明 |
+|----------|------|
+| §0.2 Phase 3 Entry Conditions | 加入 Entry Conditions 表格 |
+| §0.3 Constitution Type | 加入 Phase 3 `sad` type 門檻 |
+| §0.4 Quality Gate 工具 | 加入工具對應表（constitution/runner.py, doc_checker.py, phase-verify, pytest） |
+| §10 目錄結構 | 重構為 FR 模組化目錄，Layer 降為內部實作細節 |
+| §10.1 FR-Layer 對照表 | FR 模組與內部 Layer 的對照關係 |
+
+---
 
 ### Phase 2 模組設計
 
@@ -245,7 +257,8 @@ Johnny 的核心目標：
 - [x] 產出 SAD.md
 - [x] 產出 ADR
 - [x] 執行 Constitution check（92.9% PASS）
-- [ ] Phase 2 Git commit + push
+- [x] Phase 2 Git commit + push
+- [x] SAD.md Phase 3 框架對齊（2026-04-02）
 - [ ] 請求 Johnny CONFIRM
 - [ ] Phase 3 實作啟動
 
