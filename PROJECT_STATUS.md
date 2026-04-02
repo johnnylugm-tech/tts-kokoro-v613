@@ -1,8 +1,30 @@
 # 專案狀態總覽 — tts-kokoro-v613
 
 > 建立日期：2026-04-01  
-> 最近更新：2026-04-01  
+> 最近更新：2026-04-02  
 > 狀態：Phase 1 ✅ 完成，Phase 2 ✅ 完成，待 Phase 3
+
+---
+
+## 🎯 目前進度
+
+### 現況快照
+| 項目 | 值 |
+|------|-----|
+| Phase | 3 |
+| Step | 0 (Phase 3 起點，已 revert 至 SAD 合併後狀態) |
+| Status | 🔄 進行中 |
+| Git | `02e5d34` (revert commit，清除 Step 1-4.1 實作) |
+
+### 下一步動作
+| 順序 | 負責 | 動作 | 依賴 |
+|------|------|------|------|
+| 1 | Agent A | 依 SAD FR-01~09 順序實作第一個模組 | Phase 3 START |
+| 2 | Agent A | 每個模組完成後執行 Quality Gate | 模組實作完成 |
+| 3 | Agent B | 審查每個模組的 STAGE_PASS | Quality Gate PASS |
+
+### Blocker
+- (空)
 
 ---
 
@@ -168,39 +190,11 @@ Johnny 的核心目標：
 
 ## Phase 3 進度
 
-Phase 3 進行中。SAD 已合併完成（commit 07605ac）。
+Phase 3 已 revert 至起點（commit `02e5d34`）。SAD 已合併完成（commit `528ce61`）。
 
-### Phase 3 實作進度 (CircuitBreaker 模組)
+### Phase 3 實作進度
 
-| Step | 任務 | Commit | 狀態 |
-|------|------|--------|------|
-| 4.1 | CircuitBreaker — 實作 | `7eb24f6` | ✅ 完成 |
-| 4.2 | CircuitBreaker — 單元測試 | - | ⏳ 待開始 |
-| 4.3 | CircuitBreaker — Developer 審查 | - | ⏳ 待開始 |
-| 4.4 | CircuitBreaker — Architect 同行審查 | - | ⏳ 待開始 |
-| 4.5 | CircuitBreaker — 測試完整性確認 | - | ⏳ 待開始 |
-| 4.6 | CircuitBreaker — Quality Gate | - | ⏳ 待開始 |
-| 4.7 | CircuitBreaker — 合規矩陣 | - | ⏳ 待開始 |
-| 4.8 | CircuitBreaker — STAGE_PASS | - | ⏳ 待開始 |
-
-等待 Agent B 審查或 Johnny 指示。
-
----
-
-### Phase 3 實作進度 (SynthEngine 模組 — Module 4)
-
-| Step | 任務 | Commit | 狀態 |
-|------|------|--------|------|
-| 1 | SynthEngine — 實作 (FR-04) | `2ce2e2f` | ✅ 完成 |
-| 2 | SynthEngine — 單元測試 (15項) | `2ce2e2f` | ✅ 完成 |
-| 3 | SynthEngine — Developer 審查 | `2ce2e2f` | ✅ 完成 |
-| 4 | 通知 Agent B 審查 | - | ⏳ **進行中** |
-| 5 | Agent B — 測試完整性確認 | - | ⏳ 待開始 |
-| 6 | SynthEngine — Quality Gate | - | ⏳ 待開始 |
-| 7 | SynthEngine — 合規矩陣更新 | - | ⏳ 待開始 |
-| 8 | SynthEngine — STAGE_PASS | - | ⏳ 待開始 |
-
-**注意**: 完成 Step 1-3 後停下來等待 Agent B (Johnny1027_bot) 審查。
+Phase 3 已 revert 至起點（commit `02e5d34`）。實作尚未開始，請依 SAD FR-01~09 順序從第一個模組啟動。
 
 ### Phase 3 狀態持久化設計（Experiment v1）
 
