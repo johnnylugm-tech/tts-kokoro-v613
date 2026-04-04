@@ -1,0 +1,1 @@
+/Users/johnny/.openclaw/workspace/methodology-v2/docs/P3_SOP.md

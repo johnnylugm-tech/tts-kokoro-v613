@@ -1,0 +1,24 @@
+{
+  "current_phase": 1,
+  "current_step": null,
+  "current_module": null,
+  "status": "INIT",
+  "last_commit": null,
+  "last_updated": "2026-04-04T13:57:20.210420+00:00",
+  "phase_state": {
+    "started_at": null,
+    "blocks": 0,
+    "ab_rounds": 0,
+    "warnings": 0,
+    "last_gate_score": null,
+    "estimated_minutes": 60
+  },
+  "artifacts": {},
+  "tasks": [],
+  "dependencies": {},
+  "next_action": null,
+  "blockers": [],
+  "history": [],
+  "state_history": [],
+  "project_name": "tts-kokoro-v613"
+}

@@ -1,0 +1,1 @@
+/Users/johnny/.openclaw/workspace/methodology-v2/SKILL.md
