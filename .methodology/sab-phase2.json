@@ -1,0 +1,120 @@
+{
+  "version": "1.0",
+  "created_at": "2026-04-02T00:00:00Z",
+  "phase": 2,
+  "project": "tts-kokoro-v613",
+  "modules": {
+    "lexicon_mapper": {
+      "type": "processing",
+      "responsibility": "台灣中文詞彙映射（FR-01），將國/異體字轉為候選詞",
+      "public_api": ["map(text)", "add_word(canonical, variants)"],
+      "dependencies": [],
+      "stability": "stable",
+      "quality_attributes": ["reusable", "testable"]
+    },
+    "ssml_parser": {
+      "type": "processing",
+      "responsibility": "SSML 解析（FR-02），支援 <speak>/<voice>/<break>/<prosody>/<phoneme>",
+      "public_api": ["parse(ssml_text)", "to_kokoro_params(ssml_element)"],
+      "dependencies": ["lexicon_mapper"],
+      "stability": "stable",
+      "quality_attributes": ["reusable", "testable"]
+    },
+    "text_chunker": {
+      "type": "processing",
+      "responsibility": "文本切分（FR-03），三級遞迴，確保每 chunk ≤ 250 字",
+      "public_api": ["chunk(text)", "split_recursive(text, max_chars)"],
+      "dependencies": [],
+      "stability": "stable",
+      "quality_attributes": ["testable"]
+    },
+    "synth_engine": {
+      "type": "synthesis",
+      "responsibility": "並行合成引擎（FR-04），httpx.AsyncClient + MP3 串接",
+      "public_api": ["synthesize(texts, voice)", "synthesize_stream(text)"],
+      "dependencies": ["kokoro_client", "text_chunker"],
+      "stability": "unstable",
+      "quality_attributes": ["performant"]
+    },
+    "circuit_breaker": {
+      "type": "infrastructure",
+      "responsibility": "斷路器（FR-05），失敗 ≥ 3 → Open，10 秒後 Half-Open",
+      "public_api": ["call(func)", "get_state()", "reset()"],
+      "dependencies": [],
+      "stability": "stable",
+      "quality_attributes": ["resilient", "testable"]
+    },
+    "redis_cache": {
+      "type": "infrastructure",
+      "responsibility": "Redis 快取（FR-06），SHA-256 key，TTL=24h，優雅降級",
+      "public_api": ["get(key)", "set(key, value, ttl)", "delete(key)"],
+      "dependencies": [],
+      "stability": "stable",
+      "quality_attributes": ["performant", "reliable"]
+    },
+    "audio_converter": {
+      "type": "infrastructure",
+      "responsibility": "音訊轉換（FR-08），ffmpeg MP3 ↔ WAV 互轉",
+      "public_api": ["convert(input_path, output_format)", "get_info(path)"],
+      "dependencies": [],
+      "stability": "stable",
+      "quality_attributes": ["reliable"]
+    },
+    "routes": {
+      "type": "api",
+      "responsibility": "FastAPI 路由（FR-07），HTTP API + Typer CLI",
+      "public_api": ["POST /tts", "POST /convert", "CLI tts-v610"],
+      "dependencies": ["synth_engine", "audio_converter", "redis_cache"],
+      "stability": "stable",
+      "quality_attributes": ["documented"]
+    },
+    "kokoro_client": {
+      "type": "backend",
+      "responsibility": "Kokoro Docker 後端客戶端，封裝 HTTP 呼叫",
+      "public_api": ["speech(text, voice, speed)", "voices()"],
+      "dependencies": [],
+      "stability": "stable",
+      "quality_attributes": ["reliable"]
+    }
+  },
+  "layers": [
+    {
+      "name": "backend",
+      "modules": ["kokoro_client"],
+      "allowed_dependencies": []
+    },
+    {
+      "name": "processing",
+      "modules": ["lexicon_mapper", "ssml_parser", "text_chunker"],
+      "allowed_dependencies": ["backend"]
+    },
+    {
+      "name": "synthesis",
+      "modules": ["synth_engine"],
+      "allowed_dependencies": ["backend", "processing"]
+    },
+    {
+      "name": "infrastructure",
+      "modules": ["circuit_breaker", "redis_cache", "audio_converter"],
+      "allowed_dependencies": []
+    },
+    {
+      "name": "api",
+      "modules": ["routes"],
+      "allowed_dependencies": ["synthesis", "infrastructure"]
+    }
+  ],
+  "architecture_rules": [
+    "backend 不能依賴其他 layer",
+    "processing 不能依賴 synthesis 或 api",
+    "infrastructure 不能依賴 processing 或 synthesis 或 api",
+    "api 可以依賴 synthesis 和 infrastructure",
+    "synthesis 可以依賴 backend 和 processing"
+  ],
+  "quality_targets": {
+    "max_complexity": 15,
+    "min_coverage": 80,
+    "max_coupling": 0.3,
+    "max_response_time_ms": 300
+  }
+}
