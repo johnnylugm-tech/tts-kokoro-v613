@@ -5,6 +5,7 @@
 > 對照組：kokoro-taiwan-proxy  
 > 日期：2026-03-31  
 > 規格來源：SRS_raw.txt（docx 原文）
+> 框架遵循：本專案依循 [methodology-v2](https://github.com/johnnylugm-tech/methodology-v2) 框架開發
 
 ---
 
