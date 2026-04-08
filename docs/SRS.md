@@ -163,6 +163,20 @@ tts-v610 --file input.txt -o output/
 
 ---
 
+### FR-09：Kokoro Proxy
+
+**描述**：整合外部 Kokoro TTS API，代理轉發 HTTP 請求到 Kokoro Docker 後端。
+
+**職責**：封裝 HTTP 呼叫、處理音色選擇、控制速度參數。
+
+**SAD 對應**：`app/backend/kokoro_client.py`
+
+**邏輯驗證方法**：
+- 測試案例：speech("你好", "zf_xiaoxiao", 1.0) → 回傳 MP3 bytes
+- 測試案例：voices() → 回傳可用音色列表
+
+---
+
 ## 3. 非功能需求（NFR）
 
 ### NFR-01：效能
