@@ -39,6 +39,13 @@ class CircuitBreakerOpen(Exception):
     """
 
     def __init__(self, message: str = "Circuit breaker is OPEN") -> None:
+        """
+        [FR-05] 斷路器處於 Open 狀態，請求被拒絕。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
+        """
         self.message = message
         super().__init__(self.message)
 
@@ -88,6 +95,17 @@ class CircuitBreaker:
         failure_threshold: int = FAILURE_THRESHOLD,
         recovery_timeout: float = RECOVERY_TIMEOUT,
     ) -> None:
+        """
+        [FR-05] 初始化斷路器。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
+
+        Args:
+            failure_threshold: 觸發断路的連續失敗次數，預設 3。
+            recovery_timeout: Open 後進入 Half-Open 的秒數，預設 10.0。
+        """
         if failure_threshold <= 0:
             raise ValueError("failure_threshold must be a positive integer")
         if recovery_timeout < 0:
@@ -105,20 +123,36 @@ class CircuitBreaker:
 
     @property
     def state(self) -> CircuitState:
-        """取得目前狀態，自動處理計時器切換。"""
+        """
+        [FR-05] 取得目前狀態，自動處理計時器切換。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
+        """
         self._check_auto_transition()
         return self._state
 
     @property
     def failure_count(self) -> int:
-        """取得目前連續失敗計數。"""
+        """
+        [FR-05] 取得目前連續失敗計數。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
+        """
         return self._failure_count
 
     # ---- Public API --------------------------------------------------------
 
     def call(self, func: callable, *args: object, **kwargs: object) -> object:
         """
-        帶断路器保護的同步函式呼叫。
+        [FR-05] 帶断路器保護的同步函式呼叫。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
 
         Args:
             func: 要執行的函式。
@@ -147,7 +181,11 @@ class CircuitBreaker:
 
     async def call_async(self, coro: object, *args: object, **kwargs: object) -> object:
         """
-        帶断路器保護的非同步協程呼叫。
+        [FR-05] 帶断路器保護的非同步協程呼叫。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
 
         Args:
             coro: 非同步協程工廠（傳入協程物件本身，而非尚未包裝的函式）。
@@ -174,7 +212,11 @@ class CircuitBreaker:
 
     def record_success(self) -> None:
         """
-        記錄一次成功呼叫。
+        [FR-05] 記錄一次成功呼叫。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
 
         任何成功都會重置失敗計數並將狀態設為 CLOSED。
         """
@@ -184,8 +226,12 @@ class CircuitBreaker:
 
     def record_failure(self) -> None:
         """
-        記錄一次失敗呼叫。
+        [FR-05] 記錄一次失敗呼叫。
 
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
         達到閾值後將狀態設為 OPEN，並記錄首次失敗時間。
         """
         self._failure_count += 1
@@ -196,7 +242,11 @@ class CircuitBreaker:
 
     def reset(self) -> None:
         """
-        重置斷路器至初始 CLOSED 狀態，清除所有計數。
+        [FR-05] 重置斷路器至初始 CLOSED 狀態，清除所有計數。
+
+        Citations:
+            SRS.md#L97-L105 (FR-05 需求描述與行為定義)
+            SAD.md#L182 (CircuitBreaker 模組對映)
         """
         self._state = CircuitState.CLOSED
         self._failure_count = 0
