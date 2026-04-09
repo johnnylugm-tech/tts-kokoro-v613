@@ -39,28 +39,54 @@ from pydantic import BaseModel, Field
 # ---------------------------------------------------------------------------
 
 class KokoroAPIError(RuntimeError):
-    """[FR-09] L4：Kokoro API 層級錯誤（父類）。"""
+    """[FR-09] L4：Kokoro API 層級錯誤（父類）。
+
+    Citations:
+        SRS.md#L166-L179
+        SAD.md#L421-L463
+    """
 
     def __init__(self, status_code: int, detail: str) -> None:
+        """Citations: SRS.md#L166-L179, SAD.md#L421-L463"""
         self.status_code = status_code
         self.detail = detail
         super().__init__(f"KokoroAPIError {status_code}: {detail}")
 
 
 class KokoroConnectionError(OSError):
-    """[FR-09] L4：網路中斷、無法連線至 Kokoro 後端。"""
+    """[FR-09] L4：網路中斷、無法連線至 Kokoro 後端。
+
+    Citations:
+        SRS.md#L166-L179
+        SAD.md#L421-L463
+    """
 
 
 class KokoroTimeoutError(TimeoutError):
-    """[FR-09] L4：請求逾時。"""
+    """[FR-09] L4：請求逾時。
+
+    Citations:
+        SRS.md#L166-L179
+        SAD.md#L421-L463
+    """
 
 
 class KokoroClientError(KokoroAPIError):
-    """[FR-09] L4 sub：客戶端錯誤（4xx），不計入 CB。"""
+    """[FR-09] L4 sub：客戶端錯誤（4xx），不計入 CB。
+
+    Citations:
+        SRS.md#L166-L179
+        SAD.md#L421-L463
+    """
 
 
 class KokoroServerError(KokoroAPIError):
-    """[FR-09] L4 sub：伺服器錯誤（5xx），計入 CB。"""
+    """[FR-09] L4 sub：伺服器錯誤（5xx），計入 CB。
+
+    Citations:
+        SRS.md#L166-L179
+        SAD.md#L421-L463
+    """
 
 
 # ---------------------------------------------------------------------------
@@ -241,7 +267,12 @@ class KokoroClient:
             return False
 
     async def close(self) -> None:
-        """[FR-09] 關閉 HTTP 客戶端，釋放連線池。"""
+        """[FR-09] 關閉 HTTP 客戶端，釋放連線池。
+
+        Citations:
+            SRS.md#L166-L179
+            SAD.md#L421-L463
+        """
         if self._client is not None:
             await self._client.aclose()
             self._client = None
