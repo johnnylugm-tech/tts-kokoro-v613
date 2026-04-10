@@ -1,2 +1,3 @@
 .ralph/
 .pytest_cache/
+sessions_spawn.log
