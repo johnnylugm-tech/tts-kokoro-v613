@@ -856,76 +856,62 @@ Layer 4 (Lexicon): 唯讀操作內部資料 — 無注入風險
 
 ---
 
-## 10. 目錄結構（Phase 3 FR 模組化）
+## 10. 目錄結構（Phase 3）
 
-> **原則**：每個 FR 模組有自己的目錄，Layer 是內部實作細節。
+> **原則**：Phase 3 交付物依 SKILL.md §4 Phase 路由規定：`src/` + `tests/`
 
 ```
 tts-kokoro-v613/
-├── app/
-│   ├── processing/                # FR-01, FR-02, FR-03 模組目錄
+├── src/                           # 實作程式碼（SKILL.md §4 規定）
+│   ├── processing/                # FR-01, FR-02, FR-03
 │   │   ├── __init__.py
-│   │   ├── lexicon_mapper.py      # FR-01（TaiwanLexicon）
-│   │   │   └── internals/         # 可選：內部 layer（如 /lexicon_data/）
-│   │   ├── ssml_parser.py         # FR-02
+│   │   ├── lexicon_mapper.py     # FR-01
+│   │   ├── ssml_parser.py        # FR-02
 │   │   └── text_chunker.py       # FR-03
-│   ├── synth/                     # FR-04, FR-05 模組目錄
+│   ├── synth/                    # FR-04, FR-05
 │   │   ├── __init__.py
-│   │   ├── async_engine.py        # FR-04（AsyncEngine）
-│   │   └── circuit_breaker.py     # FR-05
-│   ├── cache/                     # FR-06 模組目錄
+│   │   ├── synth_engine.py       # FR-04
+│   │   └── circuit_breaker.py    # FR-05
+│   ├── cache/                    # FR-06
 │   │   ├── __init__.py
 │   │   └── redis_cache.py
-│   ├── audio/                     # FR-08 模組目錄
+│   ├── audio/                    # FR-08
 │   │   ├── __init__.py
 │   │   └── audio_converter.py
-│   ├── api/                       # FR-07 模組目錄
+│   ├── api/                      # FR-07
 │   │   ├── __init__.py
-│   │   ├── server.py
-│   │   └── cli.py
-│   ├── backend/                   # FR-09 模組目錄
-│   │   ├── __init__.py
-│   │   └── kokoro_client.py
-│   ├── main.py
-│   └── models/
-│       ├── speech.py
-│       └── errors.py
-├── tests/                         # 測試（與 FR 對應）
-│   ├── test_fr01_lexicon.py
-│   ├── test_fr02_ssml.py
-│   ├── test_fr03_chunker.py
-│   ├── test_fr04_synth.py
-│   ├── test_fr05_circuit.py
-│   ├── test_fr06_cache.py
-│   ├── test_fr07_api.py
-│   ├── test_fr08_audio.py
-│   └── test_fr09_backend.py
-├── quality_gate/                  # Phase 3 Quality Gate 工具
-│   ├── constitution/
-│   │   └── runner.py
-│   └── doc_checker.py
-├── .methodology/
-│   └── state.json
-├── 02-architecture/
-│   ├── SAD.md
-│   └── adr/
-├── SRS.md
-└── PROJECT_STATUS.md
+│   │   └── routes.py
+│   └── backend/                  # FR-09
+│       ├── __init__.py
+│       └── kokoro_client.py
+├── tests/                        # 測試（與 FR 一對一對應）
+│   ├── test_fr01_lexicon_mapper.py
+│   ├── test_fr02_ssml_parser.py
+│   ├── test_fr03_text_chunker.py
+│   ├── test_fr04_synth_engine.py
+│   ├── test_fr05_circuit_breaker.py
+│   ├── test_fr06_redis_cache.py
+│   ├── test_fr07_routes.py
+│   ├── test_fr08_audio_converter.py
+│   └── test_fr09_kokoro_client.py
+└── quality_gate/                 # Quality Gate 工具
+    └── constitution/
+        └── runner.py
 ```
 
-### 10.1 FR 模組與 Layer 對照
+### 10.1 FR 模組對照（SKILL.md §4 規定）
 
-| FR 模組 | 目錄 | Layer（內部實作） |
-|---------|------|------------------|
-| FR-01 LexiconMapper | `app/processing/` | TextProc Layer（內部） |
-| FR-02 SSMLParser | `app/processing/` | TextProc Layer（內部） |
-| FR-03 TextChunker | `app/processing/` | TextProc Layer（內部） |
-| FR-04 AsyncEngine | `app/synth/` | Synthesis Layer（內部） |
-| FR-05 CircuitBreaker | `app/synth/` | Synthesis Layer（內部） |
-| FR-06 RedisCache | `app/cache/` | Caching Layer（內部） |
-| FR-07 API/CLI | `app/api/` | API Layer（內部） |
-| FR-08 AudioConverter | `app/audio/` | AudioProc Layer（內部） |
-| FR-09 KokoroClient | `app/backend/` | Backend Layer（內部） |
+| FR 模組 | 程式碼目錄 | 測試檔案 |
+|---------|-----------|----------|
+| FR-01 LexiconMapper | `src/processing/lexicon_mapper.py` | `tests/test_fr01_lexicon_mapper.py` |
+| FR-02 SSMLParser | `src/processing/ssml_parser.py` | `tests/test_fr02_ssml_parser.py` |
+| FR-03 TextChunker | `src/processing/text_chunker.py` | `tests/test_fr03_text_chunker.py` |
+| FR-04 SynthEngine | `src/synth/synth_engine.py` | `tests/test_fr04_synth_engine.py` |
+| FR-05 CircuitBreaker | `src/synth/circuit_breaker.py` | `tests/test_fr05_circuit_breaker.py` |
+| FR-06 RedisCache | `src/cache/redis_cache.py` | `tests/test_fr06_redis_cache.py` |
+| FR-07 Routes | `src/api/routes.py` | `tests/test_fr07_routes.py` |
+| FR-08 AudioConverter | `src/audio/audio_converter.py` | `tests/test_fr08_audio_converter.py` |
+| FR-09 KokoroClient | `src/backend/kokoro_client.py` | `tests/test_fr09_kokoro_client.py` |
 
 ---
 
