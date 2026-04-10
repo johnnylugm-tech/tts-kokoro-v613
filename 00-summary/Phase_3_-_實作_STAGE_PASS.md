@@ -74,6 +74,13 @@ Agent B: （待填寫） Session: —
 ## Johnny 介入（如有）
 （僅在 Agent B 提出重大問題時填寫）
 
+## artifact_verification（HR-15）
+
+| Artifact | 狀態 | 說明 |
+|----------|------|------|
+| SRS.md | ✅ | 已讀 |
+| SAD.md | ✅ | 已讀 |
+
 ---
 
 ### 附：實際工具結果
