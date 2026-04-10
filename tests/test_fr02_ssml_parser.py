@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import pytest
 
-from app.processing.ssml_parser import (
+from src.processing.ssml_parser import (
     SSMLParser,
     SSMLSegment,
     SSMLParseError,

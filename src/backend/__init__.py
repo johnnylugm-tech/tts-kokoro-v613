@@ -1,5 +1,5 @@
 """[FR-09] Backend modules — Kokoro Proxy."""
-from app.backend.kokoro_client import (
+from src.backend.kokoro_client import (
     KokoroClient,
     KokoroConnectionError,
     KokoroAPIError,

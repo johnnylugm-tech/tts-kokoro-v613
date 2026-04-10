@@ -18,7 +18,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.api.routes import (
+from src.api.routes import (
     CLIConfig,
     CLIResult,
     build_cli_parser,

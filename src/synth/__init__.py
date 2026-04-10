@@ -4,7 +4,7 @@
 - synth_engine：並行合成引擎（asyncio.gather + httpx.AsyncClient）
 """
 
-from app.synth.synth_engine import (
+from src.synth.synth_engine import (
     SynthesisRequest,
     SynthesisResult,
     SynthEngine,

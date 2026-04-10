@@ -16,7 +16,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from app.audio.audio_converter import (
+from src.audio.audio_converter import (
     AudioConverter,
     AudioConverterError,
     AudioConverterNotFoundError,

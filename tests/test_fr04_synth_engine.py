@@ -17,7 +17,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from app.synth.synth_engine import (
+from src.synth.synth_engine import (
     KokoroClientProtocol,
     CircuitBreakerProtocol,
     SynthesisPartialError,

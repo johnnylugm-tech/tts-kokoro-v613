@@ -25,7 +25,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from app.processing.text_chunker import (
+from src.processing.text_chunker import (
     TextChunker,
     _split_by_delimiter,
     _is_mixed_script,
