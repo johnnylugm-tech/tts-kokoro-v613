@@ -268,7 +268,7 @@ class TestSynthesizeSpeech:
                 return_value=mock_response
             )
 
-            with patch("app.api.routes.is_file_input", return_value=True):
+            with patch("src.api.routes.is_file_input", return_value=True):
                 config = CLIConfig(input="/nonexistent/file.txt", output="output.mp3")
                 result = await synthesize_speech(config)
                 assert result.success is False

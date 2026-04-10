@@ -154,7 +154,7 @@ class TestNoRedisLibrary:
     def test_enabled_but_not_available(self):
         """模組啟用但無 redis.asyncio → is_enabled=True, is_available=False。"""
         cfg = MockAppConfig(redis=MockRedisConfig(url="redis://localhost:6379"))
-        with patch("app.cache.redis_cache._REDIS_AVAILABLE", False):
+        with patch("src.cache.redis_cache._REDIS_AVAILABLE", False):
             cache = RedisCache(cfg)
             assert cache.is_enabled is True
             assert cache.is_available is False
@@ -180,7 +180,7 @@ class TestCacheOperations:
     @pytest.fixture
     def cache_with_redis(self, mock_redis):
         cfg = MockAppConfig(redis=MockRedisConfig(url="redis://localhost:6379"))
-        with patch("app.cache.redis_cache._REDIS_AVAILABLE", True):
+        with patch("src.cache.redis_cache._REDIS_AVAILABLE", True):
             cache = RedisCache(cfg)
             cache._redis = mock_redis
             cache._available = True
@@ -288,13 +288,13 @@ class TestTTL:
     def test_default_ttl_is_24h(self):
         """設定檔未指定時，TTL 預設為 86400 秒。"""
         cfg = MockAppConfig(redis=MockRedisConfig(url="redis://localhost"))
-        with patch("app.cache.redis_cache._REDIS_AVAILABLE", False):
+        with patch("src.cache.redis_cache._REDIS_AVAILABLE", False):
             cache = RedisCache(cfg)
             assert cache._ttl == 86400
 
     def test_custom_ttl_from_config(self):
         """可透過 redis.ttl_seconds 自訂 TTL。"""
         cfg = MockAppConfig(redis=MockRedisConfig(url="redis://localhost", ttl_seconds=3600))
-        with patch("app.cache.redis_cache._REDIS_AVAILABLE", False):
+        with patch("src.cache.redis_cache._REDIS_AVAILABLE", False):
             cache = RedisCache(cfg)
             assert cache._ttl == 3600

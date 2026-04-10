@@ -44,7 +44,7 @@ def mock_httpx_async_client(mocker):
     """Mock httpx.AsyncClient 工廠 fixture。"""
     mock_client = mocker.AsyncMock(spec=httpx.AsyncClient)
     mocker.patch(
-        "app.backend.kokoro_client.httpx.AsyncClient",
+        "src.backend.kokoro_client.httpx.AsyncClient",
         return_value=mock_client,
     )
     return mock_client

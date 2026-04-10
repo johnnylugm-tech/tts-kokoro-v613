@@ -177,7 +177,7 @@ class TestConvertMp3ToWav:
                 mock_proc.wait = AsyncMock()
                 mock_subprocess.return_value = mock_proc
 
-                with patch("app.audio.audio_converter.tempfile.NamedTemporaryFile") as mock_tmp:
+                with patch("src.audio.audio_converter.tempfile.NamedTemporaryFile") as mock_tmp:
                     mock_src = MagicMock()
                     mock_src.__enter__ = MagicMock(return_value=mock_src)
                     mock_src.__exit__ = MagicMock(return_value=False)
@@ -190,8 +190,8 @@ class TestConvertMp3ToWav:
 
                     mock_tmp.side_effect = [mock_src, mock_dst]
 
-                    with patch("app.audio.audio_converter.open", mock_open(read_data=expected_output)) as _mo:
-                        with patch("app.audio.audio_converter.os.unlink"):
+                    with patch("src.audio.audio_converter.open", mock_open(read_data=expected_output)) as _mo:
+                        with patch("src.audio.audio_converter.os.unlink"):
                             result = await converter.convert(
                                 valid_mp3_data, target_format="wav", source_format="mp3"
                             )
@@ -216,7 +216,7 @@ class TestConvertWavToMp3:
                 mock_proc.wait = AsyncMock()
                 mock_subprocess.return_value = mock_proc
 
-                with patch("app.audio.audio_converter.tempfile.NamedTemporaryFile") as mock_tmp:
+                with patch("src.audio.audio_converter.tempfile.NamedTemporaryFile") as mock_tmp:
                     mock_src = MagicMock()
                     mock_src.__enter__ = MagicMock(return_value=mock_src)
                     mock_src.__exit__ = MagicMock(return_value=False)
@@ -229,8 +229,8 @@ class TestConvertWavToMp3:
 
                     mock_tmp.side_effect = [mock_src, mock_dst]
 
-                    with patch("app.audio.audio_converter.open", mock_open(read_data=expected_output)) as _mo:
-                        with patch("app.audio.audio_converter.os.unlink"):
+                    with patch("src.audio.audio_converter.open", mock_open(read_data=expected_output)) as _mo:
+                        with patch("src.audio.audio_converter.os.unlink"):
                             result = await converter.convert(
                                 valid_wav_data, target_format="mp3", source_format="wav"
                             )
@@ -254,7 +254,7 @@ class TestConvertErrorHandling:
                 mock_proc.wait = AsyncMock()
                 mock_subprocess.return_value = mock_proc
 
-                with patch("app.audio.audio_converter.tempfile.NamedTemporaryFile") as mock_tmp:
+                with patch("src.audio.audio_converter.tempfile.NamedTemporaryFile") as mock_tmp:
                     mock_src = MagicMock()
                     mock_src.__enter__ = MagicMock(return_value=mock_src)
                     mock_src.__exit__ = MagicMock(return_value=False)
@@ -267,7 +267,7 @@ class TestConvertErrorHandling:
 
                     mock_tmp.side_effect = [mock_src, mock_dst]
 
-                    with patch("app.audio.audio_converter.os.unlink"):
+                    with patch("src.audio.audio_converter.os.unlink"):
                         with pytest.raises(AudioConverterError) as exc_info:
                             await converter.convert(valid_mp3_data, target_format="wav")
                         assert "1" in str(exc_info.value)
