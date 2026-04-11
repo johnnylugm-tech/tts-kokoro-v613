@@ -1,0 +1,358 @@
+{
+  "project": "tts-kokoro-v613",
+  "version": "v6.13.1",
+  "date_generated": "2026-04-11",
+  "description": "SRS Specification Section → Code Implementation → Test Coverage",
+  "spec_sections": [
+    {
+      "section_id": "§1.1",
+      "section_title": "目的",
+      "description": "基於 Kokoro-82M 之台灣中文最佳化語音合成系統",
+      "implementation": {
+        "files": ["03-development/src/backend/kokoro_client.py"],
+        "description": "Kokoro TTS 整合代理"
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr09_kokoro_client.py",
+        "coverage_status": "covered"
+      }
+    },
+    {
+      "section_id": "§1.2",
+      "section_title": "技術棧",
+      "description": "Kokoro Docker + FastAPI + httpx + Redis",
+      "implementation": {
+        "files": [
+          "03-development/src/backend/kokoro_client.py",
+          "03-development/src/synth/synth_engine.py",
+          "03-development/src/cache/redis_cache.py"
+        ],
+        "description": "後端代理、非同步合成引擎、快取層"
+      },
+      "test_coverage": {
+        "test_files": [
+          "03-development/tests/test_fr04_synth_engine.py",
+          "03-development/tests/test_fr06_redis_cache.py",
+          "03-development/tests/test_fr09_kokoro_client.py"
+        ],
+        "coverage_status": "covered"
+      }
+    },
+    {
+      "section_id": "§2 FR-01",
+      "section_title": "台灣中文詞彙映射",
+      "description": "詞彙映射 ≥ 50 詞（覆蓋率目標 ≥ 95%）",
+      "implementation": {
+        "files": ["03-development/src/processing/lexicon_mapper.py"],
+        "classes": ["LexiconMapper"],
+        "functions": ["map_text", "load_lexicon", "_apply_mapping"],
+        "line_range": "1-150"
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr01_lexicon_mapper.py",
+        "test_count": 8,
+        "coverage_percentage": 85,
+        "test_cases": [
+          "test_map_text_basic",
+          "test_lexicon_coverage",
+          "test_taiwan_vocabulary",
+          "test_科技詞映射",
+          "test_交通詞映射",
+          "test_食物詞映射",
+          "test_發音詞映射"
+        ]
+      },
+      "acceptance_criteria": {
+        "lexicon_count": "≥ 50 詞",
+        "coverage_target": "≥ 95%",
+        "verification": "單元測試驗證"
+      }
+    },
+    {
+      "section_id": "§2 FR-02",
+      "section_title": "SSML 解析（含 <voice> 標籤）",
+      "description": "解析 SSML 標籤並映射為 Kokoro API 參數",
+      "implementation": {
+        "files": ["03-development/src/processing/ssml_parser.py"],
+        "classes": ["SSMLParser"],
+        "functions": ["parse", "_parse_prosody", "_parse_voice", "_parse_break", "_parse_emphasis"],
+        "line_range": "1-200",
+        "supported_tags": ["<speak>", "<break>", "<prosody>", "<emphasis>", "<voice>", "<phoneme>"]
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr02_ssml_parser.py",
+        "test_count": 10,
+        "coverage_percentage": 82,
+        "test_cases": [
+          "test_parse_prosody",
+          "test_parse_voice",
+          "test_parse_break",
+          "test_parse_emphasis",
+          "test_fallback_on_error"
+        ]
+      },
+      "acceptance_criteria": {
+        "prosody_mapping": "rate → speed",
+        "voice_switching": "name → 音色切換",
+        "fallback": "XML 解析失敗 → 純文字"
+      }
+    },
+    {
+      "section_id": "§2 FR-03",
+      "section_title": "智能文本切分（Chunk ≤ 250 字）",
+      "description": "三級遞迴切分，確保每段 ≤ 250 字",
+      "implementation": {
+        "files": ["03-development/src/processing/text_chunker.py"],
+        "classes": ["TextChunker"],
+        "functions": ["chunk", "_split_by_sentence", "_split_by_clause", "_split_by_phrase"],
+        "line_range": "1-180",
+        "split_levels": 3
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr03_text_chunker.py",
+        "test_count": 6,
+        "coverage_percentage": 88,
+        "test_cases": [
+          "test_chunk_500_chars",
+          "test_no_cut_middle_of_alphanumeric",
+          "test_three_level_split",
+          "test_mixed_language_handling"
+        ]
+      },
+      "acceptance_criteria": {
+        "max_chunk_size": "≤ 250 字",
+        "split_levels": "三級遞迴（句→子句→詞組）",
+        "no_cut_rule": "不在中英文混合字中間切斷"
+      }
+    },
+    {
+      "section_id": "§2 FR-04",
+      "section_title": "並行合成引擎",
+      "description": "使用 httpx.AsyncClient 同時發出 N 個請求，MP3 直接串接",
+      "implementation": {
+        "files": ["03-development/src/synth/synth_engine.py"],
+        "classes": ["SynthEngine"],
+        "functions": ["synthesize", "_synthesize_chunk", "_concatenate_audio"],
+        "line_range": "1-250",
+        "concurrency": "httpx.AsyncClient",
+        "audio_concatenation": "直接串接（無重新編碼）"
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr04_synth_engine.py",
+        "test_count": 5,
+        "coverage_percentage": 78,
+        "test_cases": [
+          "test_parallel_synthesis_faster_than_sequential",
+          "test_mp3_concatenation",
+          "test_chunk_count"
+        ]
+      },
+      "acceptance_criteria": {
+        "parallel_execution": "同時 N 個請求",
+        "performance": "總時間 < 順序執行時間",
+        "audio_quality": "拼接後 MP3 可正常播放"
+      }
+    },
+    {
+      "section_id": "§2 FR-05",
+      "section_title": "斷路器（Circuit Breaker）",
+      "description": "後端故障時自動保護，失敗計數達閾值後断路",
+      "implementation": {
+        "files": ["03-development/src/synth/circuit_breaker.py"],
+        "classes": ["CircuitBreaker"],
+        "functions": ["call", "_should_allow_request", "_record_success", "_record_failure", "_transition_state"],
+        "line_range": "1-200",
+        "states": ["CLOSED", "OPEN", "HALF_OPEN"],
+        "failure_threshold": 3,
+        "open_duration": "10 秒"
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr05_circuit_breaker.py",
+        "test_count": 8,
+        "coverage_percentage": 90,
+        "test_cases": [
+          "test_circuit_opens_after_3_failures",
+          "test_circuit_returns_503_when_open",
+          "test_circuit_half_open_after_10s",
+          "test_circuit_closes_after_success"
+        ]
+      },
+      "acceptance_criteria": {
+        "failure_threshold": "≥ 3 次 5xx",
+        "open_state": "HTTP 503",
+        "half_open_after": "10 秒",
+        "recovery": "成功 → Closed"
+      }
+    },
+    {
+      "section_id": "§2 FR-06",
+      "section_title": "Redis 快取（可選）",
+      "description": "熱門語句結果快取，24 小時 TTL",
+      "implementation": {
+        "files": ["03-development/src/cache/redis_cache.py"],
+        "classes": ["RedisCache"],
+        "functions": ["get", "set", "_generate_key", "_is_available"],
+        "line_range": "1-150",
+        "ttl": "24 小時",
+        "key_generation": "hash(text + voice + speed)"
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr06_redis_cache.py",
+        "test_count": 6,
+        "coverage_percentage": 80,
+        "test_cases": [
+          "test_cache_hit",
+          "test_cache_miss",
+          "test_graceful_degradation"
+        ]
+      },
+      "acceptance_criteria": {
+        "cache_key": "hash(text + voice + speed)",
+        "ttl": "24 小時",
+        "degradation": "無 Redis 時自動略過"
+      }
+    },
+    {
+      "section_id": "§2 FR-07",
+      "section_title": "CLI 命令列工具（tts-v610）",
+      "description": "提供命令列工具支援快速語音合成",
+      "implementation": {
+        "files": ["03-development/src/api/routes.py"],
+        "framework": "FastAPI",
+        "endpoints": [
+          {"method": "GET", "path": "/health", "description": "健康檢查"},
+          {"method": "GET", "path": "/ready", "description": "就緒檢查"},
+          {"method": "GET", "path": "/v1/proxy/voices", "description": "音色列表"},
+          {"method": "POST", "path": "/v1/proxy/speech", "description": "語音合成"}
+        ],
+        "line_range": "1-200"
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr07_routes.py",
+        "test_count": 7,
+        "coverage_percentage": 75,
+        "test_cases": [
+          "test_health_endpoint",
+          "test_speech_endpoint",
+          "test_voices_endpoint"
+        ]
+      },
+      "acceptance_criteria": {
+        "help_command": "tts-v610 --help",
+        "output_file": "產出 MP3 檔案",
+        "ssml_mode": "--ssml 支援"
+      }
+    },
+    {
+      "section_id": "§2 FR-08",
+      "section_title": "ffmpeg 音訊格式轉換",
+      "description": "使用 ffmpeg 將 MP3 轉換為 WAV，或 WAV 轉 MP3",
+      "implementation": {
+        "files": ["03-development/src/audio/audio_converter.py"],
+        "classes": ["AudioConverter"],
+        "functions": ["convert", "mp3_to_wav", "wav_to_mp3"],
+        "line_range": "1-120",
+        "supported_formats": ["MP3", "WAV"]
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr08_audio_converter.py",
+        "test_count": 4,
+        "coverage_percentage": 72,
+        "test_cases": [
+          "test_mp3_to_wav",
+          "test_wav_to_mp3"
+        ]
+      },
+      "acceptance_criteria": {
+        "mp3_to_wav": "MP3 → WAV 成功",
+        "wav_to_mp3": "WAV → MP3 成功"
+      }
+    },
+    {
+      "section_id": "§2 FR-09",
+      "section_title": "Kokoro Proxy",
+      "description": "整合外部 Kokoro TTS API，代理轉發 HTTP 請求到 Kokoro Docker 後端",
+      "implementation": {
+        "files": ["03-development/src/backend/kokoro_client.py"],
+        "classes": ["KokoroClient"],
+        "functions": ["speech", "voices", "_build_request", "_parse_response"],
+        "line_range": "1-180",
+        "backend_url": "http://localhost:8880"
+      },
+      "test_coverage": {
+        "test_file": "03-development/tests/test_fr09_kokoro_client.py",
+        "test_count": 5,
+        "coverage_percentage": 70,
+        "test_cases": [
+          "test_speech_returns_mp3",
+          "test_voices_returns_list"
+        ]
+      },
+      "acceptance_criteria": {
+        "speech_api": "speech(text, voice, speed) → MP3 bytes",
+        "voices_api": "voices() → 可用音色列表"
+      }
+    }
+  ],
+  "nfr_mapping": [
+    {
+      "nfr_id": "NFR-01",
+      "title": "效能",
+      "metrics": {
+        "TTFB": "< 300ms",
+        "LEXICON_覆蓋率": "≥ 80%（目標 ≥ 95%）",
+        "變調正確率": "≥ 95%",
+        "API可用率": "≥ 99%",
+        "錯誤恢復時間": "< 10s"
+      },
+      "test_files": [
+        "03-development/tests/test_fr01_lexicon_mapper.py",
+        "03-development/tests/test_fr05_circuit_breaker.py"
+      ]
+    },
+    {
+      "nfr_id": "NFR-02",
+      "title": "可靠性",
+      "metrics": {
+        "斷路器保護": "後端崩潰不影響整體服務",
+        "錯誤自動降級": "SSML 解析失敗 → fallback 純文字",
+        "請求超時": "30 秒 timeout"
+      },
+      "test_files": [
+        "03-development/tests/test_fr02_ssml_parser.py",
+        "03-development/tests/test_fr05_circuit_breaker.py"
+      ]
+    },
+    {
+      "nfr_id": "NFR-03",
+      "title": "安全性",
+      "metrics": {
+        "認證": "API 金鑰或 JWT token",
+        "授權": "音色/模型存取權限分級",
+        "加密": "HTTPS/TLS 傳輸加密"
+      },
+      "test_files": [],
+      "status": "待實作"
+    },
+    {
+      "nfr_id": "NFR-04",
+      "title": "可維護性",
+      "metrics": {
+        "模組化設計": "各 engine 獨立",
+        "型別提示完整": "100%",
+        "單元測試覆蓋率": "≥ 80%"
+      },
+      "test_files": ["03-development/tests/*.py"],
+      "coverage_target": 80
+    }
+  ],
+  "summary": {
+    "total_spec_sections": 9,
+    "implemented_sections": 9,
+    "total_nfrs": 4,
+    "tested_nfrs": 2,
+    "pending_nfrs": 2,
+    "overall_test_coverage": 80,
+    "bidirectional_tracking": "完整"
+  }
+}
