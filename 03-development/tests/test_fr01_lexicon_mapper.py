@@ -219,14 +219,12 @@ class TestLexiconMapperCoverage:
         SRS.md#L37
         """
         stats = mapper.get_coverage_stats()
-        assert stats["total_entries"] >= 50, (
-            f"Lexicon entries {stats['total_entries']} < 50 (FR-01 minimum)"
-        )
+        assert stats["total_entries"] >= 50  # type: ignore[operator]
 
     def test_categories_not_empty(self, mapper: LexiconMapper) -> None:
         """[FR-01] categories 清單不得為空。"""
         stats = mapper.get_coverage_stats()
-        assert stats["categories"] > 0
+        assert stats["categories"] > 0  # type: ignore[operator]
 
     def test_stats_keys(self, mapper: LexiconMapper) -> None:
         """[FR-01] get_coverage_stats() 回傳必要欄位。"""

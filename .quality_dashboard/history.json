@@ -1,0 +1,2391 @@
+[
+  {
+    "iteration": 1,
+    "timestamp": "2026-04-11T17:35:06.914878",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:271: error: Function \"builtins.callable\" is not valid as a type  [valid-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:274: error: callable? not callable  [misc]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:286: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 43.7,
+    "technical_debt": 56.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:271: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:274: error: callable? not callable  [misc]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:286: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 2,
+    "timestamp": "2026-04-11T17:46:24.227395",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 43.7,
+    "technical_debt": 56.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 3,
+    "timestamp": "2026-04-11T17:53:09.665977",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 43.7,
+    "technical_debt": 56.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 4,
+    "timestamp": "2026-04-11T17:53:25.731039",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 43.7,
+    "technical_debt": 56.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 5,
+    "timestamp": "2026-04-11T20:36:41.404766",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 43.7,
+    "technical_debt": 56.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 6,
+    "timestamp": "2026-04-11T20:50:30.777212",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 43.7,
+    "technical_debt": 56.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:149: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 7,
+    "timestamp": "2026-04-11T20:53:28.816845",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 20,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:239: error: Function \"builtins.callable\" is not valid as a type  [valid-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "499/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 46.7,
+    "technical_debt": 53.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:239: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]": 80
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 8,
+    "timestamp": "2026-04-11T20:55:55.921346",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 20,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:239: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "501/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 46.7,
+    "technical_debt": 53.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:239: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 80
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 9,
+    "timestamp": "2026-04-11T20:57:38.286175",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 20,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:239: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 40,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: "
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "502/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 46.7,
+    "technical_debt": 53.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:239: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 80
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 10,
+    "timestamp": "2026-04-11T21:01:57.217327",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 11,
+    "timestamp": "2026-04-11T21:02:24.357743",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:175: error: Incompatible return value type (got \"tuple[str, None]\", expected \"tuple[str, CLIResult] | tuple[None, CLIResult]\")  [return-value]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:175: error: Incompatible return value type (got \"tuple[str, None]\", expected \"tuple[str, CLIResult] | tuple[None, CLIResult]\")  [return-value]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 12,
+    "timestamp": "2026-04-11T21:02:53.245335",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 13,
+    "timestamp": "2026-04-11T21:16:03.542972",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 85:4 TestProsody.test_prosody_nested_in_text - B",
+          "C 176:0 TestSpeakRoot - B",
+          "M 135:4 TestEmphasis.test_emphasis_strong - B"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 14,
+    "timestamp": "2026-04-11T21:19:20.024752",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "C 177:0 TestPhoneme - B",
+          "M 180:4 TestPhoneme.test_phoneme_ipa - B",
+          "M 66:4 TestProsody.test_prosody_rate_float - A"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 15,
+    "timestamp": "2026-04-11T21:19:55.741792",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 66:4 TestProsody.test_prosody_rate_float - A",
+          "C 114:0 TestVoice - A",
+          "M 117:4 TestVoice.test_voice_name - A"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 16,
+    "timestamp": "2026-04-11T21:27:42.388891",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 66:4 TestProsody.test_prosody_rate_float - A",
+          "C 114:0 TestVoice - A",
+          "M 117:4 TestVoice.test_voice_name - A"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 17,
+    "timestamp": "2026-04-11T21:30:16.020344",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 66:4 TestProsody.test_prosody_rate_float - A",
+          "C 114:0 TestVoice - A",
+          "M 117:4 TestVoice.test_voice_name - A"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.7,
+    "technical_debt": 50.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 18,
+    "timestamp": "2026-04-11T21:32:19.260255",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Argument 1 to \"len\" has incompatible type \"int | dict[str, int]\"; expected \"Sized\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 132:4 TestSynthesize.test_synthesize_returns_mp3_bytes - B",
+          "M 81:4 TestKokoroConfig.test_custom_config - A",
+          "C 96:0 TestKokoroExceptions - A"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "493/24 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 87.5,
+        "weight": 0.05,
+        "issues": [
+          "21/24 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 49.675,
+    "technical_debt": 50.325,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Argument 1 to \"len\" has incompatible type \"int | dict[str, int]\"; expected \"Sized\"  [arg-type]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 100
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 19,
+    "timestamp": "2026-04-11T21:34:56.159118",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 20,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 66:4 TestProsody.test_prosody_rate_float - A",
+          "C 114:0 TestVoice - A",
+          "M 117:4 TestVoice.test_voice_name - A"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 52.7,
+    "technical_debt": 47.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 80
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 20,
+    "timestamp": "2026-04-11T21:35:41.552944",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 20,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 66:4 TestProsody.test_prosody_rate_float - A",
+          "C 114:0 TestVoice - A",
+          "M 117:4 TestVoice.test_voice_name - A"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 52.7,
+    "technical_debt": 47.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 80
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 21,
+    "timestamp": "2026-04-11T21:37:41.023260",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 20,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:152: error: Incompatible types in \"await\" (actual type \"Awaitable[bool] | bool | Any\", expected type \"Awaitable[Any]\")  [misc]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "No major issues"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 55.7,
+    "technical_debt": 44.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:152: error: Incompatible types in \"await\" (actual type \"Awaitable[bool] | bool | Any\", expected type \"Awaitable[Any]\")  [misc]": 80
+    },
+    "improvements": [],
+    "agent_actions": []
+  }
+]

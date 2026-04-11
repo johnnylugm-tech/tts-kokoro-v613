@@ -82,21 +82,31 @@ class TestProsody:
         segs = SSMLParser().parse('<prosody rate="slow">慢</prosody>')
         assert segs[0].prosody["rate"] == 0.8
 
-    def test_prosody_nested_in_text(self):
-        segs = SSMLParser().parse(
-            'Hello <prosody rate="0.8">world</prosody> test'
-        )
-        # Without <speak> wrapper, non-XML text causes parse error → fallback
-        # so we wrap in <speak> for explicit test
+    def test_prosody_nested_in_text_count(self):
         segs = SSMLParser().parse(
             '<speak>Hello <prosody rate="0.8">world</prosody> test</speak>'
         )
         assert len(segs) == 3
+
+    def test_prosody_nested_first_segment(self):
+        segs = SSMLParser().parse(
+            '<speak>Hello <prosody rate="0.8">world</prosody> test</speak>'
+        )
         assert segs[0].type == SegmentType.TEXT
         assert segs[0].text == "Hello "
+
+    def test_prosody_nested_middle_segment(self):
+        segs = SSMLParser().parse(
+            '<speak>Hello <prosody rate="0.8">world</prosody> test</speak>'
+        )
         assert segs[1].type == SegmentType.TEXT
         assert segs[1].text == "world"
         assert segs[1].prosody["rate"] == 0.8
+
+    def test_prosody_nested_last_segment(self):
+        segs = SSMLParser().parse(
+            '<speak>Hello <prosody rate="0.8">world</prosody> test</speak>'
+        )
         assert segs[2].type == SegmentType.TEXT
         assert segs[2].text == " test"
 
@@ -132,13 +142,23 @@ class TestVoice:
 class TestEmphasis:
     """[FR-02] <emphasis level="strong"> → speed ×1.1。"""
 
-    def test_emphasis_strong(self):
+    def test_emphasis_strong_returns_text_segment(self):
         segs = SSMLParser().parse(
             '<emphasis level="strong">強調文字</emphasis>'
         )
         assert len(segs) == 1
         assert segs[0].type == SegmentType.TEXT
+
+    def test_emphasis_strong_text_content(self):
+        segs = SSMLParser().parse(
+            '<emphasis level="strong">強調文字</emphasis>'
+        )
         assert segs[0].text == "強調文字"
+
+    def test_emphasis_strong_level_and_factor(self):
+        segs = SSMLParser().parse(
+            '<emphasis level="strong">強調文字</emphasis>'
+        )
         assert segs[0].prosody["emphasis_level"] == "strong"
         assert segs[0].prosody["rate_factor"] == 1.1
 
@@ -157,14 +177,24 @@ class TestEmphasis:
 class TestPhoneme:
     """[FR-02] <phoneme alphabet="ipa"> → 保留原生。"""
 
-    def test_phoneme_ipa(self):
+    def test_phoneme_ipa_segment(self):
         segs = SSMLParser().parse(
             '<phoneme alphabet="ipa" ph="həˈloʊ">hello</phoneme>'
         )
         assert len(segs) == 1
         assert segs[0].type == SegmentType.PHONEME
+
+    def test_phoneme_ipa_text_and_alphabet(self):
+        segs = SSMLParser().parse(
+            '<phoneme alphabet="ipa" ph="həˈloʊ">hello</phoneme>'
+        )
         assert segs[0].text == "hello"
         assert segs[0].phoneme_alphabet == "ipa"
+
+    def test_phoneme_ipa_phoneme_string(self):
+        segs = SSMLParser().parse(
+            '<phoneme alphabet="ipa" ph="həˈloʊ">hello</phoneme>'
+        )
         assert segs[0].phoneme_ph == "həˈloʊ"
 
     def test_phoneme_without_ph_attr(self):
@@ -182,17 +212,37 @@ class TestSpeakRoot:
         assert segs[0].type == SegmentType.TEXT
         assert segs[0].text == "純文字內容"
 
-    def test_speak_with_multiple_children(self):
+    def test_speak_with_multiple_children_count(self):
         segs = SSMLParser().parse(
             '<speak>嗨<break time="1s"/>你<voice name="zf_yunxi">好</voice></speak>'
         )
         assert len(segs) == 4
+
+    def test_speak_first_text_segment(self):
+        segs = SSMLParser().parse(
+            '<speak>嗨<break time="1s"/>你<voice name="zf_yunxi">好</voice></speak>'
+        )
         assert segs[0].type == SegmentType.TEXT
         assert segs[0].text == "嗨"
+
+    def test_speak_break_segment(self):
+        segs = SSMLParser().parse(
+            '<speak>嗨<break time="1s"/>你<voice name="zf_yunxi">好</voice></speak>'
+        )
         assert segs[1].type == SegmentType.BREAK
         assert segs[1].break_ms == 1000
+
+    def test_speak_second_text_segment(self):
+        segs = SSMLParser().parse(
+            '<speak>嗨<break time="1s"/>你<voice name="zf_yunxi">好</voice></speak>'
+        )
         assert segs[2].type == SegmentType.TEXT
         assert segs[2].text == "你"
+
+    def test_speak_voice_segment(self):
+        segs = SSMLParser().parse(
+            '<speak>嗨<break time="1s"/>你<voice name="zf_yunxi">好</voice></speak>'
+        )
         assert segs[3].type == SegmentType.TEXT
         assert segs[3].text == "好"
         assert segs[3].voice_name == "zf_yunxi"

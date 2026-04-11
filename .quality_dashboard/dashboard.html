@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Quality Dashboard - tts-kokoro-v613</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f1419; color: #e7e9ea; padding: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: #1d9bf0; font-size: 28px; }
+        .header p { color: #71767b; margin-top: 5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: #16181c; border-radius: 16px; padding: 20px; border: 1px solid #2f3336; }
+        .card h2 { font-size: 16px; color: #71767b; margin-bottom: 15px; border-bottom: 1px solid #2f3336; padding-bottom: 10px; }
+        .score { font-size: 48px; font-weight: bold; text-align: center; margin: 20px 0; }
+        .score.good { color: #00ba7c; }
+        .score.medium { color: #ffad1f; }
+        .score.bad { color: #f4212e; }
+        .bar { height: 8px; background: #2f3336; border-radius: 4px; overflow: hidden; margin: 10px 0; }
+        .bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
+        .bar-fill.good { background: linear-gradient(90deg, #00ba7c, #00d68f); }
+        .bar-fill.medium { background: linear-gradient(90deg, #ffad1f, #ffdf5d); }
+        .bar-fill.bad { background: linear-gradient(90deg, #f4212e, #ff6b6b); }
+        .dimension { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #2f3336; }
+        .dimension:last-child { border-bottom: none; }
+        .dimension-name { font-size: 14px; }
+        .dimension-score { font-weight: bold; font-size: 14px; }
+        .trend-chart { font-family: monospace; font-size: 12px; line-height: 1.4; color: #00ba7c; white-space: pre; }
+        .hotspot { display: flex; justify-content: space-between; padding: 8px 0; }
+        .hotspot-file { font-size: 13px; color: #e7e9ea; }
+        .hotspot-risk { font-size: 12px; padding: 2px 8px; border-radius: 10px; }
+        .hotspot-risk.high { background: #f4212e; color: white; }
+        .hotspot-risk.medium { background: #ffad1f; color: black; }
+        .hotspot-risk.low { background: #00ba7c; color: white; }
+        .timestamp { text-align: right; font-size: 11px; color: #71767b; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Quality Dashboard</h1>
+        <p>tts-kokoro-v613 - 技術債追蹤與進化監控</p>
+    </div>
+    
+    <div class="grid">
+        <div class="card">
+            <h2>總分 (Overall Score)</h2>
+            <div class="score bad">52.7%</div>
+            <div class="bar"><div class="bar-fill bad" style="width: 52.7%"></div></div>
+            <div class="timestamp">迭代 20 - 2026-04-11</div>
+        </div>
+        
+        <div class="card">
+            <h2>技術債 (Technical Debt)</h2>
+            <div class="score good">47.3%</div>
+            <div class="bar"><div class="bar-fill good" style="width: 47.3%"></div></div>
+            <div class="timestamp">目標: &lt; 20%</div>
+        </div>
+        
+        <div class="card">
+            <h2>9 維度分析</h2>
+            <div class="dimension">
+                <span class="dimension-name">Linting <small style='color:#71767b'>(10%)</small></span>
+                <span class="dimension-score" style='color:#00ba7c'>90%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Type Safety <small style='color:#71767b'>(15%)</small></span>
+                <span class="dimension-score" style='color:#f4212e'>20%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Test Coverage <small style='color:#71767b'>(20%)</small></span>
+                <span class="dimension-score" style='color:#f4212e'>0%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Security <small style='color:#71767b'>(15%)</small></span>
+                <span class="dimension-score" style='color:#f4212e'>30%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Complexity <small style='color:#71767b'>(10%)</small></span>
+                <span class="dimension-score" style='color:#00ba7c'>100%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Architecture <small style='color:#71767b'>(10%)</small></span>
+                <span class="dimension-score" style='color:#ffad1f'>70%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Readability <small style='color:#71767b'>(10%)</small></span>
+                <span class="dimension-score" style='color:#00ba7c'>100%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Error Handling <small style='color:#71767b'>(5%)</small></span>
+                <span class="dimension-score" style='color:#00ba7c'>96%</span>
+            </div>
+<div class="dimension">
+                <span class="dimension-name">Documentation <small style='color:#71767b'>(5%)</small></span>
+                <span class="dimension-score" style='color:#00ba7c'>88%</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📉 技術債趨勢</h2>
+            <pre class="trend-chart"> 1: ██████████████████████████████  56.3%
+ 2: ██████████████████████████████  56.3%
+ 3: ██████████████████████████████  56.3%
+ 4: ██████████████████████████████  56.3%
+ 5: ██████████████████████████████  56.3%
+ 6: ██████████████████████████████  56.3%
+ 7: ████████████████████████████  53.3%
+ 8: ████████████████████████████  53.3%
+ 9: ████████████████████████████  53.3%
+10: ██████████████████████████  50.3%
+11: ██████████████████████████  50.3%
+12: ██████████████████████████  50.3%
+13: ██████████████████████████  50.3%
+14: ██████████████████████████  50.3%
+15: ██████████████████████████  50.3%
+16: ██████████████████████████  50.3%
+17: ██████████████████████████  50.3%
+18: ██████████████████████████  50.3%
+19: █████████████████████████  47.3%
+20: █████████████████████████  47.3%</pre>
+        </div>
+        
+        <div class="card">
+            <h2>🔥 熱點圖</h2>
+            <div class="hotspot">
+                <span class="hotspot-file">/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]</span>
+                <span class="hotspot-risk high">80%</span>
+            </div>
+<div class="hotspot">
+                <span class="hotspot-file">/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]</span>
+                <span class="hotspot-risk high">80%</span>
+            </div>
+<div class="hotspot">
+                <span class="hotspot-file">/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to "_call_synthesize_api" has incompatible type "str | None"; expected "str"  [arg-type]</span>
+                <span class="hotspot-risk high">80%</span>
+            </div>
+<div class="hotspot">
+                <span class="hotspot-file">/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to "write" of "BufferedWriter" has incompatible type "bytes | None"; expected "Buffer"  [arg-type]</span>
+                <span class="hotspot-risk high">80%</span>
+            </div>
+<div class="hotspot">
+                <span class="hotspot-file">/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function "builtins.callable" is not valid as a type  [valid-type]</span>
+                <span class="hotspot-risk high">80%</span>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>🚀 進化歷史</h2>
+            <div style="font-size: 13px; line-height: 1.6;">
+                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;">
+                    <span>迭代</span>
+                    <span>總分</span>
+                    <span>技術債</span>
+                </div>
+                <div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#1</span><span>43.7%</span><span>56.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#2</span><span>43.7%</span><span>56.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#3</span><span>43.7%</span><span>56.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#4</span><span>43.7%</span><span>56.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#5</span><span>43.7%</span><span>56.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#6</span><span>43.7%</span><span>56.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#7</span><span>46.7%</span><span>53.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#8</span><span>46.7%</span><span>53.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#9</span><span>46.7%</span><span>53.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#10</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#11</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#12</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#13</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#14</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#15</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#16</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#17</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#18</span><span>49.7%</span><span>50.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#19</span><span>52.7%</span><span>47.3%</span></div>
+<div style='display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #2f3336;'><span>#20</span><span>52.7%</span><span>47.3%</span></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

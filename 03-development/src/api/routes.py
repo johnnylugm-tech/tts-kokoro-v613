@@ -158,6 +158,59 @@ def is_file_input(input_str: str) -> bool:
     return os.path.isfile(input_str)
 
 
+def _validate_config(config: CLIConfig) -> CLIResult | None:
+    """驗證 CLI 設定，若失敗回傳錯誤結果，否則回傳 None。"""
+    if not validate_input(config.input):
+        return CLIResult(success=False, error="Invalid input: empty or whitespace")
+    if not validate_speed(config.speed):
+        return CLIResult(success=False, error="Speed must be between 0.5 and 2.0")
+    if not validate_format(config.format):
+        return CLIResult(success=False, error="Format must be mp3 or wav")
+    return None
+
+
+def _load_input_text(input_path: str) -> tuple[str | None, CLIResult | None]:
+    """載入輸入文字，若失敗回傳錯誤結果。"""
+    if not is_file_input(input_path):
+        return input_path, None
+    try:
+        with open(input_path, "r", encoding="utf-8") as f:
+            return f.read(), None
+    except Exception as e:
+        return None, CLIResult(success=False, error=f"Failed to read input file: {e}")
+
+
+async def _call_synthesize_api(
+    config: CLIConfig,
+    input_text: str,
+    headers: dict[str, str],
+    timeout: float,
+) -> tuple[bytes | None, str | None]:
+    """呼叫合成 API，回傳 (response_content, error_message)。"""
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            response = await client.post(
+                f"{config.backend}/v1/synthesize",
+                json={
+                    "text": input_text,
+                    "voice": config.voice,
+                    "speed": config.speed,
+                    "format": config.format,
+                    "ssml": config.ssml,
+                },
+                headers=headers,
+            )
+            if response.status_code != 200:
+                return None, f"API error: {response.status_code}"
+            return response.content, None
+    except httpx.TimeoutException:
+        return None, "Request timeout"
+    except httpx.RequestError:
+        return None, "Request failed"
+    except Exception:
+        return None, "Unexpected error"
+
+
 async def synthesize_speech(
     config: CLIConfig,
     timeout: float = 30.0
@@ -177,61 +230,30 @@ async def synthesize_speech(
         SRS.md#L130 (使用範例)
         SRS.md#L136-L140 (支援參數)
     """
-    try:
-        if not validate_input(config.input):
-            return CLIResult(success=False, error="Invalid input: empty or whitespace")
+    # Validate configuration
+    validation_error = _validate_config(config)
+    if validation_error:
+        return validation_error
 
-        if not validate_speed(config.speed):
-            return CLIResult(success=False, error="Speed must be between 0.5 and 2.0")
+    # Load input text (file or direct)
+    input_text, load_error = _load_input_text(config.input)
+    if load_error:
+        return load_error
 
-        if not validate_format(config.format):
-            return CLIResult(success=False, error="Format must be mp3 or wav")
+    # Build headers
+    headers = {"Authorization": f"Bearer {config.api_key}"} if config.api_key else {}
 
-        input_text = config.input
-        if is_file_input(config.input):
-            try:
-                with open(config.input, "r", encoding="utf-8") as f:
-                    input_text = f.read()
-            except Exception as e:
-                return CLIResult(success=False, error=f"Failed to read input file: {e}")
+    # Call API
+    content, err = await _call_synthesize_api(config, input_text, headers, timeout)
+    if err:
+        return CLIResult(success=False, error=err)
 
-        headers = {}
-        if config.api_key:
-            headers["Authorization"] = f"Bearer {config.api_key}"
+    # Write output file
+    os.makedirs(os.path.dirname(config.output) or ".", exist_ok=True)
+    with open(config.output, "wb") as f:
+        f.write(content)
 
-        async with httpx.AsyncClient(timeout=timeout) as client:
-            payload = {
-                "text": input_text,
-                "voice": config.voice,
-                "speed": config.speed,
-                "format": config.format,
-                "ssml": config.ssml,
-            }
-
-            response = await client.post(
-                f"{config.backend}/v1/synthesize",
-                json=payload,
-                headers=headers
-            )
-
-            if response.status_code != 200:
-                return CLIResult(
-                    success=False,
-                    error=f"API error: {response.status_code}"
-                )
-
-            os.makedirs(os.path.dirname(config.output) or ".", exist_ok=True)
-            with open(config.output, "wb") as f:
-                f.write(response.content)
-
-            return CLIResult(success=True, output_path=config.output)
-
-    except httpx.TimeoutException:
-        return CLIResult(success=False, error="Request timeout")
-    except httpx.RequestError as e:
-        return CLIResult(success=False, error=f"Request failed: {e}")
-    except Exception as e:
-        return CLIResult(success=False, error=f"Unexpected error: {e}")
+    return CLIResult(success=True, output_path=config.output)
 
 
 async def synthesize_stream(

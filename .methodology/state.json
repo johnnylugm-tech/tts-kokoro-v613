@@ -1,18 +1,10 @@
 {
-  "current_phase": 4,
-  "phase_completeness": {"1": 1.0, "2": 1.0, "3": 1.0},
+  "current_phase": 3,
+  "phase_completeness": {"1": 1.0, "2": 1.0, "3": 0.0},
   "status": "active",
-  "last_updated": "2026-04-10T00:15:00Z",
-  "note": "Phase 3 complete - 9/9 FRs APPROVE (238 tests, avg 92% coverage), Constitution 100%, sessions_spawn.log complete",
+  "last_updated": "2026-04-11T13:34:00Z",
+  "note": "Phase 3 restart - testing v7.26 plan with FR-01 only",
   "phase_3_summary": {
-    "fr_01": {"commit": "f72bcb9", "tests": 17, "coverage": 98, "rounds": 2},
-    "fr_02": {"commit": "90f63e2", "tests": 38, "coverage": 85, "rounds": 1},
-    "fr_03": {"commit": "7ecf5a0", "tests": 31, "coverage": 90, "rounds": 2},
-    "fr_04": {"commit": "fa1ffef", "tests": 23, "coverage": 100, "rounds": 2},
-    "fr_05": {"commit": "501a76b", "tests": 26, "coverage": 90, "rounds": 2},
-    "fr_06": {"commit": "ff91d4f", "tests": 25, "coverage": 95, "rounds": 1},
-    "fr_07": {"commit": "b51ae09", "tests": 38, "coverage": 81, "rounds": 2},
-    "fr_08": {"commit": "2a47409", "tests": 15, "coverage": 96, "rounds": 1},
-    "fr_09": {"commit": "b07936d", "tests": 25, "coverage": 97, "rounds": 2}
+    "fr_01": null
   }
 }

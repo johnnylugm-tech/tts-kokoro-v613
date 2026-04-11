@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Final
+from typing import Final, TypedDict
 
 # Default lexicon data path — resolved relative to this file's location.
 _DEFAULT_LEXICON_PATH: Final[Path] = (
@@ -100,15 +100,15 @@ class LexiconMapper:
 
         return "".join(result_parts)
 
-    def get_coverage_stats(self) -> dict[str, int]:
+    def get_coverage_stats(self) -> dict[str, int | dict[str, int]]:
         """
         [FR-01] 回傳詞彙覆蓋統計資料。
 
         Returns:
             包含以下鍵值的字典：
-            - ``total_entries``: 總詞彙數（須 ≥ 50）。
-            - ``categories``: 分類數量。
-            - ``category_breakdown``: 各分類詞彙數。
+            - ``total_entries``: 總詞彙數（int，須 ≥ 50）。
+            - ``categories``: 分類數量（int）。
+            - ``category_breakdown``: 各分類詞彙數（dict[str, int]）。
 
         Citations:
             SRS.md#L37

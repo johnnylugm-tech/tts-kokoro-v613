@@ -161,6 +161,42 @@ def _chunk_by_level3(text: str) -> list[str]:
     return final_result
 
 
+def _is_safe_alnum_boundary(text: str, pos: int, text_len: int) -> bool:
+    """檢查位置的字母數字是否形成混合腳本邊界。"""
+    if pos <= 0 or pos >= text_len:
+        return False
+    char = text[pos]
+    prev_char = text[pos - 1]
+    next_char = text[pos + 1] if pos + 1 < text_len else ""
+    return (
+        char.isalnum()
+        and prev_char.isalpha()
+        and next_char.isalpha()
+        and _is_mixed_script(text[max(0, pos - 10):pos + 10])
+    )
+
+
+def _find_safe_cut_position(
+    text: str,
+    search_start: int,
+    search_end: int,
+    text_len: int,
+) -> int:
+    """從後往前找安全切分點。
+
+    優先找空白字元，否則找中英文混合詞邊界。
+    """
+    for i in range(search_end - 1, search_start + 50, -1):
+        if i >= text_len or i < 0:
+            continue
+        char = text[i]
+        if char in (" ", "\t"):
+            return i + 1
+        if _is_safe_alnum_boundary(text, i, text_len):
+            return i
+    return search_end  # fallback: 強制截斷
+
+
 def _safe_force_split(text: str) -> list[str]:
     """
     [FR-03] 安全強制切分：當所有分隔符都無法有效切分時使用。
@@ -193,26 +229,7 @@ def _safe_force_split(text: str) -> list[str]:
 
         search_start = pos
         search_end = pos + MAX_CHUNK_CHARS
-        cut = search_end
-
-        # 從 250 字處往回找安全切分點（空白或混合腳本邊界）
-        for i in range(search_end - 1, search_start + 50, -1):
-            if i >= text_len:
-                continue
-            char = text[i]
-            prev_char = text[i - 1] if i > 0 else ""
-            next_char = text[i + 1] if i + 1 < text_len else ""
-            if char in (" ", "\t"):
-                cut = i + 1
-                break
-            if (
-                char.isalnum()
-                and prev_char.isalpha()
-                and next_char.isalpha()
-                and _is_mixed_script(text[max(0, i - 10):i + 10])
-            ):
-                cut = i
-                break
+        cut = _find_safe_cut_position(text, search_start, search_end, text_len)
 
         result.append(text[pos:cut])
         pos = cut
