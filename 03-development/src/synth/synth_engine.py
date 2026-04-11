@@ -362,15 +362,15 @@ class CircuitBreakerProtocol:
 
     def is_open(self) -> bool:
         """斷路器是否處於 Open 狀態。"""
-        ...
+        raise NotImplementedError("CircuitBreakerProtocol.is_open must be implemented by concrete class")
 
     def record_success(self) -> None:
         """記錄一次成功呼叫。"""
-        ...
+        raise NotImplementedError("CircuitBreakerProtocol.record_success must be implemented by concrete class")
 
     def record_failure(self) -> None:
         """記錄一次失敗呼叫。"""
-        ...
+        raise NotImplementedError("CircuitBreakerProtocol.record_failure must be implemented by concrete class")
 
 
 # ---------------------------------------------------------------------------

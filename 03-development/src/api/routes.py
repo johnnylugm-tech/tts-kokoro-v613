@@ -27,7 +27,7 @@ from __future__ import annotations
 import asyncio
 import os
 from dataclasses import dataclass
-from typing import Optional
+from typing import Callable, Optional
 
 import httpx
 
@@ -244,6 +244,7 @@ async def synthesize_speech(
     headers = {"Authorization": f"Bearer {config.api_key}"} if config.api_key else {}
 
     # Call API
+    assert input_text is not None, "input_text should not be None after _load_input_text validation"
     content, err = await _call_synthesize_api(config, input_text, headers, timeout)
     if err:
         return CLIResult(success=False, error=err)
@@ -251,6 +252,8 @@ async def synthesize_speech(
     # Write output file
     os.makedirs(os.path.dirname(config.output) or ".", exist_ok=True)
     with open(config.output, "wb") as f:
+        if content is None:
+            return CLIResult(success=False, error="No content returned from API")
         f.write(content)
 
     return CLIResult(success=True, output_path=config.output)
@@ -258,7 +261,7 @@ async def synthesize_speech(
 
 async def synthesize_stream(
     config: CLIConfig,
-    chunk_callback: callable,
+    chunk_callback: Callable[[bytes], None],
     timeout: float = 30.0
 ) -> CLIResult:
     """[FR-07] 串流語音合成（未來擴充）。

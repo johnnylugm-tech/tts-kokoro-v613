@@ -2387,5 +2387,540 @@
     },
     "improvements": [],
     "agent_actions": []
+  },
+  {
+    "iteration": 22,
+    "timestamp": "2026-04-11T21:39:35.935266",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 20,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "No major issues"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 55.7,
+    "technical_debt": 44.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:247: error: Argument 2 to \"_call_synthesize_api\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:254: error: Argument 1 to \"write\" of \"BufferedWriter\" has incompatible type \"bytes | None\"; expected \"Buffer\"  [arg-type]": 80,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:261: error: Function \"builtins.callable\" is not valid as a type  [valid-type]": 80
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 23,
+    "timestamp": "2026-04-11T21:41:23.034951",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 85,
+        "weight": 0.1,
+        "issues": [
+          "F821 Undefined name `Callable`",
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 8 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 50,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:152: error: Incompatible types in \"await\" (actual type \"Awaitable[bool] | bool | Any\", expected type \"Awaitable[Any]\")  [misc]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:264: error: Name \"Callable\" is not defined  [name-defined]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "No major issues"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 59.7,
+    "technical_debt": 40.3,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]": 50,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]": 50,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:152: error: Incompatible types in \"await\" (actual type \"Awaitable[bool] | bool | Any\", expected type \"Awaitable[Any]\")  [misc]": 50,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 50,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py:264: error: Name \"Callable\" is not defined  [name-defined]": 50
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 24,
+    "timestamp": "2026-04-11T21:41:35.700580",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 60,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:152: error: Incompatible types in \"await\" (actual type \"Awaitable[bool] | bool | Any\", expected type \"Awaitable[Any]\")  [misc]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "No major issues"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 61.7,
+    "technical_debt": 38.3,
+    "hotspots": {},
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 25,
+    "timestamp": "2026-04-11T21:41:57.386457",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 60,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:152: error: Incompatible types in \"await\" (actual type \"Awaitable[bool] | bool | Any\", expected type \"Awaitable[Any]\")  [misc]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "No major issues"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 61.7,
+    "technical_debt": 38.3,
+    "hotspots": {},
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 26,
+    "timestamp": "2026-04-11T21:42:16.361193",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 60,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:31: error: Incompatible types in assignment (expression has type \"None\", variable has type Module)  [assignment]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:66: error: Argument 1 to \"from_url\" has incompatible type \"Any | None\"; expected \"str\"  [arg-type]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/cache/redis_cache.py:152: error: Incompatible types in \"await\" (actual type \"Awaitable[bool] | bool | Any\", expected type \"Awaitable[Any]\")  [misc]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "No major issues"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "505/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 61.7,
+    "technical_debt": 38.3,
+    "hotspots": {},
+    "improvements": [],
+    "agent_actions": []
   }
 ]
