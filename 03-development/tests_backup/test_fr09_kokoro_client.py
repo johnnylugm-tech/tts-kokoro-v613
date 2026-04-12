@@ -70,31 +70,15 @@ class TestKokoroConfig:
     """[FR-09] KokoroConfig 預設值與欄位驗證。"""
 
     def test_default_base_url(self, client_config: KokoroConfig) -> None:
-        """
-        @covers: FR-09
-        @type: positive
-        """
         assert client_config.base_url == "http://localhost:8880"
 
     def test_default_read_timeout(self, client_config: KokoroConfig) -> None:
-        """
-        @covers: FR-09
-        @type: positive
-        """
         assert client_config.read_timeout == 30.0
 
     def test_default_max_connections(self, client_config: KokoroConfig) -> None:
-        """
-        @covers: FR-09
-        @type: boundary
-        """
         assert client_config.max_connections == 20
 
     def test_custom_config(self) -> None:
-        """
-        @covers: FR-09
-        @type: positive
-        """
         cfg = KokoroConfig(
             base_url="http://custom:9999",
             read_timeout=60.0,
@@ -113,44 +97,24 @@ class TestKokoroExceptions:
     """[FR-09] 例外類別繼承關係驗證。"""
 
     def test_kokoro_api_error_is_runtime_error(self) -> None:
-        """
-        @covers: FR-09
-        @type: negative
-        """
         exc = KokoroAPIError(500, "server error")
         assert isinstance(exc, RuntimeError)
 
     def test_kokoro_connection_error_is_os_error(self) -> None:
-        """
-        @covers: FR-09
-        @type: negative
-        """
         exc = KokoroConnectionError("connection failed")
         assert isinstance(exc, OSError)
 
     def test_kokoro_timeout_error_is_timeout_error(self) -> None:
-        """
-        @covers: FR-09
-        @type: negative
-        """
         exc = KokoroTimeoutError("timed out")
         assert isinstance(exc, TimeoutError)
 
     def test_kokoro_client_error_is_api_error(self) -> None:
-        """
-        @covers: FR-09
-        @type: negative
-        """
         exc = KokoroClientError(400, "bad request")
         assert isinstance(exc, KokoroAPIError)
         assert exc.status_code == 400
         assert exc.detail == "bad request"
 
     def test_kokoro_server_error_is_api_error(self) -> None:
-        """
-        @covers: FR-09
-        @type: negative
-        """
         exc = KokoroServerError(500, "internal error")
         assert isinstance(exc, KokoroAPIError)
         assert exc.status_code == 500

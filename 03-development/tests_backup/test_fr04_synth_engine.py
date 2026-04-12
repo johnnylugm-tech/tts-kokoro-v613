@@ -361,8 +361,7 @@ class TestExceptions:
 
     def test_synthesis_partial_error_attributes(self):
         """SynthesisPartialError 有正確的 partial_results 和 failed_indices。"""
-    @covers: FR-04
-    @type: negative
+        err = SynthesisPartialError(
             partial_results=[b"a", b"b"],
             failed_indices=[2, 3],
         )
@@ -372,15 +371,13 @@ class TestExceptions:
 
     def test_synthesis_unavailable_error_attributes(self):
         """SynthesisUnavailableError 有正確的 retry_after_seconds。"""
-    @covers: FR-04
-    @type: negative
+        err = SynthesisUnavailableError(retry_after_seconds=5.0)
         assert err.retry_after_seconds == 5.0
         assert "Retry after 5.0s" in str(err)
 
     def test_synthesis_unavailable_error_default_retry(self):
         """預設 retry_after_seconds 為 10.0 秒。"""
-    @covers: FR-04
-    @type: negative
+        err = SynthesisUnavailableError()
         assert err.retry_after_seconds == 10.0
 
 
@@ -393,10 +390,6 @@ class TestDataClasses:
     """[FR-04] SynthesisRequest / SynthesisResult dataclass 驗證。"""
 
     def test_synthesis_request_fields(self):
-        """
-        @covers: FR-04
-        @type: positive
-        """
         req = SynthesisRequest(text="你好", voice="zf_xiaoxiao", speed=1.0, chunk_index=0)
         assert req.text == "你好"
         assert req.voice == "zf_xiaoxiao"
@@ -404,10 +397,6 @@ class TestDataClasses:
         assert req.chunk_index == 0
 
     def test_synthesis_result_fields(self):
-        """
-        @covers: FR-04
-        @type: positive
-        """
         result = SynthesisResult(
             audio_bytes=b"fake_mp3",
             chunk_index=1,
@@ -429,25 +418,13 @@ class TestConcatenateMp3:
     """[FR-04] concatenate_mp3 直接串接 MP3 bytes。"""
 
     def test_concatenate_two_chunks(self):
-        """
-        @covers: FR-04
-        @type: positive
-        """
         result = concatenate_mp3([b"MP3:first", b"MP3:second"])
         assert result == b"MP3:firstMP3:second"
 
     def test_concatenate_empty_list(self):
-        """
-        @covers: FR-04
-        @type: boundary
-        """
         assert concatenate_mp3([]) == b""
 
     def test_concatenate_single_chunk(self):
-        """
-        @covers: FR-04
-        @type: positive
-        """
         assert concatenate_mp3([b"only_one"]) == b"only_one"
 
 
@@ -455,26 +432,14 @@ class TestEstimateDurationMs:
     """[FR-04] _estimate_duration_ms 估算正確。"""
 
     def test_zero_bytes_returns_zero(self):
-        """
-        @covers: FR-04
-        @type: positive
-        """
         assert _estimate_duration_ms(0, 1.0) == 0.0
 
     def test_positive_bytes_estimate(self):
-        """
-        @covers: FR-04
-        @type: positive
-        """
         # 16000 bytes/s at 128kbps, speed=1.0
         ms = _estimate_duration_ms(16000, 1.0)
         assert 990 < ms < 1010  # ~1000ms
 
     def test_speed_affects_duration(self):
-        """
-        @covers: FR-04
-        @type: positive
-        """
         ms_fast = _estimate_duration_ms(16000, 2.0)  # 2x speed = half duration
         ms_normal = _estimate_duration_ms(16000, 1.0)
         assert ms_fast < ms_normal

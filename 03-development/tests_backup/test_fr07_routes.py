@@ -36,8 +36,7 @@ class TestCLIConfig:
 
     def test_config_default_values(self):
         """[FR-07] 測試預設參數值。
-    @covers: FR-07
-    @type: positive
+
         驗證預設值設定正確。
         """
         config = CLIConfig(input="test", output="output.mp3")
@@ -52,8 +51,7 @@ class TestCLIConfig:
 
     def test_config_custom_values(self):
         """[FR-07] 測試自訂參數值。
-    @covers: FR-07
-    @type: positive
+
         驗證自訂值設定正確。
         """
         config = CLIConfig(
@@ -88,8 +86,7 @@ class TestValidation:
     ])
     def test_validate_speed(self, speed, expected):
         """[FR-07] 測試語速驗證。
-    @covers: FR-07
-    @type: positive
+
         驗證 speed 是否在允許範圍 0.5-2.0 內。
         """
         assert validate_speed(speed) == expected
@@ -105,8 +102,7 @@ class TestValidation:
     ])
     def test_validate_format(self, format, expected):
         """[FR-07] 測試音訊格式驗證。
-    @covers: FR-07
-    @type: positive
+
         驗證格式是否為支援的 mp3 或 wav。
         """
         assert validate_format(format) == expected
@@ -120,8 +116,7 @@ class TestValidation:
     ])
     def test_validate_input(self, input_str, expected):
         """[FR-07] 測試輸入驗證。
-    @covers: FR-07
-    @type: positive
+
         驗證輸入是否為有效文字或檔案路徑。
         """
         assert validate_input(input_str) == expected
@@ -132,8 +127,7 @@ class TestIsFileInput:
 
     def test_is_file_input_with_file(self):
         """[FR-07] 測試檔案路徑判斷。
-    @covers: FR-07
-    @type: positive
+
         當輸入為有效檔案時，回傳 True。
         """
         with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
@@ -147,8 +141,7 @@ class TestIsFileInput:
 
     def test_is_file_input_with_text(self):
         """[FR-07] 測試文字輸入判斷。
-    @covers: FR-07
-    @type: positive
+
         當輸入為一般文字時，回傳 False。
         """
         assert is_file_input("你好世界") is False
@@ -160,8 +153,7 @@ class TestCLIResult:
 
     def test_result_success(self):
         """[FR-07] 測試成功結果。
-    @covers: FR-07
-    @type: positive
+
         驗證成功結果的屬性值。
         """
         result = CLIResult(success=True, output_path="/path/to/output.mp3")
@@ -171,8 +163,7 @@ class TestCLIResult:
 
     def test_result_error(self):
         """[FR-07] 測試錯誤結果。
-    @covers: FR-07
-    @type: negative
+
         驗證錯誤結果的屬性值。
         """
         result = CLIResult(success=False, error="Something went wrong")
@@ -186,8 +177,7 @@ class TestBuildCLIParser:
 
     def test_build_parser_keys(self):
         """[FR-07] 測試解析器包含所有必要參數。
-    @covers: FR-07
-    @type: positive
+
         驗證解析器包含所有 FR-07 定義的參數。
         """
         parser = build_cli_parser()
@@ -196,8 +186,7 @@ class TestBuildCLIParser:
 
     def test_build_parser_input(self):
         """[FR-07] 測試 input 參數定義。
-    @covers: FR-07
-    @type: positive
+
         驗證 input 參數的必要標記和幫助文字。
         """
         parser = build_cli_parser()
@@ -207,8 +196,7 @@ class TestBuildCLIParser:
 
     def test_build_parser_output(self):
         """[FR-07] 測試 output 參數定義。
-    @covers: FR-07
-    @type: positive
+
         驗證 output 參數的必要標記和幫助文字。
         """
         parser = build_cli_parser()
@@ -218,8 +206,7 @@ class TestBuildCLIParser:
 
     def test_build_parser_defaults(self):
         """[FR-07] 測試預設參數值。
-    @covers: FR-07
-    @type: positive
+
         驗證解析器預設值與 FR-07 定義一致。
         """
         parser = build_cli_parser()
@@ -338,8 +325,7 @@ class TestCLIIntegration:
 
     def test_config_to_dict(self):
         """[FR-07] 測試設定轉換。
-    @covers: FR-07
-    @type: positive
+
         驗證 CLIConfig 能正確轉換為字典。
         """
         config = CLIConfig(
@@ -361,8 +347,7 @@ class TestCLIIntegration:
 
     def test_help_command_outputs(self):
         """[FR-07] 測試 help 輸出結構。
-    @covers: FR-07
-    @type: positive
+
         驗證 CLI 解析器能支援 help 所需的參數定義。
         """
         parser = build_cli_parser()

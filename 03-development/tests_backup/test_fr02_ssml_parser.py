@@ -32,50 +32,30 @@ class TestBreak:
     """[FR-02] <break time="500ms"/> → 插入停頓字元。"""
 
     def test_break_milliseconds(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse('<break time="500ms"/>')
         assert len(segs) == 1
         assert segs[0].type == SegmentType.BREAK
         assert segs[0].break_ms == 500
 
     def test_break_seconds(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse('<break time="2s"/>')
         assert len(segs) == 1
         assert segs[0].type == SegmentType.BREAK
         assert segs[0].break_ms == 2000
 
     def test_break_decimal_seconds(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse('<break time="1.5s"/>')
         assert len(segs) == 1
         assert segs[0].type == SegmentType.BREAK
         assert segs[0].break_ms == 1500
 
     def test_break_default(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse("<break/>")
         assert len(segs) == 1
         assert segs[0].type == SegmentType.BREAK
         assert segs[0].break_ms == 500  # default
 
     def test_break_invalid_format_raises(self):
-        """
-        @covers: FR-02
-        @type: negative
-        """
         with pytest.raises(SSMLParseError):
             SSMLParser()._normalize_break("invalid")
 
@@ -84,10 +64,6 @@ class TestProsody:
     """[FR-02] <prosody rate="0.9"> → speed=0.9。"""
 
     def test_prosody_rate_float(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse('<prosody rate="0.9">文字</prosody>')
         assert len(segs) == 1
         assert segs[0].type == SegmentType.TEXT
@@ -95,34 +71,18 @@ class TestProsody:
         assert segs[0].prosody["rate"] == 0.9
 
     def test_prosody_rate_integer(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse('<prosody rate="1">測試</prosody>')
         assert segs[0].prosody["rate"] == 1.0
 
     def test_prosody_rate_keyword_fast(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse('<prosody rate="fast">快</prosody>')
         assert segs[0].prosody["rate"] == 1.2
 
     def test_prosody_rate_keyword_slow(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse('<prosody rate="slow">慢</prosody>')
         assert segs[0].prosody["rate"] == 0.8
 
     def test_prosody_nested_in_text(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse(
             'Hello <prosody rate="0.8">world</prosody> test'
         )
@@ -145,10 +105,6 @@ class TestVoice:
     """[FR-02] <voice name="zf_yunxi"> → 音色切換為 zf_yunxi。"""
 
     def test_voice_name(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse(
             '<voice name="zf_yunxi">文字</voice>'
         )
@@ -158,10 +114,6 @@ class TestVoice:
         assert segs[0].voice_name == "zf_yunxi"
 
     def test_voice_nested_text(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse(
             '<speak>正常音色 '
             '<voice name="zf_yunxi">替換音色</voice> '
@@ -173,10 +125,6 @@ class TestVoice:
         assert segs[2].voice_name is None
 
     def test_voice_no_name_attribute(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse("<voice>文字</voice>")
         assert segs[0].voice_name is None
 
@@ -185,10 +133,6 @@ class TestEmphasis:
     """[FR-02] <emphasis level="strong"> → speed ×1.1。"""
 
     def test_emphasis_strong(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse(
             '<emphasis level="strong">強調文字</emphasis>'
         )
@@ -199,10 +143,6 @@ class TestEmphasis:
         assert segs[0].prosody["rate_factor"] == 1.1
 
     def test_emphasis_reduced(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse(
             '<emphasis level="reduced">低調</emphasis>'
         )
@@ -210,10 +150,6 @@ class TestEmphasis:
         assert segs[0].prosody["rate_factor"] == 0.9
 
     def test_emphasis_default_level(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse("<emphasis>中等強調</emphasis>")
         assert segs[0].prosody["emphasis_level"] == "moderate"
 
@@ -222,10 +158,6 @@ class TestPhoneme:
     """[FR-02] <phoneme alphabet="ipa"> → 保留原生。"""
 
     def test_phoneme_ipa(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse(
             '<phoneme alphabet="ipa" ph="həˈloʊ">hello</phoneme>'
         )
@@ -236,10 +168,6 @@ class TestPhoneme:
         assert segs[0].phoneme_ph == "həˈloʊ"
 
     def test_phoneme_without_ph_attr(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse("<phoneme alphabet='ipa'>你好</phoneme>")
         assert segs[0].phoneme_alphabet == "ipa"
         assert segs[0].phoneme_ph == ""
@@ -249,20 +177,12 @@ class TestSpeakRoot:
     """[FR-02] <speak> 根元素。"""
 
     def test_speak_root(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse("<speak>純文字內容</speak>")
         assert len(segs) == 1
         assert segs[0].type == SegmentType.TEXT
         assert segs[0].text == "純文字內容"
 
     def test_speak_with_multiple_children(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse(
             '<speak>嗨<break time="1s"/>你<voice name="zf_yunxi">好</voice></speak>'
         )
@@ -282,10 +202,6 @@ class TestFallback:
     """[FR-02] XML 解析失敗時 fallback 純文字。"""
 
     def test_invalid_xml_fallback(self):
-        """
-        @covers: FR-02
-        @type: negative
-        """
         plain = "這是普通文字，沒有任何SSML標籤"
         segs = SSMLParser().parse(plain)
         assert len(segs) == 1
@@ -293,10 +209,6 @@ class TestFallback:
         assert segs[0].text == plain
 
     def test_malformed_xml_fallback(self):
-        """
-        @covers: FR-02
-        @type: negative
-        """
         segs = SSMLParser().parse("<broken<tag")
         assert len(segs) == 1
         assert segs[0].type == SegmentType.TEXT
@@ -307,18 +219,10 @@ class TestEmptyInput:
     """Edge case: 空輸入。"""
 
     def test_empty_string(self):
-        """
-        @covers: FR-02
-        @type: boundary
-        """
         segs = SSMLParser().parse("")
         assert segs == []
 
     def test_whitespace_only(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         segs = SSMLParser().parse("   ")
         assert segs == []
 
@@ -340,18 +244,10 @@ class TestNormalizeRate:
         ],
     )
     def test_rate_keywords_and_floats(self, input_val, expected):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         parser = SSMLParser()
         assert parser._normalize_rate(input_val) == expected
 
     def test_rate_unknown_returns_none(self):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         assert SSMLParser()._normalize_rate("unknown") is None
 
 
@@ -369,8 +265,4 @@ class TestNormalizeBreak:
         ],
     )
     def test_break_formats(self, input_val, expected_ms):
-        """
-        @covers: FR-02
-        @type: positive
-        """
         assert SSMLParser()._normalize_break(input_val) == expected_ms

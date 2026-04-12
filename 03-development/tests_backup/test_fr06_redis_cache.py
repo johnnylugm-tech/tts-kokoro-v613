@@ -58,49 +58,42 @@ class TestMakeKey:
 
     def test_same_inputs_same_key(self):
         """相同 text/voice/speed 必產生相同 key。"""
-    @covers: FR-06
-    @type: positive
+        key1 = RedisCache.make_key("你好", "zf_xiaoxiao", 1.0)
         key2 = RedisCache.make_key("你好", "zf_xiaoxiao", 1.0)
         assert key1 == key2
 
     def test_different_text_different_key(self):
         """不同文字必產生不同 key。"""
-    @covers: FR-06
-    @type: positive
+        key1 = RedisCache.make_key("你好", "zf_xiaoxiao", 1.0)
         key2 = RedisCache.make_key("再見", "zf_xiaoxiao", 1.0)
         assert key1 != key2
 
     def test_different_voice_different_key(self):
         """不同音色必產生不同 key。"""
-    @covers: FR-06
-    @type: positive
+        key1 = RedisCache.make_key("你好", "zf_xiaoxiao", 1.0)
         key2 = RedisCache.make_key("你好", "zf_yunxi", 1.0)
         assert key1 != key2
 
     def test_different_speed_different_key(self):
         """不同 speed 必產生不同 key。"""
-    @covers: FR-06
-    @type: positive
+        key1 = RedisCache.make_key("你好", "zf_xiaoxiao", 1.0)
         key2 = RedisCache.make_key("你好", "zf_xiaoxiao", 0.9)
         assert key1 != key2
 
     def test_speed_format_normalized(self):
         """speed=1.0 與 speed=1.00 產生相同 key（固定 4 位小數）。"""
-    @covers: FR-06
-    @type: positive
+        key1 = RedisCache.make_key("你好", "zf_xiaoxiao", 1.0)
         key2 = RedisCache.make_key("你好", "zf_xiaoxiao", 1.00)
         assert key1 == key2
 
     def test_key_has_tts_prefix(self):
         """Key 必須以 'tts:' 前綴開頭。"""
-    @covers: FR-06
-    @type: positive
+        key = RedisCache.make_key("hello", "voice", 1.0)
         assert key.startswith("tts:")
 
     def test_key_is_sha256_hex(self):
         """Key 必須為 64 字元 SHA-256 hex 字串（前綴後）。"""
-    @covers: FR-06
-    @type: positive
+        key = RedisCache.make_key("test", "v", 1.0)
         hex_part = key.removeprefix("tts:")
         assert len(hex_part) == 64
         assert all(c in "0123456789abcdef" for c in hex_part)
@@ -115,8 +108,7 @@ class TestDisabledMode:
 
     def test_url_none_disabled(self):
         """url=None → is_enabled == False。"""
-    @covers: FR-06
-    @type: positive
+        cfg = MockAppConfig(redis=MockRedisConfig(url=None))
         cache = RedisCache(cfg)
         assert cache.is_enabled is False
 
@@ -161,8 +153,7 @@ class TestNoRedisLibrary:
 
     def test_enabled_but_not_available(self):
         """模組啟用但無 redis.asyncio → is_enabled=True, is_available=False。"""
-    @covers: FR-06
-    @type: positive
+        cfg = MockAppConfig(redis=MockRedisConfig(url="redis://localhost:6379"))
         with patch("src.cache.redis_cache._REDIS_AVAILABLE", False):
             cache = RedisCache(cfg)
             assert cache.is_enabled is True
@@ -296,16 +287,14 @@ class TestTTL:
 
     def test_default_ttl_is_24h(self):
         """設定檔未指定時，TTL 預設為 86400 秒。"""
-    @covers: FR-06
-    @type: positive
+        cfg = MockAppConfig(redis=MockRedisConfig(url="redis://localhost"))
         with patch("src.cache.redis_cache._REDIS_AVAILABLE", False):
             cache = RedisCache(cfg)
             assert cache._ttl == 86400
 
     def test_custom_ttl_from_config(self):
         """可透過 redis.ttl_seconds 自訂 TTL。"""
-    @covers: FR-06
-    @type: positive
+        cfg = MockAppConfig(redis=MockRedisConfig(url="redis://localhost", ttl_seconds=3600))
         with patch("src.cache.redis_cache._REDIS_AVAILABLE", False):
             cache = RedisCache(cfg)
             assert cache._ttl == 3600

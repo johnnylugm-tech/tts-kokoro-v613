@@ -55,8 +55,7 @@ class TestTextChunkerBasic:
 
     def test_single_short_sentence(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：短句「這是測試。」→ 單一 chunk
 
         SRS.md#L70
         """
@@ -67,8 +66,7 @@ class TestTextChunkerBasic:
 
     def test_multiple_short_sentences(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：多個短句「你好。今天天氣很好！」→ 兩個 chunks
 
         SRS.md#L70
         """
@@ -79,8 +77,7 @@ class TestTextChunkerBasic:
 
     def test_empty_string(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: boundary
+        [FR-03] 測試案例：空字串 → 回傳空清單（不拋例外）
 
         SRS.md#L70
         """
@@ -89,13 +86,11 @@ class TestTextChunkerBasic:
 
     def test_whitespace_only(self, chunker: TextChunker) -> None:
         """[FR-03] 純空白字串回傳空清單。"""
-    @covers: FR-03
-    @type: positive
+        assert chunker.chunk("  \n\t  ") == []
 
     def test_newline_separator(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：換行符 \\n 作為一級分隔符
 
         SRS.md#L63
         """
@@ -110,8 +105,7 @@ class TestTextChunkerLongText:
 
     def test_500_char_long_sentence(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：輸入 500 字長句 → 每段 ≤ 250 字
 
         SRS.md#L70
         """
@@ -134,8 +128,7 @@ class TestTextChunkerLongText:
 
     def test_250_char_at_boundary(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: boundary
+        [FR-03] 測試案例：恰好 250 字 → 1 個 chunk
 
         SRS.md#L70
         """
@@ -150,8 +143,7 @@ class TestTextChunkerLongText:
 
     def test_251_char_forces_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: boundary
+        [FR-03] 測試案例：251 字 → 必須切成 2 個 chunks
 
         SRS.md#L70
         """
@@ -170,8 +162,7 @@ class TestTextChunkerMixedScript:
 
     def test_ai_acronym_not_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：含英文「AI」長句 → 不在 A/I 中間切斷
 
         SRS.md#L71
         """
@@ -190,8 +181,7 @@ class TestTextChunkerMixedScript:
 
     def test_bbc_acronym_not_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：「BBC」複合詞不得在中間被切斷
 
         SRS.md#L71
         """
@@ -203,8 +193,7 @@ class TestTextChunkerMixedScript:
 
     def test_app2_not_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：「App2」數字混合詞不得被切斷
 
         SRS.md#L71
         """
@@ -216,8 +205,7 @@ class TestTextChunkerMixedScript:
 
     def test_mixed_script_detection(self) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] _is_mixed_script 函式：中英文混合判斷
 
         SRS.md#L71
         """
@@ -229,8 +217,7 @@ class TestTextChunkerMixedScript:
 
     def test_alphanumeric_boundary_detection(self) -> None:
         """
-    @covers: FR-03
-    @type: boundary
+        [FR-03] _is_inside_alphanumeric 函式：字母數字邊界檢測
 
         SRS.md#L71
         """
@@ -246,8 +233,7 @@ class TestTextChunkerThreeLevelRecursion:
 
     def test_level1_only_short_text(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：三級切分遞迴驗證（Level 1 足夠）
 
         SRS.md#L71
         """
@@ -259,8 +245,7 @@ class TestTextChunkerThreeLevelRecursion:
 
     def test_level2_triggered(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：三級切分遞迴驗證（觸發 Level 2）
 
         Level 2 觸發條件：chunk > 100 字且無一級分隔符
 
@@ -276,8 +261,7 @@ class TestTextChunkerThreeLevelRecursion:
 
     def test_level3_triggered(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：三級切分遞迴驗證（觸發 Level 3）
 
         Level 3 觸發條件：chunk > 100 字且無一二級分隔符，但有逗號
 
@@ -294,8 +278,7 @@ class TestTextChunkerThreeLevelRecursion:
 
     def test_three_levels_all_triggered(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：三級遞迴完整觸發（400+ 字文本）
 
         SRS.md#L63-L65
         """
@@ -318,8 +301,7 @@ class TestTextChunkerLevel2Delimiters:
 
     def test_semicolon_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：分號 ``；`` 作為二級分隔符
 
         SRS.md#L64
         """
@@ -331,8 +313,7 @@ class TestTextChunkerLevel2Delimiters:
 
     def test_colon_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：冒號 ``：`` 作為二級分隔符
 
         SRS.md#L64
         """
@@ -348,8 +329,7 @@ class TestTextChunkerLevel3Delimiters:
 
     def test_chinese_comma_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：中文逗號「，」作為三級分隔符
 
         SRS.md#L65
         """
@@ -364,8 +344,7 @@ class TestTextChunkerLevel3Delimiters:
 
     def test_english_comma_split(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 測試案例：英文逗號「,」作為三級分隔符
 
         SRS.md#L65
         """
@@ -381,15 +360,13 @@ class TestTextChunkerEdgeCases:
 
     def test_only_delimiters(self, chunker: TextChunker) -> None:
         """[FR-03] 僅包含分隔符的字串不拋例外。"""
-    @covers: FR-03
-    @type: positive
+        result = chunker.chunk("。！？\n；：，,")
         for chunk in result:
             assert len(chunk) <= MAX_CHUNK_CHARS
 
     def test_no_delimiters_long_text(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] 無任何分隔符的長文字 → 需安全強制切分
 
         SRS.md#L63-L65
         """
@@ -406,8 +383,7 @@ class TestTextChunkerEdgeCases:
 
     def test_max_chunk_respected(self, chunker: TextChunker) -> None:
         """
-    @covers: FR-03
-    @type: boundary
+        [FR-03] 所有輸出 chunks 嚴格遵守 250 字上限
 
         SRS.md#L66
         """
@@ -427,8 +403,7 @@ class TestTextChunkerEdgeCases:
 
     def test_special_whitespace_preserved(self, chunker: TextChunker) -> None:
         """[FR-03] 特殊空白字元在 chunk 中保留。"""
-    @covers: FR-03
-    @type: positive
+        text = "第一句。  \n  第二句。"
         result = chunker.chunk(text)
         assert len(result) >= 1
         assert len(result[0]) <= MAX_CHUNK_CHARS
@@ -439,8 +414,7 @@ class TestHelperFunctions:
 
     def test_split_by_delimiter_level1(self) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] _split_by_delimiter：一級分隔符（句號）
 
         SRS.md#L63
         """
@@ -450,8 +424,7 @@ class TestHelperFunctions:
 
     def test_split_by_delimiter_level2(self) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] _split_by_delimiter：二級分隔符（分號）
 
         SRS.md#L64
         """
@@ -460,16 +433,14 @@ class TestHelperFunctions:
 
     def test_split_by_delimiter_preserves_delimiter(self) -> None:
         """[FR-03] 分隔符保留在結果中，不被丟棄。"""
-    @covers: FR-03
-    @type: positive
+        result = _split_by_delimiter("句一。句二！", r"[。？！!?\n]")
         joined = "".join(result)
         assert "。" in joined
         assert "！" in joined
 
     def test_chunk_by_level3_basic(self) -> None:
         """
-    @covers: FR-03
-    @type: positive
+        [FR-03] _chunk_by_level3：基本逗號切分
 
         SRS.md#L65
         """
@@ -480,13 +451,11 @@ class TestHelperFunctions:
 
     def test_sub_chunk_threshold(self) -> None:
         """[FR-03] SUB_CHUNK_THRESHOLD = 100."""
-    @covers: FR-03
-    @type: positive
+        assert SUB_CHUNK_THRESHOLD == 100
 
     def test_max_chunk_chars(self) -> None:
         """[FR-03] MAX_CHUNK_CHARS = 250."""
-    @covers: FR-03
-    @type: boundary
+        assert MAX_CHUNK_CHARS == 250
 
 
 # ---------------------------------------------------------------------------

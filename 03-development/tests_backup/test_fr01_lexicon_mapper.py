@@ -129,9 +129,6 @@ class TestLexiconMapperApply:
 
     def test_transportation_subway(self, mapper: LexiconMapper) -> None:
         """
-        @covers: FR-01
-        @type: positive
-
         [FR-01] 測試案例：輸入「我要坐地鐵去看視頻」，預期輸出「我要坐捷運去看影片」
 
         SRS.md#L35
@@ -141,9 +138,6 @@ class TestLexiconMapperApply:
 
     def test_food_pineapple_bread(self, mapper: LexiconMapper) -> None:
         """
-        @covers: FR-01
-        @type: positive
-
         [FR-01] 測試案例：輸入「菠蘿麵包」，預期輸出「鳳梨麵包」
 
         SRS.md#L36
@@ -152,11 +146,7 @@ class TestLexiconMapperApply:
         assert result == "鳳梨麵包"
 
     def test_multiple_mappings(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 單次 apply() 替換多個不同類別詞彙。"""
+        """[FR-01] 單次 apply() 替換多個不同類別詞彙。"""
         text = "菠蘿麵包好吃，我要坐地鐵"
         result = mapper.apply(text)
         assert "鳳梨麵包" in result
@@ -166,9 +156,6 @@ class TestLexiconMapperApply:
 
     def test_long_word_priority(self, mapper: LexiconMapper) -> None:
         """
-        @covers: FR-01
-        @type: positive
-
         [FR-01] 長詞優先：集成電路（4字）優先於芯片（2字）被掃描匹配。
 
         貪心掃描於 position 0 找到「芯片」（2字 valid match），
@@ -186,28 +173,16 @@ class TestLexiconMapperApply:
         assert result == "晶片是積體電路的組成部分"
 
     def test_no_match_returns_original(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 無任何匹配時，回傳原始文字。"""
+        """[FR-01] 無任何匹配時，回傳原始文字。"""
         original = "這句話完全沒有需要替換的詞"
         assert mapper.apply(original) == original
 
     def test_empty_string(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: boundary
-
-        [FR-01] 空字串輸入須回傳空字串（不禁引發錯誤）。"""
+        """[FR-01] 空字串輸入須回傳空字串（不禁引發錯誤）。"""
         assert mapper.apply("") == ""
 
     def test_mixed_chinese_and_punctuation(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 中英文混合含標點符號場景。"""
+        """[FR-01] 中英文混合含標點符號場景。"""
         text = "我要坐地鐵去看視頻，菠蘿麵包超好吃！"
         result = mapper.apply(text)
         assert "捷運" in result
@@ -215,21 +190,13 @@ class TestLexiconMapperApply:
         assert "鳳梨麵包" in result
 
     def test_pronunciation_particle_replacement(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 發音詞替換：和→ㄏㄢˋ、吧→啦"""
+        """[FR-01] 發音詞替換：和→ㄏㄢˋ、吧→啦"""
         result = mapper.apply("你和我是朋友吧")
         assert "ㄏㄢˋ" in result
         assert "啦" in result
 
     def test_all_categories_present(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 驗證六個分類（交通、科技、食物、職業、發音、日常）皆有詞條。"""
+        """[FR-01] 驗證六個分類（交通、科技、食物、職業、發音、日常）皆有詞條。"""
         samples = [
             ("地鐵", "捷運"),       # transportation
             ("視頻", "影片"),       # technology
@@ -247,9 +214,6 @@ class TestLexiconMapperCoverage:
 
     def test_total_entries_meets_minimum(self, mapper: LexiconMapper) -> None:
         """
-        @covers: FR-01
-        @type: positive
-
         [FR-01] 測試案例：LEXICON 總詞彙數 ≥ 50
 
         SRS.md#L37
@@ -260,20 +224,12 @@ class TestLexiconMapperCoverage:
         )
 
     def test_categories_not_empty(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] categories 清單不得為空。"""
+        """[FR-01] categories 清單不得為空。"""
         stats = mapper.get_coverage_stats()
         assert stats["categories"] > 0
 
     def test_stats_keys(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] get_coverage_stats() 回傳必要欄位。"""
+        """[FR-01] get_coverage_stats() 回傳必要欄位。"""
         stats = mapper.get_coverage_stats()
         assert "total_entries" in stats
         assert "categories" in stats
@@ -284,37 +240,21 @@ class TestLexiconMapperEdgeCases:
     """[FR-01] 邊界條件處理。"""
 
     def test_whitespace_preserved(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: boundary
-
-        [FR-01] 純空白字串回傳空白。"""
+        """[FR-01] 純空白字串回傳空白。"""
         assert mapper.apply("   ") == "   "
 
     def test_unicode_fullwidth_punctuation(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 全形標點符號不影響替換。"""
+        """[FR-01] 全形標點符號不影響替換。"""
         result = mapper.apply("視頻！？視頻")
         assert result.count("影片") == 2
 
     def test_repeated_same_word(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 同一詞彙出現多次，全部替換。"""
+        """[FR-01] 同一詞彙出現多次，全部替換。"""
         result = mapper.apply("視頻視頻視頻")
         assert result == "影片影片影片"
 
     def test_substring_not_double_replaced(self, mapper: LexiconMapper) -> None:
-        """
-        @covers: FR-01
-        @type: positive
-
-        [FR-01] 已替換的詞不再被二次匹配。"""
+        """[FR-01] 已替換的詞不再被二次匹配。"""
         # "U盤" → "隨身碟"，"隨身碟" 中不再包含 "U" 或 "盤" 的獨立映射
         result = mapper.apply("U盤")
         assert result == "隨身碟"
@@ -324,11 +264,7 @@ class TestLexiconMapperFileNotFound:
     """[FR-01] 檔案缺失時拋出 FileNotFoundError。"""
 
     def test_nonexistent_lexicon_path(self) -> None:
-        """
-        @covers: FR-01
-        @type: negative
-
-        [FR-01] 指定不存在的 lexicon 路徑時，__init__ 拋出 FileNotFoundError。"""
+        """[FR-01] 指定不存在的 lexicon 路徑時，__init__ 拋出 FileNotFoundError。"""
         fake = Path("/nonexistent/path/lexicon_tw.json")
         with pytest.raises(FileNotFoundError) as exc_info:
             LexiconMapper(lexicon_path=fake)

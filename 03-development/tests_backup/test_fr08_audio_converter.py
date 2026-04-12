@@ -83,18 +83,10 @@ def valid_wav_data() -> bytes:
 
 class TestSupportedFormats:
     def test_supported_formats_contains_mp3_and_wav(self) -> None:
-        """
-        @covers: FR-08
-        @type: positive
-        """
         assert "mp3" in SUPPORTED_FORMATS
         assert "wav" in SUPPORTED_FORMATS
 
     def test_supported_formats_is_frozenset_or_set(self) -> None:
-        """
-        @covers: FR-08
-        @type: positive
-        """
         assert isinstance(SUPPORTED_FORMATS, (set, frozenset))
 
 
@@ -104,31 +96,15 @@ class TestSupportedFormats:
 
 class TestErrorClasses:
     def test_not_found_error_is_subclass_of_converter_error(self) -> None:
-        """
-        @covers: FR-08
-        @type: negative
-        """
         assert issubclass(AudioConverterNotFoundError, AudioConverterError)
 
     def test_not_found_error_is_runtime_error(self) -> None:
-        """
-        @covers: FR-08
-        @type: negative
-        """
         assert issubclass(AudioConverterNotFoundError, RuntimeError)
 
     def test_converter_error_is_runtime_error(self) -> None:
-        """
-        @covers: FR-08
-        @type: negative
-        """
         assert issubclass(AudioConverterError, RuntimeError)
 
     def test_not_found_error_message(self) -> None:
-        """
-        @covers: FR-08
-        @type: negative
-        """
         err = AudioConverterNotFoundError("ffmpeg not found in PATH.")
         assert "ffmpeg" in str(err)
 

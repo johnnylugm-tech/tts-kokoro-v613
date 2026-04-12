@@ -60,17 +60,9 @@ class TestConstants:
     """驗證模組常數符合 SRS 規格。"""
 
     def test_failure_threshold_is_3(self) -> None:
-        """
-        @covers: FR-05
-        @type: negative
-        """
         assert FAILURE_THRESHOLD == 3
 
     def test_recovery_timeout_is_10(self) -> None:
-        """
-        @covers: FR-05
-        @type: positive
-        """
         assert RECOVERY_TIMEOUT == 10.0
 
 
@@ -82,17 +74,9 @@ class TestClosedState:
     """CLOSED 狀態行為測試。"""
 
     def test_initial_state_is_closed(self, cb: CircuitBreaker) -> None:
-        """
-        @covers: FR-05
-        @type: positive
-        """
         assert cb.state == CircuitState.CLOSED
 
     def test_success_in_closed_keeps_closed(self, cb: CircuitBreaker) -> None:
-        """
-        @covers: FR-05
-        @type: positive
-        """
         result = cb.call(lambda: 42)
         assert result == 42
         assert cb.state == CircuitState.CLOSED
@@ -100,23 +84,20 @@ class TestClosedState:
 
     def test_one_failure_below_threshold_stays_closed(self, cb: CircuitBreaker) -> None:
         """1 次失敗 < 閾值 3，仍為 CLOSED。"""
-    @covers: FR-05
-    @type: negative
+        cb.record_failure()
         assert cb.state == CircuitState.CLOSED
         assert cb.failure_count == 1
 
     def test_two_failures_below_threshold_stays_closed(self, cb: CircuitBreaker) -> None:
         """2 次失敗 < 閾值 3，仍為 CLOSED。"""
-    @covers: FR-05
-    @type: negative
+        cb.record_failure()
         cb.record_failure()
         assert cb.state == CircuitState.CLOSED
         assert cb.failure_count == 2
 
     def test_call_with_exception_records_failure(self, cb: CircuitBreaker) -> None:
         """CLOSED 狀態：成功執行（不拋例外）。"""
-    @covers: FR-05
-    @type: negative
+        def flaky() -> int:
             raise RuntimeError("boom")
 
         with pytest.raises(RuntimeError):
@@ -135,16 +116,14 @@ class TestOpenState:
 
     def test_third_failure_opens_circuit(self, cb: CircuitBreaker) -> None:
         """失敗計數達到閾值 3 → OPEN（SRS#L98）。"""
-    @covers: FR-05
-    @type: negative
+        cb.record_failure()
         cb.record_failure()
         cb.record_failure()
         assert cb.state == CircuitState.OPEN
 
     def test_call_raises_when_open(self, cb: CircuitBreaker) -> None:
         """斷路後請求拋出 CircuitBreakerOpen（SRS#L103）。"""
-    @covers: FR-05
-    @type: negative
+        # 觸發 OPEN
         for _ in range(3):
             cb.record_failure()
         assert cb.state == CircuitState.OPEN
@@ -155,8 +134,7 @@ class TestOpenState:
 
     def test_failure_in_open_increments_count(self, cb: CircuitBreaker) -> None:
         """OPEN 狀態下 record_failure 只遞增計數，不改變狀態。"""
-    @covers: FR-05
-    @type: negative
+        for _ in range(3):
             cb.record_failure()
         assert cb.state == CircuitState.OPEN
         initial_count = cb.failure_count
@@ -167,8 +145,7 @@ class TestOpenState:
 
     def test_success_in_open_closes_circuit(self, cb: CircuitBreaker) -> None:
         """OPEN 狀態下 record_success 重置為 CLOSED。"""
-    @covers: FR-05
-    @type: positive
+        for _ in range(3):
             cb.record_failure()
         assert cb.state == CircuitState.OPEN
 
@@ -185,10 +162,6 @@ class TestHalfOpenState:
     """HALF_OPEN 狀態行為測試。"""
 
     def test_auto_transition_to_half_open_after_timeout(
-        """
-        @covers: FR-05
-        @type: positive
-        """
         self, fast_cb: CircuitBreaker
     ) -> None:
         """Open 後經過 recovery_timeout → HALF_OPEN（SRS#L99）。"""
@@ -203,10 +176,6 @@ class TestHalfOpenState:
         assert fast_cb.state == CircuitState.HALF_OPEN
 
     def test_success_in_half_open_closes_circuit(
-        """
-        @covers: FR-05
-        @type: positive
-        """
         self, fast_cb: CircuitBreaker
     ) -> None:
         """HALF_OPEN 成功 → CLOSED（SRS#L100）。"""
@@ -222,10 +191,6 @@ class TestHalfOpenState:
         assert fast_cb.state == CircuitState.CLOSED
 
     def test_failure_in_half_open_reopens_circuit(
-        """
-        @covers: FR-05
-        @type: negative
-        """
         self, fast_cb: CircuitBreaker
     ) -> None:
         """HALF_OPEN 失敗 → 回到 OPEN。"""
@@ -254,8 +219,7 @@ class TestFullCycle:
 
     def test_full_cycle_open_to_close(self, fast_cb: CircuitBreaker) -> None:
         """完整循環：CLOSED → 3次失敗 → OPEN → timeout → HALF_OPEN → 成功 → CLOSED。"""
-    @covers: FR-05
-    @type: positive
+        # Phase 1: CLOSED → OPEN
         for _ in range(3):
             fast_cb.record_failure()
         assert fast_cb.state == CircuitState.OPEN
@@ -271,8 +235,7 @@ class TestFullCycle:
 
     def test_full_cycle_open_half_open_fail_open(self, fast_cb: CircuitBreaker) -> None:
         """HALF_OPEN 失敗：OPEN → timeout → HALF_OPEN → 失敗 → OPEN。"""
-    @covers: FR-05
-    @type: negative
+        for _ in range(3):
             fast_cb.record_failure()
         assert fast_cb.state == CircuitState.OPEN
 
@@ -353,8 +316,7 @@ class TestReset:
 
     def test_reset_from_open_to_closed(self, cb: CircuitBreaker) -> None:
         """從 OPEN 狀態 reset → CLOSED。"""
-    @covers: FR-05
-    @type: positive
+        for _ in range(3):
             cb.record_failure()
         assert cb.state == CircuitState.OPEN
 
@@ -364,8 +326,7 @@ class TestReset:
 
     def test_reset_clears_all_state(self, cb: CircuitBreaker) -> None:
         """reset() 清除所有內部狀態。"""
-    @covers: FR-05
-    @type: positive
+        cb.record_failure()
         cb.record_failure()
         cb.reset()
         assert cb.failure_count == 0
@@ -381,14 +342,12 @@ class TestEdgeCases:
 
     def test_callable_with_return_value(self, cb: CircuitBreaker) -> None:
         """驗證斷路器正確傳回函式回傳值。"""
-    @covers: FR-05
-    @type: positive
+        result = cb.call(lambda: "hello world")
         assert result == "hello world"
 
     def test_callable_with_args(self, cb: CircuitBreaker) -> None:
         """驗證 args 正確傳遞。"""
-    @covers: FR-05
-    @type: positive
+        def add(a: int, b: int) -> int:
             return a + b
 
         result = cb.call(add, 2, 3)
@@ -396,8 +355,7 @@ class TestEdgeCases:
 
     def test_callable_with_kwargs(self, cb: CircuitBreaker) -> None:
         """驗證 kwargs 正確傳遞。"""
-    @covers: FR-05
-    @type: positive
+        def greet(name: str, greeting: str = "Hi") -> str:
             return f"{greeting}, {name}"
 
         result = cb.call(greet, "Jarvis", greeting="Hello")
@@ -405,12 +363,10 @@ class TestEdgeCases:
 
     def test_negative_threshold_raises(self) -> None:
         """閾值必須為正整數。"""
-    @covers: FR-05
-    @type: negative
+        with pytest.raises(ValueError):
             CircuitBreaker(failure_threshold=0)
 
     def test_negative_timeout_raises(self) -> None:
         """超時時間必須為非負數。"""
-    @covers: FR-05
-    @type: negative
+        with pytest.raises(ValueError):
             CircuitBreaker(recovery_timeout=-1.0)
