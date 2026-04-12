@@ -27,7 +27,7 @@ from __future__ import annotations
 import asyncio
 import os
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Callable, Optional
 
 import httpx
 
@@ -236,7 +236,7 @@ async def synthesize_speech(
 
 async def synthesize_stream(
     config: CLIConfig,
-    chunk_callback: callable,
+    chunk_callback: Callable[..., Any],
     timeout: float = 30.0
 ) -> CLIResult:
     """[FR-07] 串流語音合成（未來擴充）。

@@ -28,7 +28,7 @@ try:
     _REDIS_AVAILABLE = True
 except ImportError:
     _REDIS_AVAILABLE = False
-    redis_async = None
+    redis_async = None  # type: ignore[assignment]
 
 logger = logging.getLogger(__name__)
 
@@ -57,13 +57,13 @@ class RedisCache:
         self._ttl: int = (
             getattr(config, "redis", None) and config.redis.ttl_seconds
         ) or 86400
-        self._redis: Optional[redis_async.Redis] = None
+        self._redis: Optional[redis_async.Redis] = None  # type: ignore[valid-type]
         self._enabled: bool = self._url is not None
         self._available: bool = False
 
         if self._enabled and _REDIS_AVAILABLE:
             self._redis = redis_async.from_url(
-                self._url,
+                self._url,  # type: ignore[arg-type]
                 encoding="utf-8",
                 decode_responses=False,
             )
@@ -149,7 +149,7 @@ class RedisCache:
         if not self._enabled:
             return False
         try:
-            await self._redis.ping()  # type: ignore[union-attr]
+            await self._redis.ping()  # type: ignore[misc,union-attr]
             self._available = True
             return True
         except Exception as exc:  # pragma: no cover

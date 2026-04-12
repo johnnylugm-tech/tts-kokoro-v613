@@ -291,7 +291,7 @@ class SynthEngine:
                     duration_ms=_estimate_duration_ms(len(audio_bytes), req.speed),
                     status=_ChunkStatus.SUCCESS,
                 )
-            except Exception as exc:
+            except Exception:
                 # Status FAILED → caller records via circuit breaker in main loop
                 return SynthesisResult(
                     audio_bytes=b"",
@@ -348,7 +348,7 @@ class KokoroClientProtocol:
         Returns:
             bytes: MP3 音頻資料。
         """
-        ...
+        raise NotImplementedError("KokoroClientProtocol.synthesize must be implemented by subclass")
 
 
 class CircuitBreakerProtocol:
@@ -362,7 +362,7 @@ class CircuitBreakerProtocol:
 
     def is_open(self) -> bool:
         """斷路器是否處於 Open 狀態。"""
-        ...
+        raise NotImplementedError("CircuitBreakerProtocol.is_open must be implemented by subclass")
 
     def record_success(self) -> None:
         """記錄一次成功呼叫。"""

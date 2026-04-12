@@ -1,0 +1,850 @@
+[
+  {
+    "iteration": 1,
+    "timestamp": "2026-04-12T21:38:32.630236",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:286: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:310: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 13.333333333333343,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py"
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 110:4 SSMLParser._parse_element - D",
+          "F 164:0 _safe_force_split - C",
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 41.03333333333334,
+    "technical_debt": 58.96666666666666,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:150: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:199: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:231: error: Name \"results\" already defined on line 135  [no-redef]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:286: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:310: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]": 100,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py": 86.66666666666666
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 2,
+    "timestamp": "2026-04-12T21:42:07.139923",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F841 [*] Local variable `exc` is assigned to but never used",
+          "Found 7 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 0,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:286: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:310: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 30,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 7"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 13.333333333333343,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py"
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 110:4 SSMLParser._parse_element - D",
+          "F 164:0 _safe_force_split - C",
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 41.03333333333334,
+    "technical_debt": 58.96666666666666,
+    "hotspots": {
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/lexicon_mapper.py:131: error: Dict entry 2 has incompatible type \"str\": \"dict[str, int]\"; expected \"str\": \"int\"  [dict-item]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:286: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/circuit_breaker.py:310: error: Incompatible types in \"await\" (actual type \"object\", expected type \"Awaitable[Any]\")  [misc]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:340: error: Missing return statement  [empty-body]": 100,
+      "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/synth/synth_engine.py:363: error: Missing return statement  [empty-body]": 100,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py": 86.66666666666666
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 3,
+    "timestamp": "2026-04-12T21:55:31.071536",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 95,
+        "weight": 0.1,
+        "issues": [
+          "Found 6 errors."
+        ],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 80,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:222: error: Unsupported operand types for <= (\"int\" and \"dict[str, int]\")  [operator]",
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/tests/test_fr01_lexicon_mapper.py:229: error: Unsupported operand types for < (\"int\" and \"dict[str, int]\")  [operator]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 0,
+        "weight": 0.2,
+        "issues": [
+          "Coverage 0% < 70%"
+        ],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 40,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 6"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 13.333333333333343,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py"
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 111:4 SSMLParser._parse_element - D",
+          "F 164:0 _safe_force_split - C",
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 55.03333333333334,
+    "technical_debt": 44.96666666666666,
+    "hotspots": {
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py": 86.66666666666666
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 4,
+    "timestamp": "2026-04-12T21:57:11.373115",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 91.0,
+        "weight": 0.2,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 0"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 13.333333333333343,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py"
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 70,
+        "weight": 0.1,
+        "issues": [
+          "M 111:4 SSMLParser._parse_element - D",
+          "F 164:0 _safe_force_split - C",
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "492/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 85.73333333333333,
+    "technical_debt": 14.266666666666666,
+    "hotspots": {
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py": 86.66666666666666,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py": 86.66666666666666
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 5,
+    "timestamp": "2026-04-12T21:59:05.405035",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 90,
+        "weight": 0.15,
+        "issues": [
+          "/Users/johnny/.openclaw/workspace/tts-kokoro-v613/03-development/src/processing/ssml_parser.py:139: error: Function \"builtins.callable\" is not valid as a type  [valid-type]"
+        ],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 91.0,
+        "weight": 0.2,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 0"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 35,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py"
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 80,
+        "weight": 0.1,
+        "issues": [
+          "F 164:0 _safe_force_split - C",
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "499/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 87.4,
+    "technical_debt": 12.599999999999994,
+    "hotspots": {
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py": 65,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py": 65
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 6,
+    "timestamp": "2026-04-12T22:00:22.193281",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 91.0,
+        "weight": 0.2,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 0"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 35,
+        "weight": 0.1,
+        "issues": [
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py",
+          "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py"
+        ],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 80,
+        "weight": 0.1,
+        "issues": [
+          "F 164:0 _safe_force_split - C",
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "499/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 88.9,
+    "technical_debt": 11.099999999999994,
+    "hotspots": {
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/processing/text_chunker.py": 65,
+      "CC > 15: .openclaw/workspace/tts-kokoro-v613/03-development/src/api/routes.py": 65
+    },
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 7,
+    "timestamp": "2026-04-12T22:01:20.883835",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 91.0,
+        "weight": 0.2,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 0"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 80,
+        "weight": 0.1,
+        "issues": [
+          "F 164:0 _safe_force_split - C",
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "499/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 95.4,
+    "technical_debt": 4.599999999999994,
+    "hotspots": {},
+    "improvements": [],
+    "agent_actions": []
+  },
+  {
+    "iteration": 8,
+    "timestamp": "2026-04-12T22:03:58.851880",
+    "dimensions": {
+      "D1_Linting": {
+        "name": "Linting",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "ruff"
+      },
+      "D2_TypeSafety": {
+        "name": "Type Safety",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "mypy"
+      },
+      "D3_TestCoverage": {
+        "name": "Test Coverage",
+        "score": 91.0,
+        "weight": 0.2,
+        "issues": [],
+        "tool_driven": true,
+        "tool_name": "pytest-cov"
+      },
+      "D4_Security": {
+        "name": "Security",
+        "score": 100,
+        "weight": 0.15,
+        "issues": [
+          "HIGH: 0",
+          "MEDIUM: 0"
+        ],
+        "tool_driven": true,
+        "tool_name": "bandit"
+      },
+      "D5_Complexity": {
+        "name": "Complexity",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [],
+        "tool_driven": false,
+        "tool_name": "lizard"
+      },
+      "D6_Architecture": {
+        "name": "Architecture",
+        "score": 90,
+        "weight": 0.1,
+        "issues": [
+          "F 161:0 synthesize_speech - C"
+        ],
+        "tool_driven": false,
+        "tool_name": "radon"
+      },
+      "D7_Readability": {
+        "name": "Readability",
+        "score": 100,
+        "weight": 0.1,
+        "issues": [
+          "501/25 files with docstrings (estimate)"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D8_ErrorHandling": {
+        "name": "Error Handling",
+        "score": 96,
+        "weight": 0.05,
+        "issues": [
+          "23 try-except blocks found"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      },
+      "D9_Documentation": {
+        "name": "Documentation",
+        "score": 88.0,
+        "weight": 0.05,
+        "issues": [
+          "22/25 files with docstrings"
+        ],
+        "tool_driven": false,
+        "tool_name": "agent"
+      }
+    },
+    "total_score": 96.4,
+    "technical_debt": 3.5999999999999943,
+    "hotspots": {},
+    "improvements": [],
+    "agent_actions": []
+  }
+]

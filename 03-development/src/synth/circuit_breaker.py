@@ -16,7 +16,7 @@ from __future__ import annotations
 import asyncio
 import time
 from enum import Enum
-from typing import Final, Optional
+from typing import Any, Awaitable, Callable, Final, Optional
 
 # ---------------------------------------------------------------------------
 # Constants
@@ -146,7 +146,7 @@ class CircuitBreaker:
 
     # ---- Public API --------------------------------------------------------
 
-    def call(self, func: callable, *args: object, **kwargs: object) -> object:
+    def call(self, func: Callable[..., Any], *args: object, **kwargs: object) -> object:
         """
         [FR-05] 帶断路器保護的同步函式呼叫。
 
@@ -179,7 +179,7 @@ class CircuitBreaker:
         # CLOSED 狀態：正常執行
         return self._closed_call(func, *args, **kwargs)
 
-    async def call_async(self, coro: object, *args: object, **kwargs: object) -> object:
+    async def call_async(self, coro: Awaitable[Any], *args: object, **kwargs: object) -> object:
         """
         [FR-05] 帶断路器保護的非同步協程呼叫。
 
@@ -268,7 +268,7 @@ class CircuitBreaker:
             self._state = CircuitState.HALF_OPEN
             self._half_open_attempted = False
 
-    def _closed_call(self, func: callable, *args: object, **kwargs: object) -> object:
+    def _closed_call(self, func: Callable[..., Any], *args: object, **kwargs: object) -> object:
         """CLOSED 狀態的執行包裝。"""
         try:
             result = func(*args, **kwargs)
@@ -279,7 +279,7 @@ class CircuitBreaker:
             raise
 
     async def _closed_call_async(
-        self, coro: object, *args: object, **kwargs: object
+        self, coro: Awaitable[Any], *args: object, **kwargs: object
     ) -> object:
         """CLOSED 狀態的 async 執行包裝。"""
         try:
@@ -290,7 +290,7 @@ class CircuitBreaker:
             self.record_failure()
             raise
 
-    def _half_open_call(self, func: callable, *args: object, **kwargs: object) -> object:
+    def _half_open_call(self, func: Callable[..., Any], *args: object, **kwargs: object) -> object:
         """HALF_OPEN 狀態的單次試探執行。"""
         try:
             result = func(*args, **kwargs)
@@ -303,7 +303,7 @@ class CircuitBreaker:
             raise
 
     async def _half_open_call_async(
-        self, coro: object, *args: object, **kwargs: object
+        self, coro: Awaitable[Any], *args: object, **kwargs: object
     ) -> object:
         """HALF_OPEN 狀態的 async 單次試探執行。"""
         try:

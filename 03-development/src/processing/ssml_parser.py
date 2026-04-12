@@ -16,10 +16,11 @@ Citations:
 from __future__ import annotations
 
 import re
-import xml.etree.ElementTree as ET
+import defusedxml
+import defusedxml.ElementTree as ET
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
+from typing import Callable, Optional
 
 
 class SegmentType(str, Enum):
@@ -132,127 +133,158 @@ class SSMLParser:
 
         # Unknown tag: skip element but process children
         if tag not in _SUPPORTED_TAGS:
-            results: list[SSMLSegment] = []
-            for child in element:
-                results.extend(self._parse_element(child, inherited_prosody))
-                if child.tail:
-                    results.append(
-                        SSMLSegment(
-                            type=SegmentType.TEXT,
-                            text=child.tail,
-                            prosody=inherited_prosody.copy(),
-                        )
-                    )
-            return results
+            return self._parse_unknown_tag(element, inherited_prosody)
 
-        # ── <speak> ──────────────────────────────────────────────────────────
-        if tag == "speak":
-            results: list[SSMLSegment] = []
-            if element.text:
-                results.append(
-                    SSMLSegment(type=SegmentType.TEXT, text=element.text, prosody={})
-                )
-            for child in element:
-                results.extend(self._parse_element(child, {}))
-                if child.tail:
-                    results.append(
-                        SSMLSegment(type=SegmentType.TEXT, text=child.tail, prosody={})
-                    )
-            return results
-
-        # ── <break> ───────────────────────────────────────────────────────────
-        if tag == "break":
-            break_ms = self._normalize_break(element.get("time", ""))
-            return [
-                SSMLSegment(
-                    type=SegmentType.BREAK,
-                    text="",
-                    break_ms=break_ms,
-                    prosody=inherited_prosody.copy(),
-                )
-            ]
-
-        # ── <prosody> ────────────────────────────────────────────────────────
-        if tag == "prosody":
-            prosody = inherited_prosody.copy()
-            rate_str = element.get("rate", "")
-            if rate_str:
-                rate_val = self._normalize_rate(rate_str)
-                if rate_val is not None:
-                    prosody["rate"] = rate_val
-            return self._handle_mixed_content_element(element, prosody)
-
-        # ── <emphasis> ───────────────────────────────────────────────────────
-        if tag == "emphasis":
-            level = element.get("level", "moderate")
-            emphasis_prosody = inherited_prosody.copy()
-            emphasis_prosody["emphasis_level"] = level
-            if level == "strong":
-                emphasis_prosody["rate_factor"] = 1.1
-            elif level == "reduced":
-                emphasis_prosody["rate_factor"] = 0.9
-            return self._handle_mixed_content_element(element, emphasis_prosody)
-
-        # ── <voice> ──────────────────────────────────────────────────────────
-        if tag == "voice":
-            voice_name = element.get("name", "")
-            results: list[SSMLSegment] = []
-            if element.text:
-                results.append(
-                    SSMLSegment(
-                        type=SegmentType.TEXT,
-                        text=element.text,
-                        voice_name=voice_name if voice_name else None,
-                        prosody=inherited_prosody.copy(),
-                    )
-                )
-            for child in element:
-                child_segs = self._parse_element(child, inherited_prosody)
-                for seg in child_segs:
-                    if voice_name:
-                        seg.voice_name = voice_name
-                results.extend(child_segs)
-                if child.tail:
-                    results.append(
-                        SSMLSegment(
-                            type=SegmentType.TEXT,
-                            text=child.tail,
-                            voice_name=None,  # explicit None — not voice_name propagation
-                            prosody=inherited_prosody.copy(),
-                        )
-                    )
-            return results
-
-        # ── <phoneme> ────────────────────────────────────────────────────────
-        if tag == "phoneme":
-            alphabet = element.get("alphabet", "ipa")
-            ph = element.get("ph", "")
-            # [FR-02] <phoneme alphabet="ipa"> → 保留原生
-            results: list[SSMLSegment] = []
-            if element.text:
-                results.append(
-                    SSMLSegment(
-                        type=SegmentType.PHONEME,
-                        text=element.text,
-                        phoneme_alphabet=alphabet,
-                        phoneme_ph=ph,
-                        prosody=inherited_prosody.copy(),
-                    )
-                )
-            for child in element:
-                results.extend(self._parse_element(child, inherited_prosody))
-                if child.tail:
-                    results.append(
-                        SSMLSegment(
-                            type=SegmentType.TEXT,
-                            text=child.tail,
-                            prosody=inherited_prosody.copy(),
-                        )
-                    )
-            return results
+        # Dispatch to tag-specific handler
+        handlers: dict[str, Callable] = {
+            "speak": self._handle_speak_tag,
+            "break": self._handle_break_tag,
+            "prosody": self._handle_prosody_tag,
+            "emphasis": self._handle_emphasis_tag,
+            "voice": self._handle_voice_tag,
+            "phoneme": self._handle_phoneme_tag,
+        }
+        handler = handlers.get(tag)
+        if handler:
+            return handler(element, inherited_prosody)
 
         # Should not reach here — all supported tags are handled above
         return []
+
+    def _parse_unknown_tag(
+        self, element: ET.Element, inherited_prosody: dict
+    ) -> list[SSMLSegment]:
+        """Handle unknown tags by processing children only."""
+        results: list[SSMLSegment] = []
+        for child in element:
+            results.extend(self._parse_element(child, inherited_prosody))
+            if child.tail:
+                results.append(
+                    SSMLSegment(
+                        type=SegmentType.TEXT,
+                        text=child.tail,
+                        prosody=inherited_prosody.copy(),
+                    )
+                )
+        return results
+
+    def _handle_speak_tag(
+        self, element: ET.Element, inherited_prosody: dict
+    ) -> list[SSMLSegment]:
+        """Handle <speak> tag."""
+        results: list[SSMLSegment] = []
+        if element.text:
+            results.append(
+                SSMLSegment(type=SegmentType.TEXT, text=element.text, prosody={})
+            )
+        for child in element:
+            results.extend(self._parse_element(child, {}))
+            if child.tail:
+                results.append(
+                    SSMLSegment(type=SegmentType.TEXT, text=child.tail, prosody={})
+                )
+        return results
+
+    def _handle_break_tag(
+        self, element: ET.Element, inherited_prosody: dict
+    ) -> list[SSMLSegment]:
+        """Handle <break> tag."""
+        break_ms = self._normalize_break(element.get("time", ""))
+        return [
+            SSMLSegment(
+                type=SegmentType.BREAK,
+                text="",
+                break_ms=break_ms,
+                prosody=inherited_prosody.copy(),
+            )
+        ]
+
+    def _handle_prosody_tag(
+        self, element: ET.Element, inherited_prosody: dict
+    ) -> list[SSMLSegment]:
+        """Handle <prosody> tag."""
+        prosody = inherited_prosody.copy()
+        rate_str = element.get("rate", "")
+        if rate_str:
+            rate_val = self._normalize_rate(rate_str)
+            if rate_val is not None:
+                prosody["rate"] = rate_val
+        return self._handle_mixed_content_element(element, prosody)
+
+    def _handle_emphasis_tag(
+        self, element: ET.Element, inherited_prosody: dict
+    ) -> list[SSMLSegment]:
+        """Handle <emphasis> tag."""
+        level = element.get("level", "moderate")
+        emphasis_prosody = inherited_prosody.copy()
+        emphasis_prosody["emphasis_level"] = level
+        if level == "strong":
+            emphasis_prosody["rate_factor"] = 1.1
+        elif level == "reduced":
+            emphasis_prosody["rate_factor"] = 0.9
+        return self._handle_mixed_content_element(element, emphasis_prosody)
+
+    def _handle_voice_tag(
+        self, element: ET.Element, inherited_prosody: dict
+    ) -> list[SSMLSegment]:
+        """Handle <voice> tag."""
+        voice_name = element.get("name", "")
+        results: list[SSMLSegment] = []
+        if element.text:
+            results.append(
+                SSMLSegment(
+                    type=SegmentType.TEXT,
+                    text=element.text,
+                    voice_name=voice_name if voice_name else None,
+                    prosody=inherited_prosody.copy(),
+                )
+            )
+        for child in element:
+            child_segs = self._parse_element(child, inherited_prosody)
+            for seg in child_segs:
+                if voice_name:
+                    seg.voice_name = voice_name
+            results.extend(child_segs)
+            if child.tail:
+                results.append(
+                    SSMLSegment(
+                        type=SegmentType.TEXT,
+                        text=child.tail,
+                        voice_name=None,  # explicit None — not voice_name propagation
+                        prosody=inherited_prosody.copy(),
+                    )
+                )
+        return results
+
+    def _handle_phoneme_tag(
+        self, element: ET.Element, inherited_prosody: dict
+    ) -> list[SSMLSegment]:
+        """Handle <phoneme> tag."""
+        alphabet = element.get("alphabet", "ipa")
+        ph = element.get("ph", "")
+        # [FR-02] <phoneme alphabet="ipa"> → 保留原生
+        results: list[SSMLSegment] = []
+        if element.text:
+            results.append(
+                SSMLSegment(
+                    type=SegmentType.PHONEME,
+                    text=element.text,
+                    phoneme_alphabet=alphabet,
+                    phoneme_ph=ph,
+                    prosody=inherited_prosody.copy(),
+                )
+            )
+        for child in element:
+            results.extend(self._parse_element(child, inherited_prosody))
+            if child.tail:
+                results.append(
+                    SSMLSegment(
+                        type=SegmentType.TEXT,
+                        text=child.tail,
+                        prosody=inherited_prosody.copy(),
+                    )
+                )
+        return results
 
     def _handle_mixed_content_element(
         self,

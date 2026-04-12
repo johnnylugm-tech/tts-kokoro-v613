@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Final
+from typing import Final, cast
 
 # Default lexicon data path — resolved relative to this file's location.
 _DEFAULT_LEXICON_PATH: Final[Path] = (
@@ -100,7 +100,7 @@ class LexiconMapper:
 
         return "".join(result_parts)
 
-    def get_coverage_stats(self) -> dict[str, int]:
+    def get_coverage_stats(self) -> dict[str, int | dict[str, int]]:
         """
         [FR-01] 回傳詞彙覆蓋統計資料。
 
@@ -121,7 +121,7 @@ class LexiconMapper:
         # Count per category from metadata
         meta = self._load_meta()
         if meta and "_meta" in meta:
-            cats = meta["_meta"].get("categories", [])
+            cats = cast(list[str], meta["_meta"].get("categories", []))
             category_breakdown = {cat: 0 for cat in cats}
 
         # Total unique mappings

@@ -191,33 +191,42 @@ def _safe_force_split(text: str) -> list[str]:
             result.append(text[pos:])
             break
 
-        search_start = pos
-        search_end = pos + MAX_CHUNK_CHARS
-        cut = search_end
-
-        # 從 250 字處往回找安全切分點（空白或混合腳本邊界）
-        for i in range(search_end - 1, search_start + 50, -1):
-            if i >= text_len:
-                continue
-            char = text[i]
-            prev_char = text[i - 1] if i > 0 else ""
-            next_char = text[i + 1] if i + 1 < text_len else ""
-            if char in (" ", "\t"):
-                cut = i + 1
-                break
-            if (
-                char.isalnum()
-                and prev_char.isalpha()
-                and next_char.isalpha()
-                and _is_mixed_script(text[max(0, i - 10):i + 10])
-            ):
-                cut = i
-                break
-
+        cut = _find_safe_cut_point(text, pos, text_len)
         result.append(text[pos:cut])
         pos = cut
 
     return result
+
+
+def _find_safe_cut_point(text: str, pos: int, text_len: int) -> int:
+    """Find safe cut point working backwards from MAX_CHUNK_CHARS."""
+    search_start = pos
+    search_end = pos + MAX_CHUNK_CHARS
+    cut = search_end
+
+    # 從 250 字處往回找安全切分點（空白或混合腳本邊界）
+    for i in range(search_end - 1, search_start + 50, -1):
+        if i >= text_len:
+            continue
+        char = text[i]
+        if char in (" ", "\t"):
+            return i + 1
+        if _is_safe_alphanumeric_cut(text, i, text_len):
+            return i
+
+    return cut
+
+
+def _is_safe_alphanumeric_cut(text: str, i: int, text_len: int) -> bool:
+    """Check if position i is a safe cut point for alphanumeric chars."""
+    prev_char = text[i - 1] if i > 0 else ""
+    next_char = text[i + 1] if i + 1 < text_len else ""
+    return (
+        text[i].isalnum()
+        and prev_char.isalpha()
+        and next_char.isalpha()
+        and _is_mixed_script(text[max(0, i - 10):i + 10])
+    )
 
 
 # ---------------------------------------------------------------------------
