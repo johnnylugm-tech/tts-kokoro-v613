@@ -1,0 +1,226 @@
+{
+  "FR-01": {
+    "files": [
+      "03-development/src/processing/lexicon_mapper.py",
+      "03-development/tests/test_fr01_lexicon_mapper.py"
+    ],
+    "file_count": 2,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "lexicon",
+      "mapping",
+      "taiwan",
+      "台灣",
+      "詞彙"
+    ],
+    "fr_tag_files": [
+      "03-development/src/processing/lexicon_mapper.py",
+      "03-development/tests/test_fr01_lexicon_mapper.py"
+    ],
+    "keyword_files": []
+  },
+  "FR-02": {
+    "files": [
+      "03-development/tests/test_fr02_ssml_parser.py",
+      "03-development/src/api/routes.py",
+      "03-development/src/processing/ssml_parser.py"
+    ],
+    "file_count": 3,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "ssml",
+      "parser",
+      "voice"
+    ],
+    "fr_tag_files": [
+      "03-development/src/processing/ssml_parser.py",
+      "03-development/tests/test_fr02_ssml_parser.py"
+    ],
+    "keyword_files": [
+      "03-development/src/api/routes.py"
+    ]
+  },
+  "FR-03": {
+    "files": [
+      "03-development/src/processing/text_chunker.py",
+      "03-development/src/synth/synth_engine.py",
+      "03-development/tests/test_fr03_text_chunker.py",
+      "03-development/src/api/routes.py"
+    ],
+    "file_count": 4,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "chunk",
+      "text",
+      "split",
+      "切分"
+    ],
+    "fr_tag_files": [
+      "03-development/src/processing/text_chunker.py",
+      "03-development/tests/test_fr03_text_chunker.py"
+    ],
+    "keyword_files": [
+      "03-development/src/synth/synth_engine.py",
+      "03-development/src/api/routes.py"
+    ]
+  },
+  "FR-04": {
+    "files": [
+      "03-development/tests/test_fr04_synth_engine.py",
+      "03-development/src/synth/__init__.py",
+      "03-development/src/backend/kokoro_client.py",
+      "03-development/src/synth/synth_engine.py",
+      "03-development/src/api/routes.py"
+    ],
+    "file_count": 5,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "synth",
+      "engine",
+      "parallel",
+      "async",
+      "併行"
+    ],
+    "fr_tag_files": [
+      "03-development/src/synth/synth_engine.py",
+      "03-development/src/synth/__init__.py",
+      "03-development/tests/test_fr04_synth_engine.py"
+    ],
+    "keyword_files": [
+      "03-development/src/backend/kokoro_client.py",
+      "03-development/src/api/routes.py"
+    ]
+  },
+  "FR-05": {
+    "files": [
+      "03-development/src/synth/circuit_breaker.py",
+      "03-development/src/synth/synth_engine.py",
+      "03-development/tests/test_fr05_circuit_breaker.py"
+    ],
+    "file_count": 3,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "circuit",
+      "breaker",
+      "斷路"
+    ],
+    "fr_tag_files": [
+      "03-development/src/synth/circuit_breaker.py",
+      "03-development/tests/test_fr05_circuit_breaker.py"
+    ],
+    "keyword_files": [
+      "03-development/src/synth/synth_engine.py"
+    ]
+  },
+  "FR-06": {
+    "files": [
+      "03-development/src/cache/redis_cache.py",
+      "03-development/tests/test_fr06_redis_cache.py"
+    ],
+    "file_count": 2,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "redis",
+      "cache",
+      "快取"
+    ],
+    "fr_tag_files": [
+      "03-development/src/cache/redis_cache.py",
+      "03-development/tests/test_fr06_redis_cache.py"
+    ],
+    "keyword_files": []
+  },
+  "FR-07": {
+    "files": [
+      "03-development/src/api/__init__.py",
+      "03-development/tests/test_fr07_routes.py",
+      "03-development/src/api/routes.py"
+    ],
+    "file_count": 3,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "cli",
+      "command",
+      "routes",
+      "tts-v610"
+    ],
+    "fr_tag_files": [
+      "03-development/src/api/__init__.py",
+      "03-development/src/api/routes.py",
+      "03-development/tests/test_fr07_routes.py"
+    ],
+    "keyword_files": []
+  },
+  "FR-08": {
+    "files": [
+      "03-development/src/audio/__init__.py",
+      "03-development/src/audio/audio_converter.py",
+      "03-development/tests/test_fr08_audio_converter.py"
+    ],
+    "file_count": 3,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "ffmpeg",
+      "audio",
+      "format",
+      "轉換",
+      "converter"
+    ],
+    "fr_tag_files": [
+      "03-development/src/audio/__init__.py",
+      "03-development/src/audio/audio_converter.py",
+      "03-development/tests/test_fr08_audio_converter.py"
+    ],
+    "keyword_files": []
+  },
+  "FR-09": {
+    "files": [
+      "03-development/tests/test_fr09_kokoro_client.py",
+      "03-development/src/synth/synth_engine.py",
+      "03-development/src/backend/kokoro_client.py",
+      "03-development/src/backend/__init__.py"
+    ],
+    "file_count": 4,
+    "source": [
+      "fr_tag",
+      "keyword_supplement"
+    ],
+    "keywords": [
+      "kokoro",
+      "proxy",
+      "client"
+    ],
+    "fr_tag_files": [
+      "03-development/src/backend/__init__.py",
+      "03-development/src/backend/kokoro_client.py",
+      "03-development/tests/test_fr09_kokoro_client.py"
+    ],
+    "keyword_files": [
+      "03-development/src/synth/synth_engine.py"
+    ]
+  }
+}

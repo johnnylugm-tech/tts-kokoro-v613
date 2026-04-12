@@ -1037,3 +1037,53 @@ structlog>=24.1.0
 
 *文件狀態：Phase 3 準備完成（SAD 已與 SKILL.md Phase 3 框架對齊）*
 *下次審查：Phase 3 實作完成後*
+
+<!-- SAB:START -->
+```json
+{
+  "version": "1.0",
+  "created_at": "2026-04-09",
+  "phase": 2,
+  "project": "tts-kokoro-v613",
+  "layers": [
+    {
+      "name": "api",
+      "modules": ["FR-07"],
+      "allowed_dependencies": ["orchestration"]
+    },
+    {
+      "name": "orchestration",
+      "modules": [],
+      "allowed_dependencies": ["processing", "infrastructure"]
+    },
+    {
+      "name": "processing",
+      "modules": ["FR-01", "FR-02", "FR-03"],
+      "allowed_dependencies": ["infrastructure"]
+    },
+    {
+      "name": "synth",
+      "modules": ["FR-04", "FR-05"],
+      "allowed_dependencies": ["infrastructure", "processing"]
+    },
+    {
+      "name": "infrastructure",
+      "modules": ["FR-06", "FR-08", "FR-09"],
+      "allowed_dependencies": []
+    }
+  ],
+  "dependencies": {
+    "api": ["orchestration", "synth"],
+    "orchestration": ["processing", "infrastructure"],
+    "processing": ["infrastructure"],
+    "synth": ["infrastructure"],
+    "infrastructure": []
+  },
+  "quality_targets": {
+    "max_complexity": 15,
+    "min_coverage": 80,
+    "max_coupling": 0.3
+  }
+}
+```
+<!-- SAB:END -->
