@@ -314,3 +314,31 @@ tts-v610 --file input.txt -o output/
 | GET | `/ready` | 就緒檢查 |
 | GET | `/v1/proxy/voices` | 音色列表 |
 | POST | `/v1/proxy/speech` | 語音合成 |
+
+<!-- FR:START -->
+```json
+{
+  "version": "1.0",
+  "created_at": "2026-04-09",
+  "phase": 1,
+  "project": "tts-kokoro-v613",
+  "functional_requirements": [
+    {"id": "FR-01", "description": "台灣中文詞彙映射", "module": "processing/lexicon_mapper.py"},
+    {"id": "FR-02", "description": "SSML 解析（含 <voice> 標籤）", "module": "processing/ssml_parser.py"},
+    {"id": "FR-03", "description": "智能文本切分（Chunk ≤ 250 字）", "module": "processing/text_chunker.py"},
+    {"id": "FR-04", "description": "並行合成引擎", "module": "synth/synth_engine.py"},
+    {"id": "FR-05", "description": "斷路器（Circuit Breaker）", "module": "synth/circuit_breaker.py"},
+    {"id": "FR-06", "description": "Redis 快取（可選）", "module": "cache/redis_cache.py"},
+    {"id": "FR-07", "description": "CLI 命令列工具（tts-v610）", "module": "api/routes.py"},
+    {"id": "FR-08", "description": "ffmpeg 音訊格式轉換", "module": "infrastructure/audio_converter.py"},
+    {"id": "FR-09", "description": "Kokoro Proxy", "module": "backend/kokoro_client.py"}
+  ],
+  "non_functional_requirements": [
+    {"id": "NFR-01", "type": "performance", "description": "效能"},
+    {"id": "NFR-02", "type": "reliability", "description": "可靠性"},
+    {"id": "NFR-03", "type": "security", "description": "安全性"},
+    {"id": "NFR-04", "type": "maintainability", "description": "可維護性"}
+  ]
+}
+```
+<!-- FR:END -->
