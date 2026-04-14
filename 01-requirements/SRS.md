@@ -1,6 +1,8 @@
 # SRS.md — tts-kokoro-v613 軟體需求規格
 
-> **引用：** [Constitution](../.methodology/constitution/CONSTITUTION.md) — Phase 0 基礎框架
+> **引用：**
+> - [Constitution](../.methodology/constitution/CONSTITUTION.md) — Phase 0 基礎框架
+> - [methodology-v2](https://github.com/johnnylugm-tech/methodology-v2) — 開發方法論框架
 > **ASPICE Trace：** Phase 0 (1-constitution) → Phase 1 (2-specify) — 需求來源
 
 > 版本：v6.13.1  
