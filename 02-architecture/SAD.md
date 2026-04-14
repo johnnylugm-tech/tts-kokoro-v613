@@ -5,6 +5,7 @@
 > Phase：Phase 2（架構設計）→ Phase 3（實作）  
 > 日期：2026-04-02  
 > 基於：SRS.md v6.13.1
+> **ASPICE Trace：** Phase 1 (2-specify) → Phase 2 (3-plan) — 架構依據需求
 > 框架遵循：本專案依循 [methodology-v2](https://github.com/johnnylugm-tech/methodology-v2) 框架開發
 
 ---

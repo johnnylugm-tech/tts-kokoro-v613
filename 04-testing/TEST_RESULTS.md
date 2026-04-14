@@ -1,5 +1,7 @@
 # Test Results — 2026-04-12
 
+> **ASPICE Trace：** 3-plan → 4-implement — 基於 [02-architecture/SAD.md](../02-architecture/SAD.md) 及 [03-development/](../03-development/) 實作
+
 ## 1. 執行摘要
 
 | 項目 | 數值 |

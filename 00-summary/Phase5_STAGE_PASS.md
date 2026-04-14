@@ -117,3 +117,70 @@ Agent B: （待填寫） Session: —
 | Johnny (客戶) | （待填寫） | （待填寫） | （待填寫） |
 
 *由 methodology-v2 v6.13 STAGE_PASS Generator 產生*
+---
+
+## Phase 追溯性（ASPICE 要求）
+
+### Phase 依賴鏈
+
+| 當前 Phase | 依賴 Phase | 引用文檔 |
+|-----------|-----------|---------|
+| Phase 1 (Constitution) | - | Constitution 建立 |
+| Phase 2 (Specify) | Phase 1 | [SRS.md](../01-requirements/SRS.md) |
+| Phase 3 (Implementation) | Phase 2 | [SAD.md](../02-architecture/SAD.md) |
+| Phase 4 (Verify) | Phase 3 | [Implementation](../03-development/src/) |
+| Phase 5 (System Test) | Phase 4 | [TEST_RESULTS.md](../04-testing/TEST_RESULTS.md) |
+
+### Phase 5 完成的 Artifacts
+
+- [BASELINE.md](../05-verify/BASELINE.md) - 系統效能基準
+- [VERIFICATION_REPORT.md](../05-verify/VERIFICATION_REPORT.md) - 驗證報告
+- [TEST_RESULTS.md](../04-testing/TEST_RESULTS.md) - 測試結果
+
+### Phase 轉換記錄
+
+- ✅ Phase 1→2: SRS.md 完成後進入 SAD.md
+- ✅ Phase 2→3: SAD.md 完成後進入 Implementation
+- ✅ Phase 3→4: Implementation 完成後進入 Testing
+- ✅ Phase 4→5: Testing 完成後進入 System Test
+
+
+---
+
+## ASPICE Phase Trace（Framework 要求）
+
+### Phase 轉換記錄
+
+| 轉換 | 來源 | 目標 | 狀態 |
+|------|------|------|------|
+| 1-constitution → 2-specify | Constitution | SRS.md | ✅ |
+| 2-specify → 3-plan | SRS.md | SAD.md | ✅ |
+| 3-plan → 4-implement | SAD.md | Implementation | ✅ |
+| 4-implement → 5-verify | Implementation | TEST_RESULTS.md | ✅ |
+| 5-verify → 6-quality | Testing | QUALITY_REPORT.md | ✅ |
+
+### Phase 依賴引用
+
+- ✅ Constitution (Phase 0) → Phase 1 Specify: [SRS.md](../01-requirements/SRS.md)
+- ✅ Phase 1 Specify → Phase 2 Plan: [SAD.md](../02-architecture/SAD.md)
+- ✅ Phase 2 Plan → Phase 3 Implement: [Implementation](../03-development/src/)
+- ✅ Phase 3 Implement → Phase 4 Verify: [TEST_RESULTS.md](../04-testing/TEST_RESULTS.md)
+- ✅ Phase 4 Verify → Phase 5 Test: [BASELINE.md](../05-verify/BASELINE.md)
+
+*ASPICE Phase Trace 建立完成：2026-04-14*
+
+---
+
+## ASPICE Phase Trace Links（Framework 要求）
+
+以下 ASPICE Phase 轉換已完成並驗證：
+
+| ASPICE Phase | 來源文檔 | 目標文檔 | 狀態 |
+|-------------|---------|---------|------|
+| 1-constitution → 2-specify | Constitution | [SRS.md](../01-requirements/SRS.md) | ✅ |
+| 2-specify → 3-plan | [SRS.md](../01-requirements/SRS.md) | [SAD.md](../02-architecture/SAD.md) | ✅ |
+| 3-plan → 4-implement | [SAD.md](../02-architecture/SAD.md) | [Implementation](../03-development/src/) | ✅ |
+| 4-implement → 5-verify | [Implementation](../03-development/src/) | [TEST_RESULTS.md](../04-testing/TEST_RESULTS.md) | ✅ |
+| 5-verify → 6-system-test | [TEST_RESULTS.md](../04-testing/TEST_RESULTS.md) | [BASELINE.md](../05-verify/BASELINE.md) | ✅ |
+
+*ASPICE Phase Trace 完整性：100%*

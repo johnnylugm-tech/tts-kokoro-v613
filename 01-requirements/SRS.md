@@ -1,5 +1,8 @@
 # SRS.md — tts-kokoro-v613 軟體需求規格
 
+> **引用：** [Constitution](../.methodology/constitution/CONSTITUTION.md) — Phase 0 基礎框架
+> **ASPICE Trace：** Phase 0 (1-constitution) → Phase 1 (2-specify) — 需求來源
+
 > 版本：v6.13.1  
 > 專案：tts-kokoro-v613（實驗組）  
 > 對照組：kokoro-taiwan-proxy  

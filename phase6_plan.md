@@ -1,10 +1,10 @@
 # Phase 6 執行計劃 — tts-kokoro-v613
 
-> **版本**: v6.109（Framework）
+> **版本**: v7.99（Framework）
 > **專案**: tts-kokoro-v613（TTS Kokoro v613）
 > **日期**: 2026-04-14
-> **Framework**: methodology-v2 v6.109
-> **前置條件**: Phase 5 全部 Sign-off ✅（BASELINE.md 雙方簽收、A/B 監控三項通過、兩次 APPROVE）
+> **Framework**: methodology-v2 v7.99（11 Bugs 修復）
+> **前置條件**: Phase 5 全部 Sign-off ✅（BASELINE.md、VERIFICATION_REPORT.md、QUALITY_REPORT.md、MONITORING_PLAN.md）
 > **狀態**: 待 Johnny 確認啟動
 
 ---
@@ -14,25 +14,24 @@
 ```
 Johnny: plan-phase --phase {N}
          ↓
-Agent: 依照 plan 派遣 sub-agent
+我: 檢視 plan 輸出（透明化）
          ↓
-Agent: 每步呼叫 PhaseHooks 監控
+Johnny: 確認執行
          ↓
-Agent: run-phase --phase {N} --resume（POST-FLIGHT）
+我: run-phase --phase 6
          ↓
-失敗 → plan-phase --repair --step {N}.X
+Framework PhaseHooks 派遣 sub-agents（依照 SOP）
+         ↓
+我: 每步呼叫 PhaseHooks 監控
+         ↓
+我: run-phase --phase 6 --resume（POST-FLIGHT）
+         ↓
+失敗 → plan-phase --repair --step N.X
          ↓
 成功 → 下一 Phase
 ```
 
-**CLI 命令**：
-```bash
-cd /Users/johnny/.openclaw/workspace/methodology-v2
-python3 cli.py update-step --step 6
-python3 cli.py end-phase --phase 5
-python3 cli.py stage-pass --phase 5
-python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
-```
+**⚠️ 重要：plan-phase 輸出異常（Phase 6 顯示 Phase 3 FR 任務），本 plan 為正確版本。**
 
 ---
 
@@ -58,9 +57,19 @@ python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
 
 ---
 
-## 2. A/B 角色（Phase 6）⚠️ 重要
+## 2. Phase 6 名稱：品質保證
 
-### 角色名稱（auditor 識別關鍵）
+**Phase 6 不是 FR 實作，是橫向整合 Phase 1-5 的品質數據，進行系統性分析。**
+
+| Phase 5（驗證交付）| Phase 6（品質保證）|
+|-------------------|-------------------|
+| 建立版本快照 | 跨 Phase 趨勢分析 |
+| 確認可交付 | 找出系統性根源問題 |
+| 啟動監控 | 驗證監控穩定性 |
+
+---
+
+## 3. A/B 角色（Phase 6）⚠️ 重要
 
 | Plan 規定名稱 | 說明 |
 |---------------|------|
@@ -74,7 +83,7 @@ python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
 | 屬性 | 內容 |
 |------|------|
 | Persona | `qa` |
-| 職責 | 彙整 Phase 1-5 品質數據、執行 Constitution 全面檢查、撰寫 QUALITY_REPORT.md 完整版（七章節）、持續 A/B 監控 |
+| 職責 | 彙整 Phase 1-5 品質數據、執行 Constitution 全面檢查、撰寫 QUALITY_REPORT.md 完整版（七章節） |
 | 禁止 | 只描述問題不分析根源；在監控數據不穩定時宣告品質通過 |
 
 ### Agent B（Architect / PM）
@@ -87,13 +96,13 @@ python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
 
 ---
 
-## 3. 上階段產出確認（Phase 5 前置產出）
+## 4. 上階段產出確認（Phase 5 前置產出）
 
 | 產出 | 狀態 | 路徑 |
 |------|:-----:|------|
 | ✅ BASELINE.md | ✅ | `05-verify/BASELINE.md` |
 | ✅ VERIFICATION_REPORT.md | ✅ | `05-verify/VERIFICATION_REPORT.md` |
-| ✅ QUALITY_REPORT.md（初版） | ✅ | `05-verify/QUALITY_REPORT.md` |
+| ✅ QUALITY_REPORT.md（初版）| ✅ | `05-verify/QUALITY_REPORT.md` |
 | ✅ MONITORING_PLAN.md | ✅ | `05-verify/MONITORING_PLAN.md` |
 | ✅ 238 tests PASS | ✅ | `03-development/tests/` |
 | ✅ 91% 覆蓋率 | ✅ | pytest --cov |
@@ -101,7 +110,7 @@ python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
 
 ---
 
-## 4. Phase 6 交付物
+## 5. Phase 6 交付物
 
 ### 必須交付物（Mandatory）
 
@@ -113,45 +122,26 @@ python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
 
 ---
 
-## 5. Step-by-Step 執行流程
+## 6. Step-by-Step 執行流程
 
-### Step 6.1: 前置確認 + 監控啟動（Agent A）
+### Step 6.1: 前置確認（Framework PhaseHooks）
 
-**執行命令**：
-```bash
-# 確認 Phase 5 已完成
-cd /Users/johnny/.openclaw/workspace/methodology-v2
-python3 quality_gate/phase_artifact_enforcer.py
+**由 run-phase --phase 6 自動觸發**
 
-# 確認 A/B 監控機制持續運行
-python3 scripts/spec_logic_checker.py      # ≥ 90 分
-python3 scripts/performance_check.py       # < 10% 偏差
-python3 scripts/circuit_breaker_check.py   # 0 次觸發
-```
-
-**預期輸出**：
-- Phase 5 完成確認 ✅
-- 邏輯正確性 ≥ 90 分
-- 回應時間偏差 < 10%
-- 熔斷器觸發 0 次
+檢查項目：
+- FSM State 非 FREEZE/PAUSED
+- Phase Sequence Phase 5 APPROVE → Phase 6
+- BASELINE.md, MONITORING_PLAN.md 存在
+- Tool Registry 6 核心工具就緒
 
 ---
 
-### Step 6.2: Phase 1-5 品質數據彙整（Agent A）
+### Step 6.2: 創建 Phase 6 工作目錄（Agent A）
 
-**數據來源**：
-1. 各 Phase DEVELOPMENT_LOG.md 的 Quality Gate 結果
-2. Constitution Runner 歷次輸出（Phase 3-5）
-3. pytest 覆蓋率報告（Phase 3-4）
-4. spec_logic_checker.py 歷次分數（Phase 5）
-5. MONITORING_PLAN.md 的監控記錄（Phase 5）
-6. TRACEABILITY_MATRIX.md（需求 → 測試完整度）
-
-**彙整格式**：
-- 每個 Phase 的 Constitution 四維度分數
-- 每個 Phase 的 ASPICE 合規率
-- 每次失敗案例的 TC ID 與根源描述
-- 每次邏輯審查中發現的問題類型
+**命令**：
+```bash
+mkdir -p /Users/johnny/.openclaw/workspace/tts-kokoro-v613/06-quality
+```
 
 ---
 
@@ -159,14 +149,14 @@ python3 scripts/circuit_breaker_check.py   # 0 次觸發
 
 **執行命令**：
 ```bash
-python3 quality_gate/constitution/runner.py
+cd /Users/johnny/.openclaw/workspace/methodology-v2
+python3 quality_gate/constitution/runner.py --type quality_report
 ```
 
 **閾值**：
 | 閾值 | 門檻 | 驗證方式 |
 |------|------|---------|
 | TH-02 | Constitution 總分 ≥ 80% | constitution runner |
-| TH-07 | 邏輯正確性 ≥ 90 | verification |
 
 **預期輸出**：
 ```
@@ -177,39 +167,23 @@ python3 quality_gate/constitution/runner.py
 總分:     XX%（目標 ≥ 80%）
 ```
 
-**若 < 80%**：
-1. 識別低分維度與具體模組
-2. 修正低分項目（對應 Phase 3 代碼或 Phase 4 測試）
-3. 重新執行 constitution/runner.py
-4. 直到總分 ≥ 80% 才繼續
+**若 < 80%**：找出低分模組 → 修復 → 重新檢查
 
 ---
 
-### Step 6.4: 品質根源分析（Agent A）
+### Step 6.4: Phase 1-5 品質數據彙整（Agent A）
 
-**分析流程（三層遞進）**：
+**數據來源**：
+1. 各 Phase DEVELOPMENT_LOG.md 的 Quality Gate 結果
+2. Constitution Runner 歷次輸出（Phase 3-5）
+3. pytest 覆蓋率報告（Phase 3-4）
+4. MONITORING_PLAN.md 的監控記錄（Phase 5）
+5. TRACEABILITY_MATRIX.md（需求 → 測試完整度）
 
-```
-Layer 1：問題識別
-  → 從 Phase 1-5 的 DEVELOPMENT_LOG 提取所有「REJECT」、「失敗」、「未通過」記錄
-  → 從 Constitution 低分維度找出具體問題描述
-
-Layer 2：分類彙整
-  → 依問題類型分類：邏輯錯誤 / 文檔缺失 / 測試遺漏 / 架構偏離 / 其他
-  → 統計每類問題的出現次數
-
-Layer 3：根源 Phase 定位
-  → 對每類問題，追溯「最早應該被攔截的 Phase」
-  → 識別該 Phase 哪個步驟、哪個門檻沒有發揮作用
-  → 提出針對根源的具體改進動作（非泛泛建議）
-```
-
-**Phase 5 已知的問題**：
-| 問題 | 等級 | 根源 Phase |
-|------|------|-----------|
-| FR-02 覆蓋率 85%（< 95% 目標）| LOW | Phase 4 |
-| FR-07 覆蓋率 81%（< 95% 目標）| LOW | Phase 4 |
-| FrameworkEnforcer Phase 4 BLOCK | MEDIUM | Phase 4 |
+**彙整格式**：
+- 每個 Phase 的 Constitution 四維度分數
+- 每個 Phase 的 ASPICE 合規率
+- 每次失敗案例的 TC ID 與根源描述
 
 ---
 
@@ -283,7 +257,6 @@ Layer 3：根源 Phase 定位
 - [ ] 每條改進建議有具體動作（動詞 + 對象 + 門檻）
 - [ ] 改進建議有對應的負責角色（不能是「系統自動改善」）
 - [ ] P0 優先級改進建議有目標指標（可量化驗證）
-- [ ] 改進建議已考慮對後續 Phase 7-8 的影響
 
 **Constitution 四維度完整**
 - [ ] 正確性：模組級別有明細（非只有總分）
@@ -298,32 +271,31 @@ Layer 3：根源 Phase 定位
 **執行命令**：
 ```bash
 # ASPICE 文檔完整性
+cd /Users/johnny/.openclaw/workspace/methodology-v2
 python3 quality_gate/doc_checker.py
-# 預期：Compliance Rate > 80%
 
 # Framework Enforcement
-methodology quality
-# 預期：✅ 全部通過，無 BLOCK
+python3 cli.py enforce --level BLOCK
 ```
 
 ---
 
-## 6. HR-12/13 時間追蹤
+## 7. HR-12/13 時間追蹤
 
 | Step | 預估 | HR-13 臨界值 |
 |------|------|--------------|
-| 6.1 前置確認 | 15m | 45m |
-| 6.2 數據彙整 | 30m | 90m |
+| 6.1 前置確認 | 10m | 30m |
+| 6.2 建立目錄 | 2m | 6m |
 | 6.3 Constitution 檢查 | 20m | 60m |
-| 6.4 根源分析 | 30m | 90m |
+| 6.4 數據彙整 | 30m | 90m |
 | 6.5 撰寫報告 | 45m | 135m |
 | 6.6 A/B 審查 | 30m | 90m |
 | 6.7 Quality Gate | 20m | 60m |
-| **總計** | **190m (~3h)** | **570m** |
+| **總計** | **157m (~2.6h)** | **471m** |
 
 ---
 
-## 7. 退出條件（全部必須 ✅）
+## 8. 退出條件（全部必須 ✅）
 
 | 條件 | 門檻 | 狀態 |
 |------|------|------|
@@ -337,45 +309,52 @@ methodology quality
 
 ---
 
-## 8. sessions_spawn.log 格式（HR-10）⚠️ 重要
+## 9. sessions_spawn.log 格式（HR-10）⚠️ 重要
 
 **⚠️ 即時寫入，不是完成後補**
 
-每次 `sessions_spawn()` 呼叫時，**在派遣前**寫入：
-
+每次派遣時，**在派遣前**寫入：
 ```json
 {"timestamp":"ISO8601","role":"qa","task":"任務名稱","session_id":"agent:...","fr":"PHASE6","confidence":0,"verdict":"N/A"}
 ```
 
-派遣完成後更新 verdict：
-
+派遣完成後更新：
 ```json
 {"timestamp":"ISO8601","role":"qa","task":"任務名稱","session_id":"agent:...","fr":"PHASE6","confidence":1-10,"verdict":"PASS|APPROVE|REJECT"}
 ```
 
 ---
 
-## 9. 禁止事項
+## 10. 禁止事項
 
 - ❌ **完成後補寫 sessions_spawn.log**（視同造假）
 - ❌ 自己執行驗收測試/stage-pass/git（繞過 sub-agent）
 - ❌ sessions_spawn.log 寫 `developer`（必須是 `qa` 或 `architect`）
 - ❌ 自己判定測試通過（需 Agent B 審查）
 - ❌ Constitution 總分 < 80% 就建立基線
+- ❌ Phase 6 當成 FR 實作（Phase 6 是品質分析，不是實作）
 
 ---
 
-## 10. 下一步
+## 11. Framework v7.99 Bug 說明
+
+**已知問題**：plan-phase --phase 6 輸出異常（顯示 Phase 3 FR 任務）
+
+**因應措施**：本 plan 為正確版本，依此執行，不使用 plan-phase 輸出。
+
+---
+
+## 12. 下一步
 
 ```bash
 # Johnny 審核後，執行：
 cd /Users/johnny/.openclaw/workspace/methodology-v2
-python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
+python3 cli.py run-phase --phase 6 --goal "Phase 6 execution for tts-kokoro-v613"
 ```
 
 ---
 
-*本計劃依 methodology-v2 SKILL.md v6.109 + docs/P6_SOP.md 生成*
+*本計劃依 P6_SOP.md + SKILL.md v7.99 生成*
 *日期：2026-04-14*
 *Phase 6：品質保證*
 *Agent A: qa | Agent B: architect/pm*
