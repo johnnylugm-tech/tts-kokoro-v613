@@ -18,7 +18,7 @@
 | R-05 | 文本切分破壞語義完整性 | 技術 | 中 | 低 | 6 | 監控中 | Text Splitter |
 | R-06 | Phase Truth 達不到 70% 門檻 | 流程 | 高 | 高 | 16 | **主動修復中** | QA |
 | R-07 | Constitution Score 跌破 80% 閾值 | 流程 | 高 | 中 | 12 | 監控中 | QA |
-| R-08 | `docs/VERIFICATION.md` 缺少安全驗證結果 | 安全/HIGH | 高 | 低 | 8 | **待修復** | Security |
+| R-08 | `docs/VERIFICATION.md` 缺少安全驗證結果 | 安全/HIGH | 高 | 低 | 8 | **已完成** | Security |
 | R-09 | 框架流程違規（FrameworkEnforcer BLOCK） | 流程 | 中 | 中 | 8 | **待修復** | Process |
 | R-10 | 測試覆蓋率未達內部目標（SSML 85%, Routes 81%） | 品質 | 低 | 低 | 4 | 監控中 | Testing |
 
@@ -149,9 +149,10 @@
 | **風險分數** | 8 |
 | **根本原因** | Phase 6 Constitution Check 發現 `docs/VERIFICATION.md` 缺少安全驗證結果 |
 | **觸發條件** | Constitution Check 的 `missing_security_verification` 規則 |
-| **現有緩解** | P0 優先級已指派，估計 15 分鐘可修復 |
-| **殘餘風險** | 若不修復，Constitution Score 將因額外違規而跌破 80% |
-| **狀態** | **待修復（P0）** |
+| **緩解行動** | 建立 `docs/VERIFICATION.md` 包含 Authentication、Authorization、Encryption、Data Protection 四項驗證結果 |
+| **緩解日期** | 2026-04-14 |
+| **殘餘風險** | 無 |
+| **狀態** | **已完成** ✅ |
 | **擁有者** | Security Agent |
 
 ### R-09：框架流程違規（FrameworkEnforcer BLOCK）
