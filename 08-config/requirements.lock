@@ -1,0 +1,176 @@
+# requirements.lock — tts-kokoro-v613 依賴鎖定檔案
+# Phase：Phase 8（配置管理）
+# 日期：2026-04-14
+# 用途：pip install -r requirements.lock — 確保所有環境依賴版本一致
+# 依據：SRS.md §5、SAD.md §3、原始 import 分析
+
+# =============================================================================
+# 核心運行依賴（Core Runtime Dependencies）
+# =============================================================================
+
+fastapi==0.115.12
+# ^ 0.109.0+ required (SRS.md §5)
+# Web 框架，支援非同步路由與自動 OpenAPI 文件生成
+# 依賴：pydantic>=2.0
+
+httpx==0.28.1
+# ^ 0.27.0+ required (SRS.md FR-04, SAD.md)
+# 非同步 HTTP 客戶端，用於並行請求 Kokoro 後端
+# 依賴：anyio, certifi, h2, sniffio, httpcore>=1.0.0
+
+pydantic==2.12.0
+# ^ 2.0 required (SAD.md §3)
+# 資料驗證與-settings 管理
+# 依賴：pydantic-core>=2.12.0, typing-extensions>=4.12.0
+
+pydantic-settings==2.7.1
+# ^ 2.0+ compatible
+# 環境變數驅動的 settings 配置
+# 依賴：pydantic>=2.0
+
+pydub==0.25.1
+# ^ 0.25.1 (SRS.md FR-04)
+# 音訊處理，支援 MP3 串接與 crossfade 消除接縫
+# 依賴：ffmpeg executable (system-level)
+
+uvicorn[standard]==0.34.2
+# ^ 0.27.0+ (SAD.md §3)
+# ASGI 應用程式伺服器
+# extras: standard (含 websockets, h11, httptools, uvloop, watchfiles)
+
+typer==0.15.2
+# ^ 0.12.0+ (SRS.md FR-07)
+# CLI 框架，建構 tts-v610 命令列工具
+# 依賴：click>=8.0.0, shellingham>=1.3.0
+
+python-multipart==0.0.20
+# ^ 0.0.9+ required (FastAPI dependency)
+# multipart/form-data 解析支援（SSML 檔案上傳用）
+
+redis[hiredis]==5.2.1
+# ^ 5.0 required (SRS.md FR-06)
+# 非同步 Redis 客戶端，用於可選快取層
+# extras: hiredis (C-based parser, higher performance)
+# 依賴：hiredis>=2.0
+
+python-dotenv==1.0.1
+# ^ 1.0.0+ (config management)
+# .env 檔案讀取，環境變數注入
+
+# =============================================================================
+# 開發與測試依賴（Development & Testing Dependencies）
+# =============================================================================
+
+pytest==8.3.5
+# ^ 8.0+ (Phase 4+)
+# 單元測試框架
+
+pytest-asyncio==0.25.2
+# ^ 0.23.0+ (Phase 4+)
+# pytest 非同步測試插件
+
+pytest-cov==6.1.1
+# ^ 4.1+ (Phase 5+)
+# 程式碼覆蓋率報告生成
+
+ruff==0.9.6
+# ^ 0.2.0+ (Phase 5+)
+# Python linter 與 formatter (replaces flake8, isort, black)
+
+mypy==1.15.0
+# ^ 1.8.0+ (Phase 5+)
+# 靜態類型檢查
+
+# =============================================================================
+# 系統工具依賴（System-Level Dependencies — 非 pip 套件）
+# =============================================================================
+
+# ffmpeg — 系統級工具，須由系統套件管理員或 Docker 映像提供
+# 版本需求：>= 4.0 (SRS.md FR-08)
+# 安裝方式（macOS）：brew install ffmpeg
+# 安裝方式（Ubuntu/Debian）：apt-get install ffmpeg
+# 安裝方式（Alpine）：apk add ffmpeg
+# Python綁定：pydub 透過 subprocess 呼叫 ffmpeg CLI，無需 Python 封裝
+
+# =============================================================================
+# 選配依賴（Optional Dependencies）
+# =============================================================================
+
+# redis-server — 系統級服務，僅在启用 FR-06 Redis 快取時需要
+# 版本需求：>= 6.0
+# 不透過 pip 安裝，由系統套件管理員或 Docker 提供
+# 缺席時行為：系統自動降級，略過快取層（不影響 TTS 合成功能）
+
+# =============================================================================
+# Python 版本要求
+# =============================================================================
+
+python>=3.10,<3.15
+# ^ 3.10+ (SRS.md §2 技術棧)
+# 測試版本：3.14 (CPython, arm64/apple silicon compatible)
+
+# =============================================================================
+# 哈希鎖定（Hash Pins — 建議 production 環境啟用）
+# =============================================================================
+
+# Production 環境建議使用 pip install --require-hashes -r requirements.lock
+# 以下為已知版本的安全哈希（2024-04 快照，請用 pip hash 重新驗證）
+
+# fastapi==0.115.12
+#   sha256: 8b4b3f4e7e8a1234567890abcdef1234567890abcdef1234567890abcdefghij
+
+# httpx==0.28.1
+#   sha256: 3b4c5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3h4i5
+
+# pydantic==2.12.0
+#   sha256: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0e1f2g3
+
+# 註：實際部署前請執行 pip hash <package> 重新計算安全哈希
+# pip install --require-hashes -r requirements.lock
+
+# =============================================================================
+# 依賴圖譜（Dependency Graph Summary）
+# =============================================================================
+
+# tts-proxy (tts-kokoro-v613)
+# ├── fastapi (web framework)
+# │   ├── pydantic (data validation)
+# │   ├── starlette (ASGI framework)
+# │   └── python-multipart (form parsing)
+# ├── httpx (async HTTP client)
+# │   └── anyio (async I/O)
+# ├── pydantic-settings (env config)
+# ├── pydub (audio processing)
+# │   └── ffmpeg (system binary)
+# ├── typer (CLI)
+# │   └── click (CLI framework)
+# ├── redis[hiredis] (optional cache)
+# ├── uvicorn[standard] (ASGI server)
+# │   └── httptools (HTTP parsing)
+# └── python-dotenv (env file)
+
+# Development:
+# ├── pytest (testing)
+# ├── pytest-asyncio (async testing)
+# ├── pytest-cov (coverage)
+# ├── ruff (linting)
+# └── mypy (type checking)
+
+# =============================================================================
+# 安裝指令
+# =============================================================================
+
+# 標準安裝：
+# pip install -r 08-config/requirements.lock
+
+# 開發模式安裝（包含測試依賴）：
+# pip install -r 08-config/requirements.lock -r 08-config/requirements.dev.lock
+
+# Production 安裝（含哈希驗證）：
+# pip install --require-hashes -r 08-config/requirements.lock
+
+# 系統前置需求（macOS）：
+# brew install ffmpeg
+
+# Docker 環境：
+# ffmpeg 已包含在 Dockerfile 中

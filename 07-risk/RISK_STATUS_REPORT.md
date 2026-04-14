@@ -30,7 +30,7 @@ Phase 7 風險識別結果：
 | R-05 | 文本切分破壞語意 | 6 | P2 | 監控中 | 持續監控 |
 | R-06 | Phase Truth < 70% | 16 | **P0** | **主動修復中** | 等待 Johnny 手動確認 |
 | R-07 | Constitution Score 逼近閾值 | 12 | **P0** | **主動修復中** | 依賴 R-08 修復 |
-| R-08 | VERIFICATION.md 缺失 | 8 | **P0** | **待修復** | Agent A 需建立檔案 |
+| R-08 | VERIFICATION.md 缺失 | 0 | — | ✅ **已修復** | `docs/VERIFICATION.md` 已建立（Phase 8 確認） |
 | R-09 | FrameworkEnforcer BLOCK | 8 | P1 | **待修復** | 等待 R-06 完成 |
 | R-10 | 覆蓋率未達標 | 4 | P3 | 監控中 | 接受型，長期優化 |
 
