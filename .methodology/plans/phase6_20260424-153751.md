@@ -1,0 +1,302 @@
+# Phase 6 執行計劃 — 
+
+> **版本**: 7.91
+> **專案**: 
+> **日期**: 2026-04-24
+> **Framework**: methodology-v2 7.91
+> **狀態**: 待 Johnny 確認啟動
+
+---
+
+## 0. 執行協議（§0）
+
+```
+[Step 0] READ state.json → current_phase=6
+[Step 1] LOAD SKILL.md §4 Phase 路由
+[Step 2] CHECK 進入條件 → blocker → STOP
+[Step 3] EXECUTE SOP → LAZY LOAD docs/P6_SOP.md
+[Step 4] RECORD output | SPAWN A/B agent
+[Step 5] CHECK 退出條件 → fail → FIX + RETRY
+[Step 6] UPDATE state.json phase=7 → GOTO 1
+```
+
+**CLI 命令**：
+```bash
+python3 cli.py update-step --step N
+python3 cli.py end-phase --phase 6
+python3 cli.py stage-pass --phase 6
+python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
+```
+
+---
+
+## 1. 硬規則（HR-01~HR-15）
+
+| HR | 規則 | 後果 | 具體行動 |
+|----|------|------|---------|
+| HR-01 | A/B 不同 Agent，禁自寫自審 | 終止 -25 | QA spawn → Architect spawn（嚴格順序）|
+| HR-02 | Quality Gate 需實際命令輸出 | 終止 -20 | 每個 QG 保存 stdout |
+| HR-03 | Phase 順序執行，不可跳過 | 終止 -30 | state.json phase=6 |
+| HR-04 | HybridWorkflow mode=ON，強制 A/B | 終止 | prompt 含 mode=ON |
+| HR-05 | 衝突時優先 methodology-v2 | 記錄 | 爭議時 methodology-v2 為準 |
+| HR-06 | 禁引入規格書外框架 | 終止 -20 | forbidden list |
+| HR-07 | DEVELOPMENT_LOG 需記錄 session_id | -15 | 每筆記 session_id |
+| HR-08 | Phase 結束需執行 Quality Gate | 終止 -10 | stage-pass --phase 6 |
+| HR-09 | Claims Verifier 驗證需通過 | 終止 -20 | citations 對照 |
+| HR-10 | sessions_spawn.log 需有 A/B 記錄 | 終止 -15 | 每 step 2 筆記錄 |
+| HR-11 | Phase Truth < 70% 禁進入下一 Phase | 終止 | <70% → PAUSE |
+| HR-12 | A/B 審查 > 5 輪 → PAUSE | — | 達 5 輪主動停 |
+| HR-13 | Phase 執行 > 預估 ×3 → PAUSE | — | 記 start_time |
+| HR-14 | Integrity < 40 → FREEZE | — | QG 後查 Integrity |
+| HR-15 | citations 必須含行號 + artifact_verification | -15 | 無 citations = 任務失敗 |
+
+---
+
+## 2. A/B 協作（HR-01, HR-04）
+
+### On Demand / Need to Know 原則
+
+| 原則 | 定義 |
+|------|------|
+| **Need to Know** | 只給必要資訊，細節被問時才提供 |
+| **On Demand** | Sub-agent 自己讀 artifact paths，不 dump |
+| **職責單一** | 每個 Sub-agent 只做一個任務 |
+
+### HR 約束（Phase 6）
+HR-01 | HR-07 | HR-08 | HR-10
+
+### TH 閾值（Phase 6）
+
+| TH | 指標 | 門檻 | 驗證命令 |
+|----|------|------|---------|
+| TH-02 | Constitution 總分 | ≥80% | `constitution/runner.py --type all` |
+| TH-07 | 邏輯正確性 | ≥90 | `phase-verify` |
+| TH-15 | Phase Truth | >90% | `phase-verify` |
+
+### A/B 角色（Phase 6）
+
+| 角色 | Agent | 職責 |
+|------|-------|------|
+| **Agent A** | `qa` | 品質數據彙整、QUALITY_REPORT 撰寫 |
+| **Agent B** | `architect` | 品質確認、審查驗證 |
+
+---
+
+## 3. 上階段產出承接（Phase 6 前置產出）
+
+> 上階段（Phase 5）產出摘要：
+
+| 產出 | 狀態 | 路徑 |
+|------|:-----:|------|
+| ❌ 任務初始化 | ❌ | `TASK_INITIALIZATION_PROMPT.md` |
+| ✅ 需求規格 | ✅ | `SRS.md` (8 FR, 4 NFR) |
+| ✅ 系統架構 | ✅ | `02-architecture/SAD.md` (0 modules) |
+| ✅ 架構決策 | ✅ | `02-architecture/ADR.md` |
+| ✅ 代碼實作 | ✅ | `app/` (1 files) |
+| ❌ 測試結果 | ❌ | `TEST_RESULTS.md` |
+| ❌ 系統基線 | ❌ | `BASELINE.md` |
+
+> ⚠️ 請在執行前確認上階段產出存在且完整。
+
+> ⚠️ 請在執行前確認上階段產出存在且完整。
+
+---
+
+## 4. 產出結構樹
+
+```
+06-quality/
+├── QUALITY_REPORT.md      # 品質報告（主產出）
+└── MONITORING_PLAN.md    # 監控計畫
+```
+
+### Phase 6 交付物檢查清單
+
+```markdown
+## Phase 6 交付物
+
+### 品質產出
+- [ ] `06-quality/QUALITY_REPORT.md` - 品質維度評估報告
+- [ ] `06-quality/MONITORING_PLAN.md` - 監控計畫
+
+### 驗證產出
+- [ ] Constitution 分數 >= 80%
+- [ ] 邏輯正確性 >= 90
+- [ ] Phase Truth >90%
+
+### 文檔產出
+- [ ] `sessions_spawn.log` - A/B session 完整記錄
+- [ ] `AB_COLLABORATION.md` - Agent 協作記錄
+```
+
+---
+
+## 5. 品質評估任務（共 4 項）
+
+### 5.1 品質維度定義
+
+| 維度 | 指標 | 目標值 | 驗證方法 |
+|------|------|--------|---------|
+| 可維護性 | Constitution 分數 | >= 80% | constitution runner |
+| 邏輯正確性 | 邏輯正確性分數 | >= 90 | phase-verify |
+| 測試覆蓋率 | Coverage | >= 80% | pytest --cov |
+| Phase Truth | Phase Truth 分數 | >90% | phase-verify |
+
+### 5.2 品質評估任務
+
+| 任務 | 負責 | 輸入 | 輸出 |
+|------|------|------|------|
+| 品質維度數據蒐集 | Agent A (qa) | TEST_RESULTS.md, BASELINE.md | 品質數據 |
+| Constitution 檢查 | Agent A (qa) | 所有 Phase 產出 | 檢查報告 |
+| 邏輯正確性驗證 | Agent B (architect) | 代碼, TEST_RESULTS | 驗證報告 |
+| QUALITY_REPORT 撰寫 | Agent A (qa) | 所有檢查結果 | QUALITY_REPORT.md |
+
+### 5.3 品質閾值
+
+| TH | 指標 | 門檻 | 驗證命令 |
+|----|------|------|---------|
+| TH-02 | Constitution 總分 | >= 80% | `constitution/runner.py --type all` |
+| TH-07 | 邏輯正確性 | >= 90 | `phase-verify` |
+
+---
+
+## 6. Agent Prompt 模板
+
+### Agent A（qa）
+
+```
+TASK: 生成 QUALITY_REPORT
+TASK_ID: task-p6-qa
+═══════════════════════════════════════
+
+【階段目標】
+進行全面品質評估，確保系統達到發布標準
+
+【On Demand 讀取】（只讀必要章節，❌ 禁止 dump 全文）
+- 04-testing/TEST_RESULTS.md（失敗案例）
+- 05-verify/BASELINE.md（效能數據）
+- 06-quality/QUALITY_REPORT.md（如有，讀取現有版本）
+
+【產出】
+- 06-quality/QUALITY_REPORT.md：品質報告
+- 問題修復計畫（如有問題）
+
+【驗證標準】
+- Constitution 品質總分 >= 80%
+- 邏輯正確性分數 >= 90
+- 所有高優先問題已修復或接受風險
+
+【FORBIDDEN】
+- ❌ 隱瞞品質問題
+- ❌ 高優先問題未處理
+- ❌ 報告數據與實際不符
+- ❌ 無 citations 或無行號 → HR-15 違規
+
+【OUTPUT_FORMAT】
+{
+  "status": "success|error",
+  "result": "QUALITY_REPORT.md 路徑",
+  "confidence": 1-10,
+  "citations": ["TEST_RESULTS.md#L30-L40"],
+  "summary": "50字內"
+}
+═══════════════════════════════════════
+```
+
+### Agent B（architect）
+
+```
+TASK: Review QUALITY_REPORT
+TASK_ID: task-p6-review
+═══════════════════════════════════════
+
+【審查範圍】（只讀必要章節，❌ 禁止 dump 全文）
+- 06-quality/QUALITY_REPORT.md
+- 04-testing/TEST_RESULTS.md
+- 05-verify/BASELINE.md
+
+【驗證檢查清單】
+1. Constitution 品質總分 >= 80%
+2. 邏輯正確性分數 >= 90
+3. 高優先問題已修復或接受風險
+4. 品質趨勢合理（相較 Baseline）
+5. 發布建議明確
+
+【REJECT_IF】
+- ❌ Constitution < 80% → REJECT
+- ❌ 高優先問題未處理 → REJECT
+- ❌ 數據與實際不符 → REJECT
+- ❌ 缺少 citations 或無行號 → REJECT（HR-15）
+
+【OUTPUT_FORMAT】
+{
+  "status": "APPROVE|REJECT",
+  "confidence": 1-10,
+  "violations": ["具體問題"],
+  "quality_score": "Constitution 分數",
+  "summary": "50字內"
+}
+═══════════════════════════════════════
+```
+
+---
+
+## 7. Quality Gate（Step 9）
+
+### 依序執行，全部通過才能 APPROVE
+
+```bash
+# 1. Constitution Check
+python3 quality_gate/constitution/runner.py --type all --docs-path {PROJECT_PATH}/docs
+
+# 2. Logic Verification
+python3 cli.py phase-verify --phase 6 --project {PROJECT_PATH}
+
+# 3. Coverage Check
+pytest {PROJECT_PATH}/tests/ --cov --cov-report=term -q
+```
+
+---
+
+## 8. sessions_spawn.log 格式（HR-10）
+
+每 Phase 2 筆記錄（qa + architect）：
+
+```json
+{"timestamp": "ISO8601", "role": "qa", "task": "生成 QUALITY_REPORT", "session_id": "xxx"}
+{"timestamp": "ISO8601", "role": "architect", "task": "審查 QUALITY_REPORT", "session_id": "yyy"}
+```
+
+---
+
+## 9. Commit 格式
+
+```
+[Phase 6] QUALITY_REPORT 建立 (HASH)
+```
+
+---
+
+## 10. 估計時間
+
+| 階段 | 估計時間 |
+|------|---------|
+| Pre-execution | 10 分鐘 |
+| Quality Evaluation | 60 分鐘 |
+| **總計** | **約 1 小時** |
+
+---
+
+## 11. 下一步
+
+```bash
+# Johnny 審核後，執行：
+python3 cli.py run-phase --phase 6 --goal "Phase 6 execution"
+
+# 或修復特定步驟：
+python3 cli.py plan-phase --phase 6 --repair --step 6.2
+```
+
+---
+
+*本計劃依 SKILL.md 7.91 + P6_SOP.md 7.91 生成*
