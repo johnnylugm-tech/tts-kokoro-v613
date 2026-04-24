@@ -236,3 +236,77 @@ P6 是唯一不呼叫以下工具的 Phase：
 | Enforcement modules | 3 | ✅ 3/3 | |
 | Steering/AutoResearch | 2 | ✅ 2/2 | |
 | Constitution types | 6 | ✅ 6/6 | |
+
+---
+
+## 11. PhaseHooksAdapter 整合狀態（2026-04-24）
+
+### 整合方式
+
+PhaseHooksAdapter 不再是「孤島」，現在透過 `cli_phase_prompts.py` 的 Phase 3 developer/reviewer prompt **嵌入 Agent 的任務描述中**。
+
+Agent 在執行每個 FR 時，會在 prompt 中看到具體的鉤子呼叫指令並執行。
+
+### Phase 3 Prompt 嵌入了什麼
+
+**Developer Prompt（每個 FR）：**
+```python
+# 初始化（每個 Phase 只執行一次）
+from adapters.phase_hooks_adapter import PhaseHooksAdapter
+adapter = PhaseHooksAdapter(project_path=..., phase=3, feature_flags={...})
+adapter.preflight_all()
+
+# 每個 FR 之前
+adapter.monitoring_before_dev("FR-XX")
+
+# Developer 實作...
+
+# 每個 FR 之後
+hook_result = adapter.monitoring_after_dev("FR-XX", result=dev_result)
+if not hook_result.get("passed"):
+    raise Exception(f"Hook blocked: {hook_result}")
+```
+
+**Reviewer Prompt：**
+```python
+adapter.monitoring_before_rev("FR-XX")
+# Reviewer 審查...
+hook_result = adapter.monitoring_after_rev("FR-XX", result=rev_result)
+```
+
+### HR-09 強制執行
+
+`HR-09` 規則已寫入 Phase 3 prompt：
+- ❌ 未呼叫 PhaseHooks → **HR-09 違規** → REJECT
+
+### OUTPUT_FORMAT 擴充
+
+Phase 3 prompt 的 `OUTPUT_FORMAT` 包含 `hook_calls` 欄位：
+```json
+{
+  "hook_calls": {
+    "monitoring_before_dev": { "blocked": false },
+    "monitoring_after_dev": { "passed": true, "shield_verdict": "...", "uqlm_score": 0.92 }
+  }
+}
+```
+
+### 閒置的 Feature 組件
+
+以下 13 Features 仍為獨立組件，**尚未透過 PhaseHooksAdapter 鉤子被實際呼叫**（PhaseHooksAdapter 已整合但部分 Feature 需要實際執行才能觸發）：
+
+| Feature | 實現檔案 | 鉤子點 | 狀態 |
+|---------|---------|--------|------|
+| #1 SAIF | `implement/governance/` | monitoring_after_dev | ⚠️ 待驗證 |
+| #2 Prompt Shields | `adapters/shield.py` | monitoring_after_dev | ⚠️ 待驗證 |
+| #3 Governance | `implement/governance/` | monitoring_after_rev | ⚠️ 待驗證 |
+| #4 Kill-Switch | `implement/kill_switch/` | HR-12/13 | ⚠️ 待驗證 |
+| #5 LLM Cascade | `implement/llm_cascade/` | monitoring_after_rev | ⚠️ 待驗證 |
+| #6 Hunter | `implement/feature-06-hunter/` | monitoring_after_dev | ⚠️ 待驗證 |
+| #7 UQLM | `implement/feature-07-uqlm/` | monitoring_after_dev | ⚠️ 待驗證 |
+| #8 Gap Detector | `implement/feature-08-gap-detector/` | monitoring_after_dev | ⚠️ 待驗證 |
+| #9 Risk Assessment | `implement/feature-09-risk-assessment/` | postflight | ⚠️ 待驗證 |
+| #10 LangGraph | `implement/feature-10-langgraph/` | (選択的) | ⚠️ 待驗證 |
+| #11 Langfuse | `implement/feature-11-langfuse/` | 所有鉤子 | ⚠️ 待驗證 |
+| #12 Compliance | `implement/feature-12-compliance/` | postflight | ⚠️ 待驗證 |
+| #13 Decision Log | `adapters/decision_log.py` | 所有鉤子 | ⚠️ 待驗證 |
