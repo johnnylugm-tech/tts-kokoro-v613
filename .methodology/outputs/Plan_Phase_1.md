@@ -103,11 +103,11 @@ TH-01 | TH-03 | TH-04 | TH-08 | TH-14 | TH-15
 ## 4. 產出結構樹
 
 ```
-app/
+03-development/src/
+├── api/
+│   ├── routes.py
 ├── backend/
 │   ├── kokoro_client.py
-├── cli/
-│   ├── main.py
 ├── infrastructure/
 │   ├── audio_converter.py
 │   ├── circuit_breaker.py
@@ -353,7 +353,7 @@ OUTPUT:
 - {TEST_FILE}
 
 FORBIDDEN:
-- ❌ app/infrastructure/（Phase 3+ 請用 03-development/infrastructure/）
+- ❌ 03-development/src/infrastructure/（已廢除）
 - ❌ 使用 @covers annotation → 請改用 docstring [FR-XX]
 - ❌ @type: edge → positive/negative/boundary
 - ❌ ... 省略 → 任務失敗
@@ -366,7 +366,7 @@ STEP 1: 讀取 SRS.md §FR-XX 和 SAD.md §對應章節
 
 STEP 2: 用 grep 確認函數的實際行號：
 ```bash
-grep -n "def 函數名\|class 類別名" app/xxx.py
+grep -n "def 函數名\|class 類別名" 03-development/src/xxx.py
 ```
 把輸出的行號記下來（不是估算）
 
@@ -374,7 +374,7 @@ STEP 3: 實作 + 寫 docstring 時用 STEP 2 的實際行號
 
 STEP 4: 寫完後再次 grep 確認：
 ```bash
-grep -A5 "def 函數名" app/xxx.py | grep "Citations:"
+grep -A5 "def 函數名" 03-development/src/xxx.py | grep "Citations:"
 ```
 確認 Citations 確實寫入且行號正確
 
@@ -445,16 +445,16 @@ graph TD
 
 | 維度 | 評估方法 | 目標 |
 |------|---------|------|
-| **規範符合度** | `grep -c '\[FR-' app/**/*.py` | citations ≥ 每函數 1 個 |
+| **規範符合度** | `grep -c '\[FR-' 03-development/src/**/*.py` | citations ≥ 每函數 1 個 |
 | **A/B 協作** | `sessions_spawn.log` 記錄完整 | developer + reviewer 各 1 筆記錄 |
 | **子代理管理** | `SubagentIsolator` 使用正確 | `fresh_messages` 隔離 |
-| **測試覆蓋率** | `pytest --cov=app/ --cov-report=term` | ≥80% |
+| **測試覆蓋率** | `pytest --cov=03-development/src/ --cov-report=term` | ≥80% |
 
 ### 四維度評核命令
 
 ```bash
 # 1. 規範符合度
-grep -r "\[FR-" app/ --include="*.py" | wc -l
+grep -r "\[FR-" 03-development/src/ --include="*.py" | wc -l
 
 # 2. A/B 協作
 cat sessions_spawn.log | grep -c "developer\|reviewer"
@@ -463,7 +463,7 @@ cat sessions_spawn.log | grep -c "developer\|reviewer"
 cat sessions_spawn.log | grep -c "spawn"
 
 # 4. 測試覆蓋率
-pytest --cov=app/ --cov-report=term -q
+pytest --cov=03-development/src/ --cov-report=term -q
 ```
 
 **HR-12（5輪限制）**：
@@ -821,14 +821,14 @@ for fr_id in FR_LIST:
 
 任務：
 1. 讀取 SRS.md (§{fr_id}) 和 SAD.md
-2. 實現代碼（使用 app/ 路徑）
+2. 實現代碼（使用 03-development/src/ 路徑）
 3. 返回 JSON：
 
 {{
   "status": "success",
   "files": [
     {{
-      "path": "app/.../{fr_id.lower()}.py",
+      "path": "03-development/src/.../{fr_id.lower()}.py",
       "content": "# 完整代碼..."
     }}
   ],
@@ -989,7 +989,7 @@ sessions_spawn(
   "status": "success",
   "files": [
     {
-      "path": "app/processing/lexicon_mapper.py",
+      "path": "03-development/src/processing/lexicon_mapper.py",
       "content": "# 完整代碼..."
     }
   ],

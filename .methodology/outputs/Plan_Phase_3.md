@@ -83,7 +83,7 @@ TH-06 | TH-08 | TH-09 | TH-10 | TH-11 | TH-15 | TH-16
 | TH-06 | Constitution 測試覆蓋率 | >90% | `constitution/runner.py --type implementation` |
 | TH-08 | AgentEvaluator 嚴格 | ≥90 | `phase-verify` |
 | TH-10 | 測試通過率 | =100% | `pytest tests/ -v` |
-| TH-11 | 單元測試覆蓋率 | ≥70% | `pytest --cov=app/ -v` |
+| TH-11 | 單元測試覆蓋率 | ≥70% | `pytest --cov=03-development/src/ -v` |
 | TH-15 | Phase Truth | >90% | `phase-verify` |
 | TH-16 | 代碼↔SAD 映射率 | =100% | `trace-check` |
 
@@ -93,14 +93,14 @@ TH-06 | TH-08 | TH-09 | TH-10 | TH-11 | TH-15 | TH-16
 
 | FR | 模組 | 產出檔案 | 測試檔案 | 驗證命令 |
 |------|------|---------|----------|---------|
-| FR-01 | lexicon_mapper | `app/processing/lexicon_mapper.py` | `tests/test_fr01_lexicon_mapper.py` | `pytest tests/test_fr01*.py -v` |
-| FR-02 | ssml_parser | `app/processing/ssml_parser.py` | `tests/test_fr02_ssml_parser.py` | `pytest tests/test_fr02*.py -v` |
-| FR-03 | text_chunker | `app/processing/text_chunker.py` | `tests/test_fr03_text_chunker.py` | `pytest tests/test_fr03*.py -v` |
-| FR-04 | synth_engine | `app/synth/synth_engine.py` | `tests/test_fr04_synth_engine.py` | `pytest tests/test_fr04*.py -v` |
-| FR-05 | circuit_breaker | `app/infrastructure/circuit_breaker.py` | `tests/test_fr05_circuit_breaker.py` | `pytest tests/test_fr05*.py -v` |
-| FR-06 | redis_cache | `app/infrastructure/redis_cache.py` | `tests/test_fr06_redis_cache.py` | `pytest tests/test_fr06*.py -v` |
-| FR-07 | main | `app/cli/main.py` | `tests/test_fr07_main.py` | `pytest tests/test_fr07*.py -v` |
-| FR-08 | audio_converter | `app/infrastructure/audio_converter.py` | `tests/test_fr08_audio_converter.py` | `pytest tests/test_fr08*.py -v` |
+| FR-01 | lexicon_mapper | `03-development/src/processing/lexicon_mapper.py` | `tests/test_fr01_lexicon_mapper.py` | `pytest tests/test_fr01*.py -v` |
+| FR-02 | ssml_parser | `03-development/src/processing/ssml_parser.py` | `tests/test_fr02_ssml_parser.py` | `pytest tests/test_fr02*.py -v` |
+| FR-03 | text_chunker | `03-development/src/processing/text_chunker.py` | `tests/test_fr03_text_chunker.py` | `pytest tests/test_fr03*.py -v` |
+| FR-04 | synth_engine | `03-development/src/synth/synth_engine.py` | `tests/test_fr04_synth_engine.py` | `pytest tests/test_fr04*.py -v` |
+| FR-05 | circuit_breaker | `03-development/src/infrastructure/circuit_breaker.py` | `tests/test_fr05_circuit_breaker.py` | `pytest tests/test_fr05*.py -v` |
+| FR-06 | redis_cache | `03-development/src/infrastructure/redis_cache.py` | `tests/test_fr06_redis_cache.py` | `pytest tests/test_fr06*.py -v` |
+| FR-07 | routes | `03-development/src/api/routes.py` | `tests/test_fr07_routes.py` | `pytest tests/test_fr07*.py -v` |
+| FR-08 | audio_converter | `03-development/src/infrastructure/audio_converter.py` | `tests/test_fr08_audio_converter.py` | `pytest tests/test_fr08*.py -v` |
 
 
 ---
@@ -121,11 +121,11 @@ TH-06 | TH-08 | TH-09 | TH-10 | TH-11 | TH-15 | TH-16
 ## 4. 產出結構樹
 
 ```
-app/
+03-development/src/
+├── api/
+│   ├── routes.py
 ├── backend/
 │   ├── kokoro_client.py
-├── cli/
-│   ├── main.py
 ├── infrastructure/
 │   ├── audio_converter.py
 │   ├── circuit_breaker.py
@@ -159,7 +159,7 @@ tests/
 - [ ] `synth_engine` - 模組實作
 - [ ] `circuit_breaker` - 模組實作
 - [ ] `redis_cache` - 模組實作
-- [ ] `main` - 模組實作
+- [ ] `routes` - 模組實作
 - [ ] `audio_converter` - 模組實作
 - [ ] `kokoro_client` - 模組實作
 
@@ -207,7 +207,7 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 - 輸入「菠蘿麵包」→ 輸出「鳳梨麵包」
 **SAD 對應**：
 - 模組：`lexicon_mapper`
-- 檔案：`app/processing/lexicon_mapper.py`
+- 檔案：`03-development/src/processing/lexicon_mapper.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
@@ -217,7 +217,7 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 **任務**：解析 SSML 標籤並映射為 Kokoro API 參數，支援音色切換。
 **SAD 對應**：
 - 模組：`ssml_parser`
-- 檔案：`app/processing/ssml_parser.py`
+- 檔案：`03-development/src/processing/ssml_parser.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
@@ -227,7 +227,7 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 **任務**：將長文本依三級遞迴邏輯切分，確保每段 ≤ 250 字。
 **SAD 對應**：
 - 模組：`text_chunker`
-- 檔案：`app/processing/text_chunker.py`
+- 檔案：`03-development/src/processing/text_chunker.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
@@ -237,7 +237,7 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 **任務**：使用 httpx.AsyncClient 同時發出 N 個請求，MP3 直接串接。
 **SAD 對應**：
 - 模組：`synth_engine`
-- 檔案：`app/synth/synth_engine.py`
+- 檔案：`03-development/src/synth/synth_engine.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
@@ -247,7 +247,7 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 **任務**：後端故障時自動保護，失敗計數達閾值後断路。
 **SAD 對應**：
 - 模組：`circuit_breaker`
-- 檔案：`app/infrastructure/circuit_breaker.py`
+- 檔案：`03-development/src/infrastructure/circuit_breaker.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
@@ -257,7 +257,7 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 **任務**：熱門語句結果快取，24 小時 TTL。
 **SAD 對應**：
 - 模組：`redis_cache`
-- 檔案：`app/infrastructure/redis_cache.py`
+- 檔案：`03-development/src/infrastructure/redis_cache.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
@@ -266,8 +266,8 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 #### FR-07: FR-07：CLI 命令列工具（tts-v610）
 **任務**：提供命令列工具支援快速語音合成。
 **SAD 對應**：
-- 模組：`main`
-- 檔案：`app/cli/main.py`
+- 模組：`routes`
+- 檔案：`03-development/src/api/routes.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
@@ -277,19 +277,17 @@ Phase 3 依據 SAD 實作所有 FR 模組，包含單元測試。
 **任務**：使用 ffmpeg 將 MP3 轉換為 WAV，或 WAV 轉 MP3。
 **SAD 對應**：
 - 模組：`audio_converter`
-- 檔案：`app/infrastructure/audio_converter.py`
+- 檔案：`03-development/src/infrastructure/audio_converter.py`
 **Forbidden**：
 - ❌ app/infrastructure/（已廢除）
 - ❌ @covers: L1 Error
 - ❌ @type: edge
 
 ### Phase 3 交付物
-- [ ] `app/processing/` - 處理模組
-- [ ] `app/synth/` - 合成模組
-- [ ] `app/infrastructure/` - 基礎設施模組
-- [ ] `app/api/` - API 路由
-- [ ] `app/cli/` - CLI 工具
-- [ ] `app/backend/` - 後端整合
+- [ ] `03-development/src/processing/` - 處理模組
+- [ ] `03-development/src/synth/` - 合成模組
+- [ ] `03-development/src/infrastructure/` - 基礎設施模組
+- [ ] `03-development/src/api/` - API 路由
 - [ ] `tests/` - 單元測試
 
 
@@ -356,7 +354,7 @@ SAD.md 只讀取：
 - §Module 邊界對照表（對應 FR-01 的章節）
 
 【產出】
-- app/processing/lexicon_mapper.py}：實作代碼
+- 03-development/src/processing/lexicon_mapper.py}：實作代碼
 - tests/test_01.py：單元測試
 
 【驗證標準】
@@ -455,7 +453,7 @@ OUTPUT:
 - {TEST_FILE}
 
 FORBIDDEN:
-- ❌ app/infrastructure/（Phase 3+ 請用 03-development/infrastructure/）
+- ❌ 03-development/src/infrastructure/（已廢除）
 - ❌ 使用 @covers annotation → 請改用 docstring [FR-XX]
 - ❌ @type: edge → positive/negative/boundary
 - ❌ ... 省略 → 任務失敗
@@ -468,7 +466,7 @@ STEP 1: 讀取 SRS.md §FR-XX 和 SAD.md §對應章節
 
 STEP 2: 用 grep 確認函數的實際行號：
 ```bash
-grep -n "def 函數名\|class 類別名" app/xxx.py
+grep -n "def 函數名\|class 類別名" 03-development/src/xxx.py
 ```
 把輸出的行號記下來（不是估算）
 
@@ -476,7 +474,7 @@ STEP 3: 實作 + 寫 docstring 時用 STEP 2 的實際行號
 
 STEP 4: 寫完後再次 grep 確認：
 ```bash
-grep -A5 "def 函數名" app/xxx.py | grep "Citations:"
+grep -A5 "def 函數名" 03-development/src/xxx.py | grep "Citations:"
 ```
 確認 Citations 確實寫入且行號正確
 
@@ -547,16 +545,16 @@ graph TD
 
 | 維度 | 評估方法 | 目標 |
 |------|---------|------|
-| **規範符合度** | `grep -c '\[FR-' app/**/*.py` | citations ≥ 每函數 1 個 |
+| **規範符合度** | `grep -c '\[FR-' 03-development/src/**/*.py` | citations ≥ 每函數 1 個 |
 | **A/B 協作** | `sessions_spawn.log` 記錄完整 | developer + reviewer 各 1 筆記錄 |
 | **子代理管理** | `SubagentIsolator` 使用正確 | `fresh_messages` 隔離 |
-| **測試覆蓋率** | `pytest --cov=app/ --cov-report=term` | ≥80% |
+| **測試覆蓋率** | `pytest --cov=03-development/src/ --cov-report=term` | ≥80% |
 
 ### 四維度評核命令
 
 ```bash
 # 1. 規範符合度
-grep -r "\[FR-" app/ --include="*.py" | wc -l
+grep -r "\[FR-" 03-development/src/ --include="*.py" | wc -l
 
 # 2. A/B 協作
 cat sessions_spawn.log | grep -c "developer\|reviewer"
@@ -565,7 +563,7 @@ cat sessions_spawn.log | grep -c "developer\|reviewer"
 cat sessions_spawn.log | grep -c "spawn"
 
 # 4. 測試覆蓋率
-pytest --cov=app/ --cov-report=term -q
+pytest --cov=03-development/src/ --cov-report=term -q
 ```
 
 **HR-12（5輪限制）**：
@@ -650,7 +648,7 @@ python3 quality_gate/constitution/runner.py --type implementation
 pytest tests/ -v
 
 # 3. TH-11 覆蓋率 ≥70%
-pytest --cov=app/ -v
+pytest --cov=03-development/src/ -v
 
 # 4. TH-16 代碼↔SAD =100%
 python3 cli.py trace-check
@@ -943,14 +941,14 @@ for fr_id in FR_LIST:
 
 任務：
 1. 讀取 SRS.md (§{fr_id}) 和 SAD.md
-2. 實現代碼（使用 app/ 路徑）
+2. 實現代碼（使用 03-development/src/ 路徑）
 3. 返回 JSON：
 
 {{
   "status": "success",
   "files": [
     {{
-      "path": "app/.../{fr_id.lower()}.py",
+      "path": "03-development/src/.../{fr_id.lower()}.py",
       "content": "# 完整代碼..."
     }}
   ],
@@ -1111,7 +1109,7 @@ sessions_spawn(
   "status": "success",
   "files": [
     {
-      "path": "app/processing/lexicon_mapper.py",
+      "path": "03-development/src/processing/lexicon_mapper.py",
       "content": "# 完整代碼..."
     }
   ],

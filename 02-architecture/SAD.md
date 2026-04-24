@@ -46,15 +46,15 @@
 
 | FR ID | 需求 | 負責模組 |
 |-------|------|---------|
-| **FR-01** | TaiwanLexicon ≥ 50 詞映射（台灣中文詞彙替換） | `app/processing/lexicon_mapper.py` |
-| **FR-02** | SSMLParser 解析 SSML 標籤（`<voice>`、`<break>`、`<prosody>`） | `app/processing/ssml_parser.py` |
-| **FR-03** | TextSplitter 三級遞迴切分（≤ 250 字） | `app/processing/text_chunker.py` |
-| **FR-04** | AsyncEngine 併發處理（httpx.AsyncClient + MP3 串接） | `app/synth/synth_engine.py` |
-| **FR-05** | CircuitBreaker 熔斷機制（失敗 ≥ 3 → Open，10 秒後 Half-Open） | `app/infrastructure/circuit_breaker.py` |
-| **FR-06** | RedisCache 可選快取（SHA-256 key，TTL=24h，優雅降級） | `app/infrastructure/redis_cache.py` |
-| **FR-07** | FastAPI + Typer CLI（HTTP API + 命令列工具） | `app/api/routes.py` + `app/cli/main.py` |
-| **FR-08** | AudioConverter（ffmpeg MP3 ↔ WAV 互轉） | `app/infrastructure/audio_converter.py` |
-| **FR-09** | Kokoro Proxy（整合外部 TTS API，代理轉發） | `app/backend/kokoro_client.py` |
+| **FR-01** | TaiwanLexicon ≥ 50 詞映射（台灣中文詞彙替換） | `03-development/src/processing/lexicon_mapper.py` |
+| **FR-02** | SSMLParser 解析 SSML 標籤（`<voice>`、`<break>`、`<prosody>`） | `03-development/src/processing/ssml_parser.py` |
+| **FR-03** | TextSplitter 三級遞迴切分（≤ 250 字） | `03-development/src/processing/text_chunker.py` |
+| **FR-04** | AsyncEngine 併發處理（httpx.AsyncClient + MP3 串接） | `03-development/src/synth/synth_engine.py` |
+| **FR-05** | CircuitBreaker 熔斷機制（失敗 ≥ 3 → Open，10 秒後 Half-Open） | `03-development/src/infrastructure/circuit_breaker.py` |
+| **FR-06** | RedisCache 可選快取（SHA-256 key，TTL=24h，優雅降級） | `03-development/src/infrastructure/redis_cache.py` |
+| **FR-07** | FastAPI + Typer CLI（HTTP API + 命令列工具） | `03-development/src/api/routes.py` + `03-development/src/cli/main.py` |
+| **FR-08** | AudioConverter（ffmpeg MP3 ↔ WAV 互轉） | `03-development/src/infrastructure/audio_converter.py` |
+| **FR-09** | Kokoro Proxy（整合外部 TTS API，代理轉發） | `03-development/src/backend/kokoro_client.py` |
 
 ### 1.4 架構目標
 
@@ -119,30 +119,30 @@
 ```
 ╔══════════════════════════════════════════════════════════════════════╗
 ║  LAYER 1 — API LAYER                                                 ║
-║  app/api/routes.py                                                   ║
+║  03-development/src/api/routes.py                                                   ║
 ║  HTTP 請求/回應生命週期、認證、輸入驗證、L1 錯誤 → HTTP 4xx           ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║  LAYER 2 — ORCHESTRATION LAYER                                       ║
-║  app/orchestrator/speech_orchestrator.py                             ║
+║  03-development/src/orchestrator/speech_orchestrator.py                             ║
 ║  協調完整合成管線、快取查詢/寫入、音訊組裝、L2/L3 錯誤傳播           ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║  LAYER 3 — PROCESSING LAYER                                          ║
-║  • app/processing/ssml_parser.py        （FR-02）                    ║
-║  • app/processing/lexicon_mapper.py     （FR-01）                    ║
-║  • app/processing/text_chunker.py       （FR-03）                    ║
-║  • app/synth/synth_engine.py           （FR-04）— async I/O 子目錄  ║
+║  • 03-development/src/processing/ssml_parser.py        （FR-02）                    ║
+║  • 03-development/src/processing/lexicon_mapper.py     （FR-01）                    ║
+║  • 03-development/src/processing/text_chunker.py       （FR-03）                    ║
+║  • 03-development/src/synth/synth_engine.py           （FR-04）— async I/O 子目錄  ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║  LAYER 4 — BACKEND LAYER                                             ║
-║  app/backend/kokoro_client.py（FR-09: Kokoro Proxy）                 ║
+║  03-development/src/backend/kokoro_client.py（FR-09: Kokoro Proxy）                 ║
 ║  httpx.AsyncClient 生命週期（Lazy Init）、單一後端聯絡點、            ║
 ║  重試邏輯（3 次指數退避）、向 Circuit Breaker 發出 L4 錯誤           ║
 ╠══════════════════════════════════════════════════════════════════════╣
 ║  LAYER 5 — INFRASTRUCTURE LAYER                                      ║
-║  • app/infrastructure/circuit_breaker.py   （FR-05）                ║
-║  • app/infrastructure/redis_cache.py       （FR-06）                ║
-║  • app/infrastructure/audio_converter.py   （FR-08）                ║
-║  • app/infrastructure/config_loader.py                                      ║
-║  • app/infrastructure/auth.py                                                ║
+║  • 03-development/src/infrastructure/circuit_breaker.py   （FR-05）                ║
+║  • 03-development/src/infrastructure/redis_cache.py       （FR-06）                ║
+║  • 03-development/src/infrastructure/audio_converter.py   （FR-08）                ║
+║  • 03-development/src/infrastructure/config_loader.py                                      ║
+║  • 03-development/src/infrastructure/auth.py                                                ║
 ╚══════════════════════════════════════════════════════════════════════╝
 ```
 
@@ -154,19 +154,19 @@
 
 | 模組 | 檔案路徑 | FR/NFR 對應 | 擁有錯誤等級 |
 |------|---------|------------|------------|
-| **APIRouter** | `app/api/routes.py` | NFR-04 | L1 |
-| **SpeechOrchestrator** | `app/orchestrator/speech_orchestrator.py` | 全部 FRs | L3 |
-| **SSMLParser** | `app/processing/ssml_parser.py` | FR-02 | L1 |
-| **LexiconMapper** | `app/processing/lexicon_mapper.py` | FR-01 | L1 |
-| **TextChunker** | `app/processing/text_chunker.py` | FR-03 | L1 |
-| **SynthEngine** | `app/synth/synth_engine.py` | FR-04 | L2 |
-| **KokoroClient** | `app/backend/kokoro_client.py` | FR-09 | L4 |
-| **CircuitBreaker** | `app/infrastructure/circuit_breaker.py` | FR-05, NFR-05, NFR-07 | L4 |
-| **RedisCache** | `app/infrastructure/redis_cache.py` | FR-06 | L3 |
-| **AudioConverter** | `app/infrastructure/audio_converter.py` | FR-08 | L2 |
-| **ConfigLoader** | `app/infrastructure/config_loader.py` | NFR-* | L1 |
-| **AuthMiddleware** | `app/infrastructure/auth.py` | 安全性 | L1 |
-| **CLITool** | `app/cli/main.py` | FR-07 | L1/L2 |
+| **APIRouter** | `03-development/src/api/routes.py` | NFR-04 | L1 |
+| **SpeechOrchestrator** | `03-development/src/orchestrator/speech_orchestrator.py` | 全部 FRs | L3 |
+| **SSMLParser** | `03-development/src/processing/ssml_parser.py` | FR-02 | L1 |
+| **LexiconMapper** | `03-development/src/processing/lexicon_mapper.py` | FR-01 | L1 |
+| **TextChunker** | `03-development/src/processing/text_chunker.py` | FR-03 | L1 |
+| **SynthEngine** | `03-development/src/synth/synth_engine.py` | FR-04 | L2 |
+| **KokoroClient** | `03-development/src/backend/kokoro_client.py` | FR-09 | L4 |
+| **CircuitBreaker** | `03-development/src/infrastructure/circuit_breaker.py` | FR-05, NFR-05, NFR-07 | L4 |
+| **RedisCache** | `03-development/src/infrastructure/redis_cache.py` | FR-06 | L3 |
+| **AudioConverter** | `03-development/src/infrastructure/audio_converter.py` | FR-08 | L2 |
+| **ConfigLoader** | `03-development/src/infrastructure/config_loader.py` | NFR-* | L1 |
+| **AuthMiddleware** | `03-development/src/infrastructure/auth.py` | 安全性 | L1 |
+| **CLITool** | `03-development/src/cli/main.py` | FR-07 | L1/L2 |
 
 ---
 
@@ -242,7 +242,7 @@ SynthEngine → CircuitBreaker.call(kokoro_client.synthesize)
 
 ## 6. 模組介面定義
 
-### 6.1 資料模型（`app/models/speech.py`）
+### 6.1 資料模型（`03-development/src/models/speech.py`）
 
 ```python
 from enum import Enum
@@ -270,7 +270,7 @@ class ReadyResponse(BaseModel):
     ready: bool; kokoro_reachable: bool; uptime_seconds: float
 ```
 
-### 6.2 共享錯誤基底（`app/models/errors.py`）
+### 6.2 共享錯誤基底（`03-development/src/models/errors.py`）
 
 ```python
 # 避免反向依賴（Layer 5 → Layer 4）
@@ -280,7 +280,7 @@ class ClientSideError(Exception):
     pass
 ```
 
-### 6.3 SSML Parser — FR-02（`app/processing/ssml_parser.py`）
+### 6.3 SSML Parser — FR-02（`03-development/src/processing/ssml_parser.py`）
 
 ```python
 from dataclasses import dataclass, field
@@ -313,7 +313,7 @@ class SSMLParser:
 class SSMLParseError(ValueError): pass  # L1
 ```
 
-### 6.4 Lexicon Mapper — FR-01（`app/processing/lexicon_mapper.py`）
+### 6.4 Lexicon Mapper — FR-01（`03-development/src/processing/lexicon_mapper.py`）
 
 ```python
 import re
@@ -332,7 +332,7 @@ class LexiconMapper:
     def get_coverage_stats(self) -> dict[str, int]: ...
 ```
 
-### 6.5 Text Chunker — FR-03（`app/processing/text_chunker.py`）
+### 6.5 Text Chunker — FR-03（`03-development/src/processing/text_chunker.py`）
 
 ```python
 import re
@@ -360,7 +360,7 @@ class TextChunker:
     def _hard_split(self, text: str, level: int, base_index: int) -> list[ChunkResult]: ...
 ```
 
-### 6.6 Synth Engine — FR-04（`app/synth/synth_engine.py`）
+### 6.6 Synth Engine — FR-04（`03-development/src/synth/synth_engine.py`）
 
 ```python
 import asyncio
@@ -400,7 +400,7 @@ class SynthesisUnavailableError(RuntimeError):
         self.retry_after_seconds = retry_after_seconds
 ```
 
-### 6.7 Kokoro Client — FR-09（`app/backend/kokoro_client.py`）
+### 6.7 Kokoro Client — FR-09（`03-development/src/backend/kokoro_client.py`）
 
 ```python
 import httpx, asyncio
@@ -445,7 +445,7 @@ class KokoroServerError(KokoroAPIError): pass  # L4 sub: 5xx 計入 CB
 class KokoroTimeoutError(TimeoutError): pass  # L4
 ```
 
-### 6.8 Circuit Breaker — FR-05（`app/infrastructure/circuit_breaker.py`）
+### 6.8 Circuit Breaker — FR-05（`03-development/src/infrastructure/circuit_breaker.py`）
 
 ```python
 import asyncio, time
@@ -508,7 +508,7 @@ class CircuitBreakerOpenError(RuntimeError):
         super().__init__(f"Circuit breaker OPEN; retry after {retry_after:.1f}s")
 ```
 
-### 6.9 Redis Cache — FR-06（`app/infrastructure/redis_cache.py`）
+### 6.9 Redis Cache — FR-06（`03-development/src/infrastructure/redis_cache.py`）
 
 ```python
 import hashlib
@@ -536,7 +536,7 @@ class RedisCache:
     async def close(self) -> None: ...
 ```
 
-### 6.10 Audio Converter — FR-08（`app/infrastructure/audio_converter.py`）
+### 6.10 Audio Converter — FR-08（`03-development/src/infrastructure/audio_converter.py`）
 
 ```python
 import asyncio, shutil
@@ -566,7 +566,7 @@ class AudioConverterError(RuntimeError): pass  # L2
 class AudioConverterNotFoundError(AudioConverterError): pass  # L2
 ```
 
-### 6.11 Config Loader（`app/infrastructure/config_loader.py`）
+### 6.11 Config Loader（`03-development/src/infrastructure/config_loader.py`）
 
 ```python
 from pathlib import Path
@@ -603,7 +603,7 @@ def get_config(config_path: str = "config.yaml") -> AppConfig:
 class ConfigError(ValueError): pass  # L1
 ```
 
-### 6.12 Auth Middleware（`app/infrastructure/auth.py`）
+### 6.12 Auth Middleware（`03-development/src/infrastructure/auth.py`）
 
 ```python
 import hmac
@@ -627,7 +627,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
     def _validate_jwt(self, token: str) -> bool: ...
 ```
 
-### 6.13 CLI Tool — FR-07（`app/cli/main.py`）
+### 6.13 CLI Tool — FR-07（`03-development/src/cli/main.py`）
 
 ```python
 import asyncio, typer, httpx
@@ -651,7 +651,7 @@ def synthesize(
 async def _run(...): ...
 ```
 
-### 6.14 Speech Orchestrator（`app/orchestrator/speech_orchestrator.py`）
+### 6.14 Speech Orchestrator（`03-development/src/orchestrator/speech_orchestrator.py`）
 
 ```python
 from app.models.speech import SpeechRequest
@@ -678,7 +678,7 @@ class SpeechOrchestrator:
         ...
 ```
 
-### 6.15 FastAPI 依賴注入工廠（`app/api/dependencies.py`）
+### 6.15 FastAPI 依賴注入工廠（`03-development/src/api/dependencies.py`）
 
 ```python
 from functools import lru_cache
@@ -768,7 +768,7 @@ class ErrorResponse(BaseModel):
 ### 7.4 全域例外處理器註冊
 
 ```python
-# app/main.py
+# 03-development/src/main.py
 @app.exception_handler(SSMLParseError)       # → 422
 @app.exception_handler(SynthesisUnavailableError)  # → 503 + Retry-After
 @app.exception_handler(CircuitBreakerOpenError)    # → 503 + Retry-After
@@ -842,7 +842,7 @@ Layer 4 (Lexicon): 唯讀操作內部資料 — 無注入風險
 
 ```
 tts-kokoro-v613/
-├── app/
+├── 03-development/src/
 │   ├── __init__.py
 │   ├── main.py                          # FastAPI app factory, lifespan, middleware
 │   ├── api/                             # LAYER 1
@@ -872,7 +872,7 @@ tts-kokoro-v613/
 │   │   └── lexicon_tw.json              # ≥ 50 詞
 │   └── cli/
 │       └── main.py                      # FR-07: tts-v610
-├── tests/                               # 測試套件（鏡像 app/ 結構）
+├── tests/                               # 測試套件（鏡像 03-development/src/ 結構）
 ├── 01-requirements/
 ├── 02-architecture/
 ├── config.yaml / config.example.yaml
@@ -912,7 +912,7 @@ auth:
   jwt_expiry_seconds: 3600
 
 processing:
-  lexicon_path: "app/data/lexicon_tw.json"
+  lexicon_path: "03-development/src/data/lexicon_tw.json"
   max_input_chars: 10000
   max_chunk_size: 250
 
@@ -947,21 +947,21 @@ audio:
 ### 12.1 模組依賴映射
 
 ```
-app/main.py
-    ├── app/api/routes.py
-    │       ├── app/models/speech.py
-    │       ├── app/orchestrator/speech_orchestrator.py
-    │       └── app/infrastructure/auth.py
-    └── app/orchestrator/speech_orchestrator.py
-            ├── app/processing/ssml_parser.py
-            ├── app/processing/lexicon_mapper.py
-            ├── app/processing/text_chunker.py
-            ├── app/synth/synth_engine.py
-            │       └── app/backend/kokoro_client.py
-            │               ├── app/infrastructure/circuit_breaker.py
-            │               └── app/infrastructure/config_loader.py
-            ├── app/infrastructure/redis_cache.py
-            └── app/infrastructure/audio_converter.py
+03-development/src/main.py
+    ├── 03-development/src/api/routes.py
+    │       ├── 03-development/src/models/speech.py
+    │       ├── 03-development/src/orchestrator/speech_orchestrator.py
+    │       └── 03-development/src/infrastructure/auth.py
+    └── 03-development/src/orchestrator/speech_orchestrator.py
+            ├── 03-development/src/processing/ssml_parser.py
+            ├── 03-development/src/processing/lexicon_mapper.py
+            ├── 03-development/src/processing/text_chunker.py
+            ├── 03-development/src/synth/synth_engine.py
+            │       └── 03-development/src/backend/kokoro_client.py
+            │               ├── 03-development/src/infrastructure/circuit_breaker.py
+            │               └── 03-development/src/infrastructure/config_loader.py
+            ├── 03-development/src/infrastructure/redis_cache.py
+            └── 03-development/src/infrastructure/audio_converter.py
 ```
 
 ### 12.2 循環依賴分析
@@ -969,7 +969,7 @@ app/main.py
 | 潛在循環 | 狀態 | 緩解措施 |
 |---------|------|---------|
 | `synth_engine → kokoro_client → circuit_breaker` | 無循環 | 單向依賴 |
-| `circuit_breaker → kokoro_client` | **已解決** | `ClientSideError` 基底類別置於 `app/models/errors.py`（共享層）；`KokoroClientError` 繼承它；CB 用 `isinstance(exc, ClientSideError)` 檢查 |
+| `circuit_breaker → kokoro_client` | **已解決** | `ClientSideError` 基底類別置於 `03-development/src/models/errors.py`（共享層）；`KokoroClientError` 繼承它；CB 用 `isinstance(exc, ClientSideError)` 檢查 |
 | `orchestrator → synth_engine → orchestrator` | **禁止** | SynthEngine 不得引用 orchestrator |
 | `routes → orchestrator → routes` | **禁止** | Orchestrator 不得引用 API 層 |
 | `config_loader → 任何 app 模組` | **禁止** | ConfigLoader 零 app 模組引用 |
